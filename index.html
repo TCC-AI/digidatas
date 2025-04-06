@@ -712,6 +712,23 @@ a.download-link::before {
     top: 240px;
     left: 125px;
   }}
+  @media (max-width: 600px) {
+  #linksTable td:nth-child(1) {
+    font-size: 14px;
+  }
+  
+  #linksTable td:nth-child(2) {
+    font-size: 12px;
+  }
+  
+  #linksTable td {
+    padding: 10px 8px; /* 在手機上增加垂直間距 */
+  }
+  
+  #linksTable a {
+    word-break: break-all; /* 確保超連結在手機上會換行 */
+  }
+}
 
 /* ★ NEW: AI Modal (寬度90%) */
 #aiModal {
