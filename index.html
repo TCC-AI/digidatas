@@ -1374,7 +1374,19 @@ a.download-link::before {
           .then(data => {
             if (data.success) {
               const aiReply = data.result.reply; 
-              const assistantMsgHtml = `<div class="chat-assistant">${escapeHtml(aiReply)}</div>`;
+              // 假設這裡是 callGAS('aiAssistant', { userMessage }) 之後的 then(...) 區塊
+          .then(data => {
+            if (data.success) {
+              const aiReply = data.result.reply;
+              // 改成直接插入 HTML 字串，不呼叫 escapeHtml
+              const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`; 
+              chatContainer.innerHTML += assistantMsgHtml;
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+            } else {
+              chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
+            }
+          })
+
               chatContainer.innerHTML += assistantMsgHtml;
               chatContainer.scrollTop = chatContainer.scrollHeight;
             } else {
