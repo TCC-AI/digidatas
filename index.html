@@ -1340,7 +1340,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyMc5B6Yse0vbRPjx3SYmxhdmZqZZQpK6Y9nRvNrwnJvBLpICz-BqseSAqIgG36am3Z/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw5Ty6mfz3FHpQdTNN20qZnjb1J8niJGgjPXEnXQCd7fxpBoM3AQodE1liGAB_YjaeQ/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1638,26 +1638,28 @@ function changePassword() {
        * 5) 更新用戶信息顯示 + s3按鈕顯示 + 管理員按鈕顯示
        *************************************************/
       function updateUserInfo() {
-        if (currentUser) {
-          document.getElementById('userName').textContent = currentUser.name || currentUser.username;
-          document.getElementById('userRole').textContent = currentUser.role || '';
-          
-          const linksButton = document.getElementById('linksButton');
-          if (currentUser.permission === 's3') {
-            linksButton.style.display = 'block';
-          } else {
-            linksButton.style.display = 'none';
-          }
-          
-                // 修改這裡：只有 s7 權限的用戶才能看到用戶管理按鈕
-          const userManageButton = document.getElementById('userManageButton');
-          if (currentUser.permission === 's7') {
-            userManageButton.style.display = 'block';
-          } else {
-            userManageButton.style.display = 'none';
-          }
-        }
-      }
+  if (currentUser) {
+    document.getElementById('userName').textContent = currentUser.name || currentUser.username;
+    document.getElementById('userRole').textContent = currentUser.role || '';
+    
+    const linksButton = document.getElementById('linksButton');
+    // s3 或 s7 權限的用戶都可以看到重要連結按鈕
+    if (currentUser.permission === 's3' || currentUser.permission === 's7') {
+      linksButton.style.display = 'block';
+    } else {
+      linksButton.style.display = 'none';
+    }
+    
+    // 只有 s7 權限的用戶才能看到用戶管理按鈕
+    const userManageButton = document.getElementById('userManageButton');
+    if (currentUser.permission === 's7') {
+      userManageButton.style.display = 'block';
+    } else {
+      userManageButton.style.display = 'none';
+    }
+  }
+}
+
 
       /*************************************************
        * 6) 調用 Apps Script
