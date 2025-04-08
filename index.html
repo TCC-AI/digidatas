@@ -206,11 +206,13 @@
         color: #054496;
         margin-bottom: 20px;
         font-size: 3em;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         position: relative;
         padding-bottom: 15px;
-        margin-top: 20px;
+        margin-top: 15px;
       }
+    
+      
       .logo-img {
         max-width: 200px;
         margin: 25px auto 0; 
@@ -902,7 +904,7 @@ a.download-link::before {
     <div id="aiModal">
       <div class="modal-content">
         <span class="close" onclick="closeAiModal()">&times;</span>
-        <h2>AI搜查助理</h2>
+        <h2>AI資搜助理</h2>
         <div id="aiChatContainer"></div>
         <div>
           <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題">
@@ -915,7 +917,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwvU_Bbjag-0o8Uc3Ss6-yylc2i3SO9u_BsxZA1iJcvvGYLrCwIJ3XpNHbXVJHD93Kb/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyiKacuNkJ9LvtPVvUnMuQit5exyVvp7c_ZHVIrPjCvq_bVH-bCVzIa3Parn6MSRe219w/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1386,8 +1388,8 @@ a.download-link::before {
         // 初次開啟時，先放兩句話(問候 + 問問題)
         const chatContainer = document.getElementById('aiChatContainer');
         chatContainer.innerHTML = `
-          <div class="chat-assistant">哈囉～希望你今天一切順利。</div>
-          <div class="chat-assistant">你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～</div>
+          <div class="chat-assistant">Hi～願你擁有美好的一天～</div>
+          <div class="chat-assistant">想要找什麼檔案呢？請給我關鍵詞（用多個關鍵詞會更精準喔～KeyWords請用空格隔開）～</div>
         `;
       }
 
