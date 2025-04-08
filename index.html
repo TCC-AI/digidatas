@@ -1107,16 +1107,42 @@ function performLogout() {
     if (loginRowIndex) {
       callGAS('logLogout', { rowIndex: loginRowIndex })
         .then(data => {
-          cleanupAndShowLogin();
+          doLogout();
         })
         .catch(err => {
-          cleanupAndShowLogin();
+          doLogout();
         });
     } else {
-      cleanupAndShowLogin();
+      doLogout();
     }
   }, 300);
 }
+
+// 執行登出的實際操作
+function doLogout() {
+  // 清除本地存儲
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('username');
+  localStorage.removeItem('name');
+  localStorage.removeItem('role');
+  localStorage.removeItem('loginRowIndex');
+  localStorage.removeItem('permissionLevel');
+
+  // 重置當前用戶
+  currentUser = null;
+  
+  // 顯示登入畫面
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('loginError').style.display = 'none';
+  
+  // 重置登出按鈕顏色
+  const logoutBtn = document.getElementById('logoutButton');
+  logoutBtn.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e8e)';
+  logoutBtn.classList.remove('button-clicked');
+}
+
 
 // 顯示更改密碼模態視窗
 function showChangePasswordModal() {
