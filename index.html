@@ -1604,68 +1604,23 @@ function closeChangePasswordModal() {
 
 // 更改密碼
 function changePassword() {
-  // 獲取欄位值並去除前後空格
-  const currentPassword = document.getElementById('currentPassword').value.trim();
-  const newPassword = document.getElementById('newPassword').value.trim();
-  const confirmPassword = document.getElementById('confirmPassword').value.trim();
+  const currentPassword = document.getElementById('currentPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const passwordError = document.getElementById('passwordError');
   
-  // 獲取錯誤訊息元素
-  const errorElement = document.getElementById('passwordError') || 
-                       document.querySelector('.password-error-message');
-  
-  // 顯示錯誤訊息的函數
-  function showError(message) {
-    if (errorElement) {
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
-    } else {
-      // 如果找不到錯誤元素，則創建一個
-      const newErrorElement = document.createElement('div');
-      newErrorElement.id = 'passwordError';
-      newErrorElement.className = 'password-error-message';
-      newErrorElement.style.color = '#ff6b6b';
-      newErrorElement.style.margin = '10px 0';
-      newErrorElement.style.fontWeight = 'bold';
-      newErrorElement.style.padding = '8px';
-      newErrorElement.style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
-      newErrorElement.style.borderRadius = '5px';
-      newErrorElement.style.textAlign = 'center';
-      newErrorElement.textContent = message;
-      
-      // 找到確認按鈕並在其前面插入錯誤訊息
-      const confirmButton = document.querySelector('.change-password-modal button');
-      if (confirmButton && confirmButton.parentNode) {
-        confirmButton.parentNode.insertBefore(newErrorElement, confirmButton);
-      }
-    }
-  }
-  
-  // 清除錯誤訊息
-  function clearError() {
-    if (errorElement) {
-      errorElement.style.display = 'none';
-    }
-  }
-  
-  // 檢查所有欄位是否已填寫
+  // 驗證輸入
   if (!currentPassword || !newPassword || !confirmPassword) {
-    showError('請填寫所有欄位');
-    console.log('欄位值檢查:', {
-      currentPassword: Boolean(currentPassword),
-      newPassword: Boolean(newPassword),
-      confirmPassword: Boolean(confirmPassword)
-    });
+    passwordError.textContent = '請填寫所有欄位';
+    passwordError.style.display = 'block';
     return;
   }
   
-  // 檢查新密碼與確認密碼是否相符
   if (newPassword !== confirmPassword) {
-    showError('新密碼與確認密碼不符');
+    passwordError.textContent = '新密碼與確認密碼不符';
+    passwordError.style.display = 'block';
     return;
   }
-  
-  // 清除錯誤訊息
-  clearError();
   
   // 呼叫後端API更改密碼
   callGAS('changePassword', { 
@@ -1679,12 +1634,14 @@ function changePassword() {
       closeChangePasswordModal();
       performLogout();
     } else {
-      showError(data.error || '密碼更改失敗');
+      passwordError.textContent = data.error || '密碼更改失敗';
+      passwordError.style.display = 'block';
     }
   })
   .catch(err => {
     console.error('更改密碼錯誤:', err);
-    showError('更改密碼時發生錯誤，請稍後再試');
+    passwordError.textContent = '更改密碼時發生錯誤，請稍後再試';
+    passwordError.style.display = 'block';
   });
 }
 
@@ -2493,31 +2450,24 @@ function changePassword() {
     </script>
     <!-- 更改密碼模態視窗 -->
 <div id="changePasswordModal" class="modal">
-<div class="modal-content">
-  <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-  <h2>更改密碼</h2>
-  <hr>
-  
-  <div class="form-group">
-    <label for="currentPassword">目前密碼:</label>
-    <input type="password" id="currentPassword" autocomplete="current-password">
+  <div class="modal-content">
+    <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+    <h2>更改密碼</h2>
+    <div class="form-group">
+      <label for="currentPassword">目前密碼:</label>
+      <input type="password" id="currentPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="newPassword">新密碼:</label>
+      <input type="password" id="newPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">確認新密碼:</label>
+      <input type="password" id="confirmPassword" required>
+    </div>
+    <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
+    <button onclick="changePassword()">確認更改</button>
   </div>
-  
-  <div class="form-group">
-    <label for="newPassword">新密碼:</label>
-    <input type="password" id="newPassword" autocomplete="new-password">
-  </div>
-  
-  <div class="form-group">
-    <label for="confirmPassword">確認新密碼:</label>
-    <input type="password" id="confirmPassword" autocomplete="new-password">
-  </div>
-  
-  <div id="passwordError" style="display:none;"></div>
-  
-  <button onclick="changePassword()" class="btn-primary">確認更改</button>
-</div>
-
 </div>
 
   </body>
