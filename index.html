@@ -1340,7 +1340,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwGb10WLYgzM8DeU4IGHS_meTUsKu3VV1jziKpZPC8mPJgCdhWECNWfXPJLkXv4oiTc/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyMc5B6Yse0vbRPjx3SYmxhdmZqZZQpK6Y9nRvNrwnJvBLpICz-BqseSAqIgG36am3Z/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1649,9 +1649,9 @@ function changePassword() {
             linksButton.style.display = 'none';
           }
           
-          // 顯示用戶管理按鈕（僅管理員可見）
+                // 修改這裡：只有 s7 權限的用戶才能看到用戶管理按鈕
           const userManageButton = document.getElementById('userManageButton');
-          if (currentUser.role === '管理員' || currentUser.permission === 's3') {
+          if (currentUser.permission === 's7') {
             userManageButton.style.display = 'block';
           } else {
             userManageButton.style.display = 'none';
