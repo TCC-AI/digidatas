@@ -431,6 +431,49 @@
   font-size: 1em;
 }
 
+/* 新增：用戶管理按鈕 (僅管理員可見) */
+#userManageButton {
+  position: absolute;
+  top: 250px;
+  left: 310px; /* 在AI按鈕右側 */
+  padding: 8px 8px;
+  background: linear-gradient(45deg, #9c27b0, #d81b60);
+  color: white; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(156, 39, 176, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: none; /* 預設隱藏，只有管理員才顯示 */
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  width: 90px;
+}
+#userManageButton:hover {
+  background: linear-gradient(45deg, #d81b60, #9c27b0);
+  box-shadow: 0 8px 20px rgba(156, 39, 176, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#userManageButton:active {
+  background: linear-gradient(45deg, #7b1fa2, #c2185b);
+}
+#userManageButton::before {
+  content: "👥";
+  margin-right: 8px;
+  font-size: 0.8em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#userManageButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
+
 /* Logout Button */
 #logoutButton {
   position: absolute;
@@ -660,76 +703,6 @@ a.download-link::before {
 }
 }
 
-/* 
-  ----- Media Queries -----
-  這裡有三段: 
-  1) @media (max-width: 820px)
-  2) @media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2)
-  3) 再一個 @media (max-width: 820px) 
-  全都保留 
-*/
-
-@media (max-width: 820px) {
-  .container { padding: 30px; }
-  h2 { font-size: 2.2em; }
-  label { font-size: 1.3em; }
-  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; }
-  iframe { height: 500px; }
-  a.download-link { font-size: 1em; padding: 12px 25px; }
-}
-
-@media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2) {
-  h2 { font-size: 2em; }
-  label { font-size: 1em; }
-  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; padding: 12px 12px; }
-  #statsButton, #logoutButton { font-size: 0.8em; }
-  a.download-link { font-size: 1em; }
-}
-
-@media (max-width: 820px) {
-  .container { padding: 15px; }
-  #statsButton { 
-    font-size: 1em; 
-    min-height: 35px; 
-    min-width: 110px; 
-    padding: 8px 12px; 
-    top: 240px; 
-  }
-  #userInfo { top: 50px; right: 10px; font-size: 0.8em; }
-  #linksButton {
-    font-size: 1em;
-    min-height: 35px;
-    min-width: 110px;
-    padding: 8px 12px;
-    top: 240px;
-    left: 240px;
-  }
-  #aiButton {
-    font-size: 1em;
-    min-height: 35px;
-        min-width: 110px;
-    padding: 8px 12px;
-    top: 240px;
-    left: 125px;
-  }}
-  @media (max-width: 600px) {
-  #linksTable td:nth-child(1) {
-    font-size: 16px;
-    width: 70%;  /* 名稱欄位佔表格寬度的 35% */  }
-  
-  #linksTable td:nth-child(2) {
-    font-size: 10px;
-    width: 30%;  /* 名稱欄位佔表格寬度的 35% */  }
-  
-  #linksTable td {
-    padding: 10px 8px; /* 在手機上增加垂直間距 */
-  }
-  
-  #linksTable a {
-    word-break: break-all; /* 確保超連結在手機上會換行 */
-  }
-}
-
 /* ★ NEW: AI Modal (寬度90%) */
 #aiModal {
   display: none;
@@ -808,6 +781,346 @@ a.download-link::before {
   background: linear-gradient(45deg, #007fff, #00bfff);
 }
 
+/* 新增：用戶管理模態框 */
+#userManageModal {
+  display: none;
+  position: fixed;
+  z-index: 1003;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+#userManageModal .modal-content {
+  position: relative;
+  background: white;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 1200px;
+  animation: modalOpen 0.4s;
+}
+#userManageModal .close {
+  position: absolute;
+  top: 15px; right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#userManageModal .close:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* 用戶管理頁籤樣式 */
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  margin-right: 5px;
+  background-color: #f8f8f8;
+  transition: all 0.3s ease;
+}
+.tab.active {
+  background-color: #fff;
+  border-color: #ddd;
+  border-bottom-color: #fff;
+  font-weight: bold;
+  color: #2193b0;
+}
+.tab:hover:not(.active) {
+  background-color: #eee;
+}
+
+/* 用戶列表樣式 */
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+#usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+#usersTable th, #usersTable td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+#usersTable th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+#usersTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+#usersTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* 用戶操作按鈕 */
+.user-action-btn {
+  padding: 6px 12px;
+  margin: 0 3px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s;
+}
+.edit-btn {
+  background-color: #3498db;
+  color: white;
+}
+.edit-btn:hover {
+  background-color: #2980b9;
+}
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+.reset-pwd-btn {
+  background-color: #f39c12;
+  color: white;
+}
+.reset-pwd-btn:hover {
+  background-color: #d35400;
+}
+.toggle-status-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+.toggle-status-btn:hover {
+  background-color: #27ae60;
+}
+
+/* 用戶表單樣式 */
+.user-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.user-form .form-group {
+  margin-bottom: 15px;
+}
+.user-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+.user-form input, .user-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+.permission-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.permission-checkbox {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+.permission-checkbox input {
+  width: auto;
+  margin-right: 5px;
+}
+.form-actions {
+  margin-top: 20px;
+  text-align: right;
+}
+.form-actions button {
+  margin-left: 10px;
+}
+.cancel-btn {
+  background-color: #95a5a6;
+  color: white;
+}
+.cancel-btn:hover {
+  background-color: #7f8c8d;
+}
+.save-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+.save-btn:hover {
+  background-color: #27ae60;
+}
+
+/* 批量操作區域 */
+.bulk-actions {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #eee;
+}
+.bulk-actions select {
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.bulk-actions button {
+  padding: 8px 15px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.bulk-actions button:hover {
+  background-color: #2980b9;
+}
+
+/* 活動日誌樣式 */
+#activityLogTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+#activityLogTable th, #activityLogTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+#activityLogTable th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+#activityLogTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* 
+  ----- Media Queries -----
+  這裡有三段: 
+  1) @media (max-width: 820px)
+  2) @media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2)
+  3) 再一個 @media (max-width: 820px) 
+  全都保留 
+*/
+
+@media (max-width: 820px) {
+  .container { padding: 30px; }
+  h2 { font-size: 2.2em; }
+  label { font-size: 1.3em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; }
+  iframe { height: 500px; }
+  a.download-link { font-size: 1em; padding: 12px 25px; }
+}
+
+@media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2) {
+  h2 { font-size: 2em; }
+  label { font-size: 1em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; padding: 12px 12px; }
+  #statsButton, #logoutButton { font-size: 0.8em; }
+  a.download-link { font-size: 1em; }
+}
+
+@media (max-width: 820px) {
+  .container { padding: 15px; }
+  #statsButton { 
+    font-size: 1em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 240px; 
+  }
+  #userInfo { top: 50px; right: 10px; font-size: 0.8em; }
+  #linksButton {
+    font-size: 1em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 240px;
+  }
+  #aiButton {
+    font-size: 1em;
+    min-height: 35px;
+        min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 125px;
+  }
+  #userManageButton {
+    font-size: 1em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 355px;
+  }
+}
+  @media (max-width: 600px) {
+  #linksTable td:nth-child(1) {
+    font-size: 16px;
+    width: 70%;  /* 名稱欄位佔表格寬度的 35% */  }
+  
+  #linksTable td:nth-child(2) {
+    font-size: 10px;
+    width: 30%;  /* 名稱欄位佔表格寬度的 35% */  }
+  
+  #linksTable td {
+    padding: 10px 8px; /* 在手機上增加垂直間距 */
+  }
+  
+  #linksTable a {
+    word-break: break-all; /* 確保超連結在手機上會換行 */
+  }
+  
+  /* 用戶管理在手機上的調整 */
+  .tabs {
+    flex-direction: column;
+  }
+  .tab {
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  .tab.active {
+    border-bottom-color: #ddd;
+  }
+  #usersTable th, #usersTable td {
+    padding: 8px 5px;
+    font-size: 0.85em;
+  }
+  .user-action-btn {
+    padding: 4px 8px;
+    font-size: 0.8em;
+    margin: 2px;
+  }
+  .bulk-actions {
+    flex-direction: column;
+  }
+  .bulk-actions select, .bulk-actions button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
     </style>
   </head>
 
@@ -847,6 +1160,9 @@ a.download-link::before {
 
       <!-- ★ NEW: AI助手按鈕 (所有人可見) -->
       <button id="aiButton" onclick="showAiModal()">AI助理</button>
+      
+      <!-- 新增：用戶管理按鈕 (僅管理員可見) -->
+      <button id="userManageButton" onclick="showUserManageModal()">用戶管理</button>
       
       <div class="form-group first-form-group">
         <label for="folderSelect">請選擇部門</label>
@@ -910,12 +1226,121 @@ a.download-link::before {
         </div>
       </div>
     </div>
+    
+    <!-- 新增：用戶管理 Modal -->
+    <div id="userManageModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeUserManageModal()">&times;</span>
+        <h2>用戶管理</h2>
+        
+        <!-- 頁籤導航 -->
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('usersList')">用戶列表</div>
+          <div class="tab" onclick="switchTab('createUser')">新增用戶</div>
+          <div class="tab" onclick="switchTab('activityLog')">活動日誌</div>
+        </div>
+        
+        <!-- 用戶列表頁籤 -->
+        <div id="usersList" class="tab-content active">
+          <!-- 批量操作區域 -->
+          <div class="bulk-actions">
+            <select id="bulkActionSelect">
+              <option value="">批量操作...</option>
+              <option value="enable">啟用選中用戶</option>
+              <option value="disable">禁用選中用戶</option>
+              <option value="delete">刪除選中用戶</option>
+              <option value="s1">設為 S1 權限</option>
+              <option value="s2">設為 S2 權限</option>
+              <option value="s3">設為 S3 權限</option>
+            </select>
+            <button onclick="executeBulkAction()">執行</button>
+          </div>
+          
+          <!-- 用戶列表表格 -->
+          <table id="usersTable">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                <th>用戶名</th>
+                <th>姓名</th>
+                <th>角色</th>
+                <th>權限</th>
+                <th>最後登入</th>
+                <th>狀態</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- 用戶數據將通過 JavaScript 動態填充 -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- 新增用戶頁籤 -->
+        <div id="createUser" class="tab-content">
+          <form class="user-form" id="userForm">
+            <input type="hidden" id="editUserId" value="">
+            <div class="form-group">
+              <label for="newUsername">用戶名</label>
+              <input type="text" id="newUsername" required>
+            </div>
+            <div class="form-group">
+              <label for="newFullName">姓名</label>
+              <input type="text" id="newFullName" required>
+            </div>
+            <div class="form-group">
+              <label for="newPassword">密碼</label>
+              <input type="password" id="newPassword" required>
+            </div>
+            <div class="form-group">
+              <label for="newRole">角色</label>
+              <input type="text" id="newRole" placeholder="例如：管理員、一般用戶">
+            </div>
+            <div class="form-group">
+              <label>權限等級</label>
+              <div class="permission-checkboxes">
+                <label class="permission-checkbox">
+                  <input type="radio" name="permissionLevel" value="s1"> S1
+                </label>
+                <label class="permission-checkbox">
+                  <input type="radio" name="permissionLevel" value="s2"> S2
+                </label>
+                <label class="permission-checkbox">
+                  <input type="radio" name="permissionLevel" value="s3"> S3
+                </label>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="cancel-btn" onclick="switchTab('usersList')">取消</button>
+              <button type="button" class="save-btn" onclick="saveUser()">保存</button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- 活動日誌頁籤 -->
+        <div id="activityLog" class="tab-content">
+          <table id="activityLogTable">
+            <thead>
+              <tr>
+                <th>時間</th>
+                <th>用戶</th>
+                <th>操作</th>
+                <th>詳情</th>
+              </tr>
+            </thead>
+            <tbody id="activityLogBody">
+              <!-- 活動日誌數據將通過 JavaScript 動態填充 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
     <script>
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwwXTwzpay7dGfVZ2hfXLoC-ZAa-Xh8CBaowK2d-Fck93TRTsVUaB9wCzVqSFxadogF/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwGb10WLYgzM8DeU4IGHS_meTUsKu3VV1jziKpZPC8mPJgCdhWECNWfXPJLkXv4oiTc/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1069,7 +1494,7 @@ function logoutUser() {
     document.body.removeChild(dropdown);
   };
   
-  // 添加登出選項
+    // 添加登出選項
   var logoutOption = document.createElement('div');
   logoutOption.className = 'dropdown-option';
   logoutOption.textContent = '登出系統';
@@ -1210,7 +1635,7 @@ function changePassword() {
 }
 
       /*************************************************
-       * 5) 更新用戶信息顯示 + s3按鈕顯示
+       * 5) 更新用戶信息顯示 + s3按鈕顯示 + 管理員按鈕顯示
        *************************************************/
       function updateUserInfo() {
         if (currentUser) {
@@ -1222,6 +1647,14 @@ function changePassword() {
             linksButton.style.display = 'block';
           } else {
             linksButton.style.display = 'none';
+          }
+          
+          // 顯示用戶管理按鈕（僅管理員可見）
+          const userManageButton = document.getElementById('userManageButton');
+          if (currentUser.role === '管理員' || currentUser.permission === 's3') {
+            userManageButton.style.display = 'block';
+          } else {
+            userManageButton.style.display = 'none';
           }
         }
       }
@@ -1438,7 +1871,9 @@ function changePassword() {
       window.onclick = function(event) {
         const statsModal = document.getElementById('statsModal');
         const linksModal = document.getElementById('linksModal');
-        const aiModal    = document.getElementById('aiModal'); // ★ NEW
+        const aiModal    = document.getElementById('aiModal');
+        const userManageModal = document.getElementById('userManageModal');
+        const changePasswordModal = document.getElementById('changePasswordModal');
 
         if (event.target === statsModal) {
           statsModal.style.display = "none";
@@ -1446,6 +1881,10 @@ function changePassword() {
           linksModal.style.display = "none";
         } else if (event.target === aiModal) {
           aiModal.style.display = "none";
+        } else if (event.target === userManageModal) {
+          userManageModal.style.display = "none";
+        } else if (event.target === changePasswordModal) {
+          changePasswordModal.style.display = "none";
         }
       };
 
@@ -1591,29 +2030,411 @@ function changePassword() {
           return c;
         });
       }
+      
+      /*************************************************
+       * 新增：用戶管理功能
+       *************************************************/
+      // 顯示用戶管理模態框
+      function showUserManageModal() {
+        // 添加按鈕點擊效果
+        const userManageBtn = document.getElementById('userManageButton');
+        userManageBtn.classList.add('button-clicked');
+        
+        // 更改按鈕顏色
+        userManageBtn.style.background = 'linear-gradient(45deg, #9c27b0, #d81b60)';
+        
+        setTimeout(() => {
+          // 加載用戶列表
+          loadUsers();
+          
+          // 加載活動日誌
+          loadActivityLog();
+          
+          // 顯示模態框
+          document.getElementById('userManageModal').style.display = 'block';
+          
+          // 重置按鈕樣式
+          setTimeout(() => {
+            userManageBtn.style.background = 'linear-gradient(45deg, #9c27b0, #d81b60)';
+            userManageBtn.classList.remove('button-clicked');
+          }, 300);
+        }, 300);
+      }
+      
+      // 關閉用戶管理模態框
+      function closeUserManageModal() {
+        document.getElementById('userManageModal').style.display = 'none';
+        // 重置表單
+        document.getElementById('userForm').reset();
+        document.getElementById('editUserId').value = '';
+      }
+      
+      // 切換頁籤
+      function switchTab(tabId) {
+        // 隱藏所有頁籤內容
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+          content.classList.remove('active');
+        });
+        
+        // 取消所有頁籤的活動狀態
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+          tab.classList.remove('active');
+        });
+        
+        // 顯示選中的頁籤內容
+        document.getElementById(tabId).classList.add('active');
+        
+        // 設置選中頁籤的活動狀態
+        const activeTab = document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`);
+        if (activeTab) {
+          activeTab.classList.add('active');
+        }
+        
+        // 如果切換到用戶列表頁籤，重新加載用戶列表
+        if (tabId === 'usersList') {
+          loadUsers();
+        }
+        
+        // 如果切換到活動日誌頁籤，重新加載活動日誌
+        if (tabId === 'activityLog') {
+          loadActivityLog();
+        }
+      }
+      
+      // 加載用戶列表
+      function loadUsers() {
+        callGAS('getUsers')
+          .then(data => {
+            if (data.success) {
+              renderUsersTable(data.result);
+            } else {
+              console.error("Error:", data.error);
+              alert('加載用戶列表失敗: ' + data.error);
+            }
+          })
+          .catch(err => {
+            console.error("Fetch error:", err);
+            alert('加載用戶列表時發生錯誤');
+          });
+      }
+      
+      // 渲染用戶列表表格
+      function renderUsersTable(users) {
+        const tbody = document.getElementById('usersTableBody');
+        tbody.innerHTML = '';
+        
+        if (!users || users.length === 0) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td colspan="8" style="text-align: center;">暫無用戶數據</td>';
+          tbody.appendChild(tr);
+          return;
+        }
+        
+        users.forEach((user, index) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="checkbox" class="user-checkbox" value="${index}"></td>
+            <td>${user.username}</td>
+            <td>${user.fullName || ''}</td>
+            <td>${user.role || ''}</td>
+            <td>${user.permissionLevel || ''}</td>
+            <td>${user.lastLogin || ''}</td>
+            <td>${user.active ? '啟用' : '禁用'}</td>
+            <td>
+              <button class="user-action-btn edit-btn" onclick="editUser(${index})">編輯</button>
+              <button class="user-action-btn reset-pwd-btn" onclick="resetPassword(${index})">重置密碼</button>
+              <button class="user-action-btn toggle-status-btn" onclick="toggleUserStatus(${index})">${user.active ? '禁用' : '啟用'}</button>
+              <button class="user-action-btn delete-btn" onclick="deleteUser(${index})">刪除</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+      
+      // 全選/取消全選
+      function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const userCheckboxes = document.querySelectorAll('.user-checkbox');
+        
+        userCheckboxes.forEach(checkbox => {
+          checkbox.checked = selectAllCheckbox.checked;
+        });
+      }
+      
+      // 執行批量操作
+      function executeBulkAction() {
+        const action = document.getElementById('bulkActionSelect').value;
+        if (!action) {
+          alert('請選擇要執行的操作');
+          return;
+        }
+        
+        const selectedUsers = [];
+        const userCheckboxes = document.querySelectorAll('.user-checkbox:checked');
+        userCheckboxes.forEach(checkbox => {
+          selectedUsers.push(parseInt(checkbox.value));
+        });
+        
+        if (selectedUsers.length === 0) {
+          alert('請至少選擇一個用戶');
+          return;
+        }
+        
+        // 確認操作
+        if (!confirm(`確定要對選中的 ${selectedUsers.length} 個用戶執行 ${getBulkActionName(action)} 操作嗎？`)) {
+          return;
+        }
+        
+        callGAS('bulkUserAction', { action, userIndices: selectedUsers.join(',') })
+          .then(data => {
+            if (data.success) {
+              alert('操作成功完成');
+              loadUsers(); // 重新加載用戶列表
+            } else {
+              alert('操作失敗: ' + data.error);
+            }
+          })
+          .catch(err => {
+            console.error("Bulk action error:", err);
+            alert('執行操作時發生錯誤');
+          });
+      }
+      
+      // 獲取批量操作名稱
+      function getBulkActionName(action) {
+        switch (action) {
+          case 'enable': return '啟用';
+          case 'disable': return '禁用';
+          case 'delete': return '刪除';
+          case 's1': return '設為 S1 權限';
+          case 's2': return '設為 S2 權限';
+          case 's3': return '設為 S3 權限';
+          default: return action;
+        }
+      }
+      
+      // 編輯用戶
+      function editUser(index) {
+        callGAS('getUserDetails', { userIndex: index })
+          .then(data => {
+            if (data.success) {
+              const user = data.result;
+              
+              // 填充表單
+              document.getElementById('editUserId').value = index;
+              document.getElementById('newUsername').value = user.username;
+              document.getElementById('newFullName').value = user.fullName || '';
+              document.getElementById('newPassword').value = ''; // 不顯示密碼
+              document.getElementById('newRole').value = user.role || '';
+              
+              // 設置權限等級
+              const permRadios = document.getElementsByName('permissionLevel');
+              for (let radio of permRadios) {
+                radio.checked = radio.value === user.permissionLevel;
+              }
+              
+              // 切換到創建/編輯頁籤
+              switchTab('createUser');
+            } else {
+              alert('獲取用戶詳情失敗: ' + data.error);
+            }
+          })
+          .catch(err => {
+            console.error("Get user details error:", err);
+            alert('獲取用戶詳情時發生錯誤');
+          });
+      }
+      
+      // 保存用戶（新增或更新）
+      function saveUser() {
+        const editUserId = document.getElementById('editUserId').value;
+        const username = document.getElementById('newUsername').value.trim();
+        const fullName = document.getElementById('newFullName').value.trim();
+        const password = document.getElementById('newPassword').value;
+        const role = document.getElementById('newRole').value.trim();
+        
+        // 獲取選中的權限等級
+        let permissionLevel = '';
+        const permRadios = document.getElementsByName('permissionLevel');
+        for (let radio of permRadios) {
+          if (radio.checked) {
+            permissionLevel = radio.value;
+            break;
+          }
+        }
+        
+                // 驗證必填字段
+        if (!username) {
+          alert('請輸入用戶名');
+          return;
+        }
+        
+        if (!fullName) {
+          alert('請輸入姓名');
+          return;
+        }
+        
+        // 如果是新增用戶，密碼為必填
+        if (!editUserId && !password) {
+          alert('請輸入密碼');
+          return;
+        }
+        
+        // 準備請求參數
+        const params = {
+          username,
+          fullName,
+          role,
+          permissionLevel
+        };
+        
+        // 如果有密碼，添加到參數中
+        if (password) {
+          params.password = password;
+        }
+        
+        // 如果是編輯現有用戶，添加用戶索引
+        if (editUserId) {
+          params.userIndex = editUserId;
+          
+          // 發送更新用戶請求
+          callGAS('updateUser', params)
+            .then(data => {
+              if (data.success) {
+                alert('用戶更新成功');
+                switchTab('usersList'); // 切換回用戶列表頁籤
+                loadUsers(); // 重新加載用戶列表
+              } else {
+                alert('用戶更新失敗: ' + data.error);
+              }
+            })
+            .catch(err => {
+              console.error("Update user error:", err);
+              alert('更新用戶時發生錯誤');
+            });
+        } else {
+          // 發送創建用戶請求
+          callGAS('createUser', params)
+            .then(data => {
+              if (data.success) {
+                alert('用戶創建成功');
+                switchTab('usersList'); // 切換回用戶列表頁籤
+                loadUsers(); // 重新加載用戶列表
+              } else {
+                alert('用戶創建失敗: ' + data.error);
+              }
+            })
+            .catch(err => {
+              console.error("Create user error:", err);
+              alert('創建用戶時發生錯誤');
+            });
+        }
+      }
+      
+      // 重置用戶密碼
+      function resetPassword(index) {
+        const newPassword = prompt('請輸入新密碼（留空將生成隨機密碼）');
+        
+        if (newPassword === null) {
+          return; // 用戶取消操作
+        }
+        
+        callGAS('resetUserPassword', { userIndex: index, newPassword })
+          .then(data => {
+            if (data.success) {
+              alert(`密碼重置成功${data.result.password ? '，新密碼為：' + data.result.password : ''}`);
+            } else {
+              alert('密碼重置失敗: ' + data.error);
+            }
+          })
+          .catch(err => {
+            console.error("Reset password error:", err);
+            alert('重置密碼時發生錯誤');
+          });
+      }
+      
+      // 切換用戶狀態（啟用/禁用）
+      function toggleUserStatus(index) {
+        callGAS('toggleUserStatus', { userIndex: index })
+          .then(data => {
+            if (data.success) {
+              alert(`用戶${data.result.active ? '啟用' : '禁用'}成功`);
+              loadUsers(); // 重新加載用戶列表
+            } else {
+              alert('操作失敗: ' + data.error);
+            }
+          })
+          .catch(err => {
+            console.error("Toggle user status error:", err);
+            alert('操作時發生錯誤');
+          });
+      }
+      
+      // 刪除用戶
+      function deleteUser(index) {
+        if (!confirm('確定要刪除此用戶嗎？此操作不可撤銷。')) {
+          return;
+        }
+        
+        callGAS('deleteUser', { userIndex: index })
+          .then(data => {
+            if (data.success) {
+              alert('用戶刪除成功');
+              loadUsers(); // 重新加載用戶列表
+            } else {
+              alert('用戶刪除失敗: ' + data.error);
+            }
+          })
+          .catch(err => {
+            console.error("Delete user error:", err);
+            alert('刪除用戶時發生錯誤');
+          });
+      }
+      
+      // 加載活動日誌
+      function loadActivityLog() {
+        callGAS('getActivityLog')
+          .then(data => {
+            if (data.success) {
+              renderActivityLog(data.result);
+            } else {
+              console.error("Error:", data.error);
+              alert('加載活動日誌失敗: ' + data.error);
+            }
+          })
+          .catch(err => {
+            console.error("Fetch error:", err);
+            alert('加載活動日誌時發生錯誤');
+          });
+      }
+      
+      // 渲染活動日誌表格
+      function renderActivityLog(logs) {
+        const tbody = document.getElementById('activityLogBody');
+        tbody.innerHTML = '';
+        
+        if (!logs || logs.length === 0) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td colspan="4" style="text-align: center;">暫無活動日誌</td>';
+          tbody.appendChild(tr);
+          return;
+        }
+        
+        logs.forEach(log => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${log.timestamp}</td>
+            <td>${log.user}</td>
+            <td>${log.action}</td>
+            <td>${log.details}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
     </script>
     <!-- 更改密碼模態視窗 -->
-<div id="changePasswordModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-    <h2>更改密碼</h2>
-    <div class="form-group">
-      <label for="currentPassword">目前密碼:</label>
-      <input type="password" id="currentPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="newPassword">新密碼:</label>
-      <input type="password" id="newPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="confirmPassword">確認新密碼:</label>
-      <input type="password" id="confirmPassword" required>
-    </div>
-    <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
-    <button onclick="changePassword()">確認更改</button>
-  </div>
-</div>
-<!-- 更改密碼模態視窗 -->
 <div id="changePasswordModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeChangePasswordModal()">&times;</span>
@@ -1637,5 +2458,3 @@ function changePassword() {
 
   </body>
 </html>
-
-
