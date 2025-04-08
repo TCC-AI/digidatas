@@ -1422,7 +1422,7 @@ a.download-link::before {
           updateUserInfo();
           populateFolderDropdown(data.result);
           // 延遲呼叫公告檢查
-          setTimeout(checkAnnouncement, 5);
+          setTimeout(checkAnnouncement, 200);
         } else {
           clearAuthData();
           document.getElementById('loginScreen').style.display = 'flex';
