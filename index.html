@@ -2511,6 +2511,7 @@ function closeAnnouncementEditModal() {
 }
 
 // 呼叫後端保存公告（假設後端支援 saveAnnouncement 這個 action）
+// 呼叫後端保存公告
 function saveAnnouncement() {
   var text = document.getElementById('announcementText').value.trim();
   if (!text) {
@@ -2522,6 +2523,9 @@ function saveAnnouncement() {
       if (data.success) {
         alert("公告已存檔！");
         closeAnnouncementEditModal();
+        
+        // 立即顯示新增的公告
+        showAnnouncementPopupModal(text);
       } else {
         alert("公告存檔失敗: " + data.error);
       }
@@ -2531,6 +2535,7 @@ function saveAnnouncement() {
       alert("公告存檔時發生錯誤");
     });
 }
+
 
 // 登入後檢查公告是否存在
 function checkAnnouncement() {
