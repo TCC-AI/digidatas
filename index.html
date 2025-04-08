@@ -1216,6 +1216,26 @@ a.download-link::before {
       </div>
     </div>
 
+    <div id="announcementEditModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAnnouncementEditModal()">&times;</span>
+    <h2>新增公告</h2>
+    <textarea id="announcementText" placeholder="請輸入公告內容..." style="width:100%; height:150px; padding:10px; font-size:1em;"></textarea>
+    <div style="margin-top:10px; text-align:right;">
+      <button onclick="closeAnnouncementEditModal()" style="margin-right:10px;">取消</button>
+      <button onclick="saveAnnouncement()">存檔</button>
+    </div>
+  </div>
+</div>
+
+    <div id="announcementPopupModal" class="modal">
+  <div class="modal-content" style="text-align:center;">
+    <h3 id="announcementPopupContent"></h3>
+    <button onclick="closeAnnouncementPopupModal()" style="margin-top:20px;">確定</button>
+  </div>
+</div>
+
+
     <!-- 超級連結 Modal (只給s3用) -->
     <div id="linksModal">
       <div class="modal-content">
@@ -1243,6 +1263,9 @@ a.download-link::before {
       <div class="modal-content">
         <span class="close" onclick="closeUserManageModal()">&times;</span>
         <h2>用戶管理</h2>
+        <!-- 新增公告按鈕，僅管理員可見，放在頁籤導航上方 -->
+<button id="announcementBtn" onclick="showAnnouncementEditModal()" style="margin-bottom:10px; background: linear-gradient(45deg, #ffcc00, #ffaa00); color: #001; border: none; border-radius:20px; padding:8px 12px; font-size:1.3em; font-weight:bold;">新增公告</button>
+
         
         <!-- 頁籤導航 -->
         <div class="tabs">
@@ -1376,42 +1399,45 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbypHa4pTNw86xGlfaM0qZO09TnD6bQrBVQFa9P8UJiJ0QcW5wShNFUe2RbJNScMJNmy/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxAsob_cShm04dVoqFoRrPuXdhXVhFhgPcRxtWWX4oGKkjqYxuGvJUFjvfomaX3H_ZL/exec";
       let currentUser = null;
       
       /*************************************************
        * 2) 檢查是否已登入 + 字母特效
        *************************************************/
       window.onload = function() {
-        const token = localStorage.getItem('authToken');
-        const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token 檢查
-        if (token && csrfToken) {
-          callGAS('getSubfolders')
-            .then(data => {
-              if (data.success) {
-                document.getElementById('loginScreen').style.display = 'none';
-                currentUser = {
-                  username: localStorage.getItem('username'),
-                  name: localStorage.getItem('name'),
-                  role: localStorage.getItem('role'),
-                  permission: localStorage.getItem('permissionLevel') || ''
-                };
-                updateUserInfo();
-                populateFolderDropdown(data.result);
-              } else {
-                clearAuthData();
-                document.getElementById('loginScreen').style.display = 'flex';
-              }
-            })
-            .catch(err => {
-              console.error("Fetch error:", err);
-              clearAuthData();
-              document.getElementById('loginScreen').style.display = 'flex';
-            });
+  const token = localStorage.getItem('authToken');
+  const csrfToken = localStorage.getItem('csrfToken');
+  if (token && csrfToken) {
+    callGAS('getSubfolders')
+      .then(data => {
+        if (data.success) {
+          document.getElementById('loginScreen').style.display = 'none';
+          currentUser = {
+            username: localStorage.getItem('username'),
+            name: localStorage.getItem('name'),
+            role: localStorage.getItem('role'),
+            permission: localStorage.getItem('permissionLevel') || ''
+          };
+          updateUserInfo();
+          populateFolderDropdown(data.result);
+          // 新增：檢查公告
+          checkAnnouncement();
+        } else {
+          clearAuthData();
+          document.getElementById('loginScreen').style.display = 'flex';
         }
-        
-        createTCCLetters(); // 建立 T, C, C 字母特效
-      };
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        clearAuthData();
+        document.getElementById('loginScreen').style.display = 'flex';
+      });
+  }
+  
+  createTCCLetters(); // 建立 T, C, C 字母特效
+};
+
 
       // 清除所有身份驗證數據
       function clearAuthData() {
@@ -2471,6 +2497,65 @@ function changePassword() {
             tbody.appendChild(tr);
           });
         }
+
+      // 顯示公告編輯 Modal
+function showAnnouncementEditModal() {
+  document.getElementById('announcementText').value = ""; // 可根據需求預載現有公告
+  document.getElementById('announcementEditModal').style.display = 'block';
+}
+
+// 關閉公告編輯 Modal
+function closeAnnouncementEditModal() {
+  document.getElementById('announcementEditModal').style.display = 'none';
+}
+
+// 呼叫後端保存公告（假設後端支援 saveAnnouncement 這個 action）
+function saveAnnouncement() {
+  var text = document.getElementById('announcementText').value.trim();
+  if (!text) {
+    alert("公告內容不能為空");
+    return;
+  }
+  callGAS('saveAnnouncement', { announcement: text })
+    .then(data => {
+      if (data.success) {
+        alert("公告已存檔！");
+        closeAnnouncementEditModal();
+      } else {
+        alert("公告存檔失敗: " + data.error);
+      }
+    })
+    .catch(err => {
+      console.error("saveAnnouncement error:", err);
+      alert("公告存檔時發生錯誤");
+    });
+}
+
+// 登入後檢查公告是否存在
+function checkAnnouncement() {
+  callGAS('getAnnouncement')
+    .then(data => {
+      if (data.success && data.result && data.result.announcement) {
+        showAnnouncementPopupModal(data.result.announcement);
+      }
+    })
+    .catch(err => {
+      console.error("checkAnnouncement error:", err);
+    });
+}
+
+// 顯示公告 Popup Modal
+function showAnnouncementPopupModal(announcement) {
+  // 使用 h3 呈現公告文字
+  document.getElementById('announcementPopupContent').innerText = announcement;
+  document.getElementById('announcementPopupModal').style.display = 'block';
+}
+
+// 關閉公告 Popup Modal
+function closeAnnouncementPopupModal() {
+  document.getElementById('announcementPopupModal').style.display = 'none';
+}
+
       </script>
   </body>
 </html>
