@@ -1010,41 +1010,70 @@ a.download-link::before {
           });
       }
 
-      /*************************************************
+ /*************************************************
  * 4) 登出函數
  *************************************************/
 function logoutUser() {
+  // 檢查是否已經存在下拉選單
+  const existingDropdown = document.querySelector('.logout-dropdown');
+  if (existingDropdown) {
+    document.body.removeChild(existingDropdown);
+    return;
+  }
+
   // 添加下拉菜單
   var dropdown = document.createElement('div');
   dropdown.className = 'logout-dropdown';
   dropdown.style.position = 'absolute';
-  dropdown.style.top = '40px';
+  dropdown.style.top = '45px';
   dropdown.style.right = '10px';
   dropdown.style.backgroundColor = 'white';
-  dropdown.style.borderRadius = '5px';
-  dropdown.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+  dropdown.style.borderRadius = '10px';
+  dropdown.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
   dropdown.style.zIndex = '1000';
-  
-  // 添加登出選項
-  var logoutOption = document.createElement('div');
-  logoutOption.className = 'dropdown-option';
-  logoutOption.textContent = '登出系統';
-  logoutOption.style.padding = '10px 15px';
-  logoutOption.style.cursor = 'pointer';
-  logoutOption.style.borderBottom = '1px solid #eee';
-  logoutOption.onclick = function() {
-    performLogout();
-  };
+  dropdown.style.overflow = 'hidden';
+  dropdown.style.minWidth = '120px';
   
   // 添加更改密碼選項
   var changePasswordOption = document.createElement('div');
   changePasswordOption.className = 'dropdown-option';
   changePasswordOption.textContent = '更改密碼';
-  changePasswordOption.style.padding = '10px 15px';
+  changePasswordOption.style.padding = '12px 15px';
   changePasswordOption.style.cursor = 'pointer';
-  changePasswordOption.onclick = function() {
+  changePasswordOption.style.borderBottom = '1px solid #eee';
+  changePasswordOption.style.transition = 'background-color 0.3s';
+  changePasswordOption.style.color = '#333';
+  changePasswordOption.style.fontWeight = 'bold';
+  changePasswordOption.onmouseover = function() {
+    this.style.backgroundColor = '#f5f5f5';
+  };
+  changePasswordOption.onmouseout = function() {
+    this.style.backgroundColor = 'white';
+  };
+  changePasswordOption.onclick = function(e) {
+    e.stopPropagation(); // 防止事件冒泡
     showChangePasswordModal();
     document.body.removeChild(dropdown);
+  };
+  
+  // 添加登出選項
+  var logoutOption = document.createElement('div');
+  logoutOption.className = 'dropdown-option';
+  logoutOption.textContent = '登出系統';
+  logoutOption.style.padding = '12px 15px';
+  logoutOption.style.cursor = 'pointer';
+  logoutOption.style.color = '#ff3333';
+  logoutOption.style.fontWeight = 'bold';
+  logoutOption.style.transition = 'background-color 0.3s';
+  logoutOption.onmouseover = function() {
+    this.style.backgroundColor = '#fff0f0';
+  };
+  logoutOption.onmouseout = function() {
+    this.style.backgroundColor = 'white';
+  };
+  logoutOption.onclick = function(e) {
+    e.stopPropagation(); // 防止事件冒泡
+    performLogout();
   };
   
   dropdown.appendChild(changePasswordOption);
@@ -1132,8 +1161,8 @@ function changePassword() {
   .then(data => {
     if (data.success) {
       alert('密碼更改成功！請重新登入。');
-      logoutUser();
       closeChangePasswordModal();
+      performLogout();
     } else {
       passwordError.textContent = data.error || '密碼更改失敗';
       passwordError.style.display = 'block';
@@ -1527,5 +1556,48 @@ function changePassword() {
         });
       }
     </script>
+    <!-- 更改密碼模態視窗 -->
+<div id="changePasswordModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+    <h2>更改密碼</h2>
+    <div class="form-group">
+      <label for="currentPassword">目前密碼:</label>
+      <input type="password" id="currentPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="newPassword">新密碼:</label>
+      <input type="password" id="newPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">確認新密碼:</label>
+      <input type="password" id="confirmPassword" required>
+    </div>
+    <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
+    <button onclick="changePassword()">確認更改</button>
+  </div>
+</div>
+<!-- 更改密碼模態視窗 -->
+<div id="changePasswordModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+    <h2>更改密碼</h2>
+    <div class="form-group">
+      <label for="currentPassword">目前密碼:</label>
+      <input type="password" id="currentPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="newPassword">新密碼:</label>
+      <input type="password" id="newPassword" required>
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">確認新密碼:</label>
+      <input type="password" id="confirmPassword" required>
+    </div>
+    <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
+    <button onclick="changePassword()">確認更改</button>
+  </div>
+</div>
+
   </body>
 </html>
