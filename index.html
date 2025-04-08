@@ -206,13 +206,11 @@
         color: #054496;
         margin-bottom: 20px;
         font-size: 3em;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         position: relative;
         padding-bottom: 15px;
-        margin-top: 15px;
+        margin-top: 20px;
       }
-    
-      
       .logo-img {
         max-width: 200px;
         margin: 25px auto 0; 
@@ -433,38 +431,29 @@
   font-size: 1em;
 }
 
-/* 用戶選項下拉菜單 */
-.dropdown {
+/* Logout Button */
+#logoutButton {
   position: absolute;
   top: 10px; right: 10px;
-  display: inline-block;
-}
-
-/* 下拉按鈕 */
-.dropdown-button {
   padding: 8px 15px;
   background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-  color: white; 
-  border: none; 
-  border-radius: 50px;
+  color: white; border: none; border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3), 0 3px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.), 0 3px 8px rgba(0,0,0,0.15);
   transition: all 0.3s ease;
-  font-size: 0.8em; 
-  font-weight: bold;
-  display: flex; 
-  align-items: center; 
-  justify-content: center;
+  font-size: 0.8em; font-weight: bold;
+  display: flex; align-items: center; justify-content: center;
   min-height: 30px;
 }
-
-.dropdown-button:hover {
+#logoutButton:hover {
   background: linear-gradient(45deg, #ff8e8e, #ff6b6b);
   box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5), 0 5px 12px rgba(0,0,0,0.2);
   transform: translateY(-2px);
 }
-
-.dropdown-button::before {
+#logoutButton:active {
+  background: linear-gradient(45deg, #b50404, #ff6b6b);
+}
+#logoutButton::before {
   content: "🚪";
   margin-right: 8px;
   font-size: 0.8em;
@@ -472,67 +461,14 @@
   transition: all 0.3s ease;
 }
 
-/* 下拉內容 */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(5px);
-  min-width: 120px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  z-index: 100;
-  border-radius: 10px;
-  overflow: hidden;
+/* 按鈕點擊效果 */
+.button-clicked {
+  animation: buttonClick 0.5s;
 }
-
-/* 下拉選項 */
-.dropdown-content a {
-  color: #333;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  transition: all 0.2s;
-  font-size: 0.9em;
-  font-weight: bold;
-}
-
-.dropdown-content a:hover {
-  background-color: rgba(255, 107, 107, 0.2);
-}
-
-/* 顯示下拉內容 */
-.dropdown:hover .dropdown-content {
-  display: block;
-  animation: fadeIn 0.3s;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* 下拉箭頭 */
-.dropdown-arrow {
-  margin-left: 5px;
-  font-size: 0.7em;
-  transition: transform 0.3s;
-}
-
-.dropdown:hover .dropdown-arrow {
-  transform: rotate(180deg);
-}
-
-/* 更改密碼選項 */
-#changePasswordOption::before {
-  content: "🔑";
-  margin-right: 8px;
-}
-
-/* 登出選項 */
-#logoutOption::before {
-  content: "🚪";
-  margin-right: 8px;
+@keyframes buttonClick {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
 
 /* User Info */
@@ -724,76 +660,81 @@ a.download-link::before {
 }
 }
 
-/* 更改密碼 Modal */
-#changePasswordModal {
-  display: none;
-  position: fixed;
-  z-index: 1002;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.7);
-  overflow: auto;
-}
-#changePasswordModal .modal-content {
-  position: relative;
-  background: white;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-  width: 90%;
-    max-width: 500px;
-  animation: modalOpen 0.4s;
-}
-#changePasswordModal h2 {
-  color: #054496;
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  text-align: center;
-}
-#changePasswordModal .form-group {
-  margin-bottom: 15px;
-}
-#changePasswordModal label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #147802;
-}
-#changePasswordModal input {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid rgba(33, 147, 176, 0.3);
-  border-radius: 10px;
-  font-size: 1em;
-}
-#passwordChangeError {
-  color: #ff6b6b;
-  margin: 10px 0;
-  font-weight: bold;
-  display: none;
-}
-#changePasswordModal button {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(45deg, #2193b0, #6dd5ed);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-top: 10px;
-}
-#changePasswordModal button:hover {
-  background: linear-gradient(45deg, #6dd5ed, #2193b0);
+/* 
+  ----- Media Queries -----
+  這裡有三段: 
+  1) @media (max-width: 820px)
+  2) @media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2)
+  3) 再一個 @media (max-width: 820px) 
+  全都保留 
+*/
+
+@media (max-width: 820px) {
+  .container { padding: 30px; }
+  h2 { font-size: 2.2em; }
+  label { font-size: 1.3em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; }
+  iframe { height: 500px; }
+  a.download-link { font-size: 1em; padding: 12px 25px; }
 }
 
-/* AI 助手 Modal */
+@media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2) {
+  h2 { font-size: 2em; }
+  label { font-size: 1em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; padding: 12px 12px; }
+  #statsButton, #logoutButton { font-size: 0.8em; }
+  a.download-link { font-size: 1em; }
+}
+
+@media (max-width: 820px) {
+  .container { padding: 15px; }
+  #statsButton { 
+    font-size: 1em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 240px; 
+  }
+  #userInfo { top: 50px; right: 10px; font-size: 0.8em; }
+  #linksButton {
+    font-size: 1em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 240px;
+  }
+  #aiButton {
+    font-size: 1em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 125px;
+  }}
+  @media (max-width: 600px) {
+  #linksTable td:nth-child(1) {
+    font-size: 16px;
+    width: 70%;  /* 名稱欄位佔表格寬度的 35% */  }
+  
+  #linksTable td:nth-child(2) {
+    font-size: 10px;
+    width: 30%;  /* 名稱欄位佔表格寬度的 35% */  }
+  
+  #linksTable td {
+    padding: 10px 8px; /* 在手機上增加垂直間距 */
+  }
+  
+  #linksTable a {
+    word-break: break-all; /* 確保超連結在手機上會換行 */
+  }
+}
+
+/* ★ NEW: AI Modal (寬度90%) */
 #aiModal {
   display: none;
   position: fixed;
-  z-index: 1002;
+  z-index: 1002; /* 比 linksModal、statsModal 更前 */
   left: 0; top: 0;
   width: 100%; height: 100%;
   background-color: rgba(0,0,0,0.7);
@@ -807,1084 +748,784 @@ a.download-link::before {
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.3);
   width: 90%;
-  max-width: 800px;
-  height: 80%;
+  max-width: 1200px;
   animation: modalOpen 0.4s;
-  display: flex;
-  flex-direction: column;
 }
-#aiModal h2 {
-  color: #054496;
-  margin-bottom: 15px;
-  font-size: 1.8em;
-  text-align: center;
-}
-#aiChatContainer {
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-}
-#aiInputContainer {
-  display: flex;
-  gap: 10px;
-}
-#aiInput {
-  flex-grow: 1;
-  padding: 10px;
-  border: 2px solid rgba(33, 147, 176, 0.3);
-  border-radius: 10px;
-  font-size: 1em;
-}
-#aiSendButton {
-  padding: 10px 20px;
-  background: linear-gradient(45deg, #2193b0, #6dd5ed);
-  color: white;
-  border: none;
-  border-radius: 10px;
+#aiModal .close {
+  position: absolute;
+  top: 15px; right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 1em;
+  transition: all 0.2s;
+}
+#aiModal .close:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+/* 簡易聊天區域 */
+#aiChatContainer {
+  margin-bottom: 15px;
+  min-height: 200px; 
+  max-height: 500px; 
+  overflow-y: auto; 
+  border: 1px solid #ccc; 
+  padding: 10px;
+  border-radius: 8px;
+}
+.chat-assistant {
+  background: #f2f2f2;
+  padding: 8px;
+  margin: 5px;
+  border-radius: 8px;
+  color: #333;
+}
+.chat-user {
+  background: #dff9fb;
+  padding: 8px;
+  margin: 5px;
+  border-radius: 8px;
+  text-align: right;
+  color: #333;
+}
+#aiUserInput {
+  width: 70%;
+  padding: 8px;
+  margin-right: 5px;
+  border-radius: 8px;
+}
+#sendAiBtn {
+  padding: 8px 15px;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #00bfff, #007fff);
+  color: #fff;
+  border: none;
+  cursor: pointer;
   font-weight: bold;
 }
-#aiSendButton:hover {
-  background: linear-gradient(45deg, #6dd5ed, #2193b0);
-}
-.ai-message, .user-message {
-  padding: 10px 15px;
-  margin: 5px 0;
-  border-radius: 15px;
-  max-width: 80%;
-  word-wrap: break-word;
-}
-.ai-message {
-  background-color: #e3f2fd;
-  align-self: flex-start;
-  margin-right: auto;
-  border-bottom-left-radius: 5px;
-}
-.user-message {
-  background-color: #e1f5fe;
-  align-self: flex-end;
-  margin-left: auto;
-  text-align: right;
-  border-bottom-right-radius: 5px;
-}
-#aiResults {
-  margin-top: 15px;
-  width: 100%;
-  border-collapse: collapse;
-}
-#aiResults th, #aiResults td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-#aiResults th {
-  background-color: #f2f2f2;
-  position: sticky;
-  top: 0;
-}
-#aiResults tr:hover {
-  background-color: #f5f5f5;
-}
-#aiLoading {
-  text-align: center;
-  margin: 20px 0;
-  display: none;
-}
-.ai-thinking {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 13px;
-}
-.ai-thinking div {
-  position: absolute;
-  top: 0;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: #2193b0;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.ai-thinking div:nth-child(1) {
-  left: 8px;
-  animation: ai-thinking1 0.6s infinite;
-}
-.ai-thinking div:nth-child(2) {
-  left: 8px;
-  animation: ai-thinking2 0.6s infinite;
-}
-.ai-thinking div:nth-child(3) {
-  left: 32px;
-  animation: ai-thinking2 0.6s infinite;
-}
-.ai-thinking div:nth-child(4) {
-  left: 56px;
-  animation: ai-thinking3 0.6s infinite;
-}
-@keyframes ai-thinking1 {
-  0% { transform: scale(0); }
-  100% { transform: scale(1); }
-}
-@keyframes ai-thinking3 {
-  0% { transform: scale(1); }
-  100% { transform: scale(0); }
-}
-@keyframes ai-thinking2 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(24px, 0); }
+#sendAiBtn:hover {
+  background: linear-gradient(45deg, #007fff, #00bfff);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .container {
-    padding: 15px 10px;
-  }
-  h2 {
-    font-size: 1.8em;
-  }
-  label {
-    font-size: 1.1em;
-  }
-  select, button, input[type="text"] {
-    font-size: 0.9em;
-    padding: 10px;
-  }
-  #statsButton, #linksButton, #aiButton {
-    font-size: 0.9em;
-    padding: 5px 10px;
-    min-width: 60px;
-    width: 70px;
-  }
-  #statsButton {
-    top: 10px;
-    left: 10px;
-  }
-  #linksButton {
-    top: 10px;
-    left: 90px;
-  }
-  #aiButton {
-    top: 10px;
-    left: 170px;
-  }
-  iframe {
-    height: 600px;
-  }
-  .dropdown-button {
-    font-size: 0.7em;
-    padding: 5px 10px;
-  }
-  #userInfo {
-    font-size: 0.5em;
-  }
-  .modal-content {
-    margin: 20% auto;
-    padding: 15px;
-  }
-  .chart-container {
-    height: 300px;
-  }
-}
-
-@media (max-width: 480px) {
-  h2 {
-    font-size: 1.5em;
-  }
-  label {
-    font-size: 1em;
-  }
-  select, button, input[type="text"] {
-    font-size: 0.8em;
-    padding: 8px;
-  }
-  iframe {
-    height: 400px;
-  }
-  .modal-content {
-    margin: 30% auto;
-    padding: 10px;
-  }
-  .chart-container {
-    height: 250px;
-  }
-}
     </style>
   </head>
-  <body>
-    <!-- 浮動字母 -->
-    <div class="letter letter-t">T</div>
-    <div class="letter letter-c1">C</div>
-    <div class="letter letter-c2">C</div>
 
+  <body>
     <!-- 登入畫面 -->
     <div id="loginScreen">
       <div id="loginBox">
-        <img src="https://raw.githubusercontent.com/Bingdoal/demo/master/logo.png" alt="Logo" class="logo-img">
-        <h3>昶青數位資料中心</h3>
+        <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
+        <h3>昶青數位資料中心登入</h3>
         <div class="form-group">
-          <label for="username">帳號</label>
+          <label for="username">使用者帳號</label>
           <input type="text" id="username" placeholder="請輸入帳號">
         </div>
         <div class="form-group">
-          <label for="password">密碼</label>
+          <label for="password">使用者密碼</label>
           <input type="password" id="password" placeholder="請輸入密碼">
         </div>
         <div id="loginError"></div>
-        <button id="loginButton">登入系統</button>
+        <button onclick="loginUser()">登入系統</button>
+        <h6 style="text-align: center; color: #8f8d8d;margin-top: 20px;">Designed by T.C.C.管理本部</h6>
       </div>
     </div>
 
-    <!-- 主要容器 -->
-    <div class="container" id="mainContainer" style="display:none;">
+    <!-- 主應用程式 -->
+    <div class="container">
+      <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
       <h2>昶青數位資料中心</h2>
       
-      <!-- 使用統計按鈕 -->
-      <button id="statsButton">使用統計</button>
-      
-      <!-- 超級連結按鈕 (s3限定) -->
-      <button id="linksButton">超級連結</button>
-      
-      <!-- AI助理按鈕 -->
-      <button id="aiButton">AI助理</button>
-      
-      <!-- 用戶選項下拉菜單 -->
-      <div class="dropdown">
-        <button class="dropdown-button">
-          <span>選項</span>
-          <span class="dropdown-arrow">▼</span>
-        </button>
-        <div class="dropdown-content">
-          <a href="#" id="changePasswordOption">更改密碼</a>
-          <a href="#" id="logoutOption">登出系統</a>
-        </div>
-      </div>
-      
-      <!-- 用戶資訊 -->
+      <button id="logoutButton" onclick="logoutUser()">登出</button>
       <div id="userInfo">
-        <div>使用者: <span id="userName"></span></div>
-        <div>權限: <span id="userRole"></span></div>
+        歡迎, <span id="userName"></span>
+        <div id="userRole"></div>
       </div>
+      <button id="statsButton" onclick="showStats()">使用統計</button>
+      <!-- 只有s3看到的按鈕 -->
+      <button id="linksButton" onclick="showLinks()">超級連結</button>
+
+      <!-- ★ NEW: AI助手按鈕 (所有人可見) -->
+      <button id="aiButton" onclick="showAiModal()">AI助理</button>
       
-      <!-- 部門選擇 -->
       <div class="form-group first-form-group">
-        <label for="department">部門選擇</label>
-        <select id="department">
-          <option value="">請選擇部門</option>
+        <label for="folderSelect">請選擇部門</label>
+        <select id="folderSelect" onchange="loadFiles()">
+          <option value="">請選擇...</option>
         </select>
       </div>
-      
-      <!-- 文件類別 -->
+
       <div class="form-group">
-        <label for="category">文件類別</label>
-        <select id="category">
-          <option value="">請選擇類別</option>
+        <label for="typeSelect">請選擇文件類別</label>
+        <select id="typeSelect" onchange="loadFiles()">
+          <option value="all" selected>全部文件</option>
+          <option value="辦法">辦法計畫</option>
+          <option value="其他文件">其他文件</option>
         </select>
       </div>
-      
-      <!-- 檔案搜尋 -->
+
       <div class="form-group">
-        <label for="search">檔案搜尋</label>
-        <input type="text" id="search" placeholder="輸入關鍵字搜尋檔案">
+        <label for="searchInput">檔案搜尋</label>
+        <input type="text" id="searchInput" placeholder="請輸入關鍵字..." oninput="loadFiles()">
       </div>
       
-      <!-- 檔案選擇 -->
       <div class="form-group">
-        <label for="file">檔案選擇</label>
-        <select id="file">
-          <option value="">請選擇檔案</option>
+        <label for="fileSelect">請選擇檔案</label>
+        <select id="fileSelect" onchange="showFile()">
+          <option value="">請選擇...</option>
         </select>
       </div>
-      
-      <!-- 結果顯示 -->
+      <h6 style="text-align: center; color: #808080;">Designed by T.C.C.管理本部</h6>
       <div id="result"></div>
     </div>
-
-    <!-- 使用統計模態框 -->
+    
+    <!-- 使用統計 Modal -->
     <div id="statsModal" class="modal">
       <div class="modal-content">
-        <span class="close" onclick="closeStatsModal()">&times;</span>
-        <h2>使用統計資料</h2>
-        <div class="chart-container" id="chart_div"></div>
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>使用統計</h2>
+        <div id="vendorsChart" class="chart-container"></div>
+        <div id="filesChart" class="chart-container"></div>
       </div>
     </div>
-    
-    <!-- 超級連結模態框 -->
-    <div id="linksModal" class="modal">
+
+    <!-- 超級連結 Modal (只給s3用) -->
+    <div id="linksModal">
       <div class="modal-content">
         <span class="close" onclick="closeLinksModal()">&times;</span>
         <h2>重要連結</h2>
-        <table id="linksTable">
-          <thead>
-            <tr>
-              <th>名稱</th>
-              <th>連結</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div id="linksContainer"></div>
       </div>
     </div>
-    
-    <!-- AI助理模態框 -->
-    <div id="aiModal" class="modal">
+
+    <!-- ★ NEW: AI對話 Modal -->
+    <div id="aiModal">
       <div class="modal-content">
         <span class="close" onclick="closeAiModal()">&times;</span>
-        <h2>AI助理</h2>
+        <h2>AI搜查助理</h2>
         <div id="aiChatContainer"></div>
-        <div id="aiLoading">
-          <div class="ai-thinking">
-            <div></div><div></div><div></div><div></div>
-          </div>
+        <div>
+          <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題">
+          <button id="sendAiBtn" onclick="sendMessageToAi()">送出</button>
         </div>
-        <div id="aiInputContainer">
-          <input type="text" id="aiInput" placeholder="請輸入您的問題...">
-          <button id="aiSendButton">發送</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 更改密碼模態框 -->
-    <div id="changePasswordModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-        <h2>更改密碼</h2>
-        <div class="form-group">
-          <label for="currentPassword">目前密碼</label>
-          <input type="password" id="currentPassword" placeholder="請輸入目前密碼">
-        </div>
-        <div class="form-group">
-          <label for="newPassword">新密碼</label>
-          <input type="password" id="newPassword" placeholder="請輸入新密碼">
-        </div>
-        <div class="form-group">
-          <label for="confirmPassword">確認新密碼</label>
-          <input type="password" id="confirmPassword" placeholder="請再次輸入新密碼">
-        </div>
-        <div id="passwordChangeError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
-        <button onclick="changePassword()">確認更改</button>
       </div>
     </div>
 
     <script>
-      // 全局變數
-      let userToken = '';
-      let userLevel = '';
-      let selectedDepartment = '';
-      let selectedCategory = '';
-      let filesData = [];
-      let departmentsData = [];
-      let categoriesData = [];
-      let currentUsername = '';
-      let currentUserFullName = '';
+      /*************************************************
+       * 1) Web App URL
+       *************************************************/
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw8y1J11xeDTtVbzEGXu_KbWL5NA_QsVMr7GIdgmmREjuf3RHRuXDo3PdN6pKeZ_la0/exec";
+      let currentUser = null;
       
-      // 常數
-      const API_URL = 'https://script.google.com/macros/s/AKfycbxPLPxOuPEHzKmFBBQd1eWxgKcSVWWcHKdtDkdCZD-u-HNjWIcZPRQNmMHe4ZDLzpZL/exec';
-      
-      // 初始化 Google Charts
-      google.charts.load('current', {'packages':['corechart']});
-      
-      // 頁面加載時執行
-      document.addEventListener('DOMContentLoaded', function() {
-        // 檢查是否已登入
-        checkLogin();
-        
-        // 登入按鈕事件
-        document.getElementById('loginButton').addEventListener('click', login);
-        
-        // 登出按鈕事件
-        document.getElementById('logoutOption').addEventListener('click', logout);
-        
-        // 更改密碼按鈕事件
-        document.getElementById('changePasswordOption').addEventListener('click', showChangePasswordModal);
-        
-        // 部門選擇事件
-        document.getElementById('department').addEventListener('change', function() {
-          selectedDepartment = this.value;
-          loadCategories();
-        });
-        
-        // 類別選擇事件
-        document.getElementById('category').addEventListener('change', function() {
-          selectedCategory = this.value;
-          loadFiles();
-        });
-        
-        // 檔案選擇事件
-        document.getElementById('file').addEventListener('change', function() {
-          if (this.value) {
-            showFilePreview(this.value);
-          } else {
-            document.getElementById('result').innerHTML = '';
-          }
-        });
-        
-        // 搜尋框事件
-        document.getElementById('search').addEventListener('input', function() {
-          filterFiles(this.value);
-        });
-        
-        // 使用統計按鈕事件
-        document.getElementById('statsButton').addEventListener('click', function() {
-          showStatsModal();
-        });
-        
-        // 超級連結按鈕事件
-        document.getElementById('linksButton').addEventListener('click', function() {
-          showLinksModal();
-        });
-        
-        // AI助理按鈕事件
-        document.getElementById('aiButton').addEventListener('click', function() {
-          showAiModal();
-        });
-        
-        // AI發送按鈕事件
-        document.getElementById('aiSendButton').addEventListener('click', sendAiQuestion);
-        
-        // AI輸入框回車事件
-        document.getElementById('aiInput').addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            sendAiQuestion();
-          }
-        });
-        
-        // 點擊模態框外部關閉
-        window.onclick = function(event) {
-          if (event.target === document.getElementById('statsModal')) {
-            closeStatsModal();
-          } else if (event.target === document.getElementById('linksModal')) {
-            closeLinksModal();
-          } else if (event.target === document.getElementById('aiModal')) {
-            closeAiModal();
-          } else if (event.target === document.getElementById('changePasswordModal')) {
-            closeChangePasswordModal();
-          }
-        };
-        
-        // 密碼輸入框回車事件
-        document.getElementById('password').addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            login();
-          }
-        });
-      });
-      
-      // 檢查是否已登入
-      function checkLogin() {
-        const savedToken = localStorage.getItem('userToken');
-        const savedUsername = localStorage.getItem('username');
-        const savedUserFullName = localStorage.getItem('userFullName');
-        const savedUserLevel = localStorage.getItem('userLevel');
-        
-        if (savedToken && savedUsername) {
-          userToken = savedToken;
-          currentUsername = savedUsername;
-          currentUserFullName = savedUserFullName;
-          userLevel = savedUserLevel;
-          
-          document.getElementById('loginScreen').style.display = 'none';
-          document.getElementById('mainContainer').style.display = 'block';
-          document.getElementById('userName').textContent = currentUserFullName;
-          document.getElementById('userRole').textContent = userLevel;
-          
-          // 根據權限顯示超級連結按鈕
-          if (userLevel === 's3') {
-            document.getElementById('linksButton').style.display = 'flex';
-          }
-          
-          loadDepartments();
+      /*************************************************
+       * 2) 檢查是否已登入 + 字母特效
+       *************************************************/
+      window.onload = function() {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          callGAS('getSubfolders')
+            .then(data => {
+              if (data.success) {
+                document.getElementById('loginScreen').style.display = 'none';
+                currentUser = {
+                  username: localStorage.getItem('username'),
+                  name: localStorage.getItem('name'),
+                  role: localStorage.getItem('role'),
+                  permission: localStorage.getItem('permissionLevel') || ''
+                };
+                updateUserInfo();
+                populateFolderDropdown(data.result);
+              } else {
+                localStorage.removeItem('authToken');
+                document.getElementById('loginScreen').style.display = 'flex';
+              }
+            })
+            .catch(err => {
+              console.error("Fetch error:", err);
+              localStorage.removeItem('authToken');
+              document.getElementById('loginScreen').style.display = 'flex';
+            });
         }
-      }
-      
-      // 登入功能
-      function login() {
+        
+        createTCCLetters(); // 建立 T, C, C 字母特效
+      };
+
+      /*************************************************
+       * 3) 登入函數
+       *************************************************/
+      function loginUser() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
+        const loginError = document.getElementById('loginError');
         
         if (!username || !password) {
-          showLoginError('請輸入帳號和密碼');
+          loginError.textContent = '請輸入帳號和密碼';
+          loginError.style.display = 'block';
           return;
         }
         
-        fetch(`${API_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
-          .then(response => response.json())
+        callGAS('login', { username, password }, false)
           .then(data => {
             if (data.success) {
-              userToken = data.token;
-              currentUsername = username;
-              currentUserFullName = data.fullName;
-              userLevel = data.level;
-              
-              // 保存登入資訊
-              localStorage.setItem('userToken', userToken);
-              localStorage.setItem('username', username);
-              localStorage.setItem('userFullName', currentUserFullName);
-              localStorage.setItem('userLevel', userLevel);
-              
-              document.getElementById('loginScreen').style.display = 'none';
-              document.getElementById('mainContainer').style.display = 'block';
-              document.getElementById('userName').textContent = currentUserFullName;
-              document.getElementById('userRole').textContent = userLevel;
-              
-              // 根據權限顯示超級連結按鈕
-              if (userLevel === 's3') {
-                document.getElementById('linksButton').style.display = 'flex';
+              localStorage.setItem('authToken', data.result.token);
+              localStorage.setItem('username', data.result.username);
+              localStorage.setItem('name', data.result.name);
+              localStorage.setItem('role', data.result.role);
+              if (data.result.permissionLevel) {
+                localStorage.setItem('permissionLevel', data.result.permissionLevel);
+              }
+              if (data.result.loginRowIndex) {
+                localStorage.setItem('loginRowIndex', data.result.loginRowIndex);
               }
               
-              loadDepartments();
+              currentUser = {
+                username: data.result.username,
+                name: data.result.name,
+                role: data.result.role,
+                permission: data.result.permissionLevel || ''
+              };
+              
+              document.getElementById('loginScreen').style.display = 'none';
+              updateUserInfo();
+              
+              callGAS('getSubfolders')
+                .then(data => {
+                  if (data.success) {
+                    populateFolderDropdown(data.result);
+                  } else {
+                    console.error("Error:", data.error);
+                  }
+                })
+                .catch(err => console.error("Fetch error:", err));
             } else {
-              showLoginError(data.error || '登入失敗');
-            }
-          })
-          .catch(error => {
-            console.error('登入錯誤:', error);
-            showLoginError('登入時發生錯誤，請稍後再試');
-          });
-      }
-      
-      // 顯示登入錯誤
-      function showLoginError(message) {
-        const errorElement = document.getElementById('loginError');
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-        
-        // 3秒後自動隱藏錯誤訊息
-        setTimeout(() => {
-          errorElement.style.display = 'none';
-        }, 3000);
-      }
-      
-      // 登出功能
-      function logout() {
-        // 呼叫登出API
-        fetch(`${API_URL}?action=logLogout&token=${userToken}`)
-          .then(() => {
-            // 清除本地存儲
-            localStorage.removeItem('userToken');
-            localStorage.removeItem('username');
-            localStorage.removeItem('userFullName');
-            localStorage.removeItem('userLevel');
-            
-            // 重新載入頁面
-            window.location.reload();
-          })
-          .catch(error => {
-            console.error('登出錯誤:', error);
-            // 即使API失敗，也強制登出
-            localStorage.removeItem('userToken');
-            localStorage.removeItem('username');
-            localStorage.removeItem('userFullName');
-            localStorage.removeItem('userLevel');
-            window.location.reload();
-          });
-      }
-      
-      // 顯示更改密碼模態框
-      function showChangePasswordModal() {
-        document.getElementById('currentPassword').value = '';
-        document.getElementById('newPassword').value = '';
-        document.getElementById('confirmPassword').value = '';
-        document.getElementById('passwordChangeError').style.display = 'none';
-        document.getElementById('changePasswordModal').style.display = 'block';
-      }
-      
-      // 關閉更改密碼模態框
-      function closeChangePasswordModal() {
-        document.getElementById('changePasswordModal').style.display = 'none';
-      }
-      
-      // 更改密碼功能
-      function changePassword() {
-        const currentPassword = document.getElementById('currentPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const errorElement = document.getElementById('passwordChangeError');
-        
-        // 基本驗證
-        if (!currentPassword || !newPassword || !confirmPassword) {
-          errorElement.textContent = '所有欄位都必須填寫';
-          errorElement.style.display = 'block';
-          return;
-        }
-        
-        if (newPassword !== confirmPassword) {
-          errorElement.textContent = '新密碼與確認密碼不符';
-          errorElement.style.display = 'block';
-          return;
-        }
-        
-        if (newPassword.length < 6) {
-          errorElement.textContent = '新密碼長度至少需要6個字元';
-          errorElement.style.display = 'block';
-          return;
-        }
-        
-        // 調用後端 API 更改密碼
-        fetch(`${API_URL}?action=changePassword&token=${userToken}&currentPassword=${encodeURIComponent(currentPassword)}&newPassword=${encodeURIComponent(newPassword)}`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              // 顯示成功訊息
-              alert('密碼已成功更改，請使用新密碼重新登入');
-              // 登出用戶
-              logout();
-              closeChangePasswordModal();
-            } else {
-              errorElement.textContent = data.error || '密碼更改失敗';
-              errorElement.style.display = 'block';
+              loginError.textContent = data.error || '登入失敗';
+              loginError.style.display = 'block';
             }
           })
           .catch(err => {
-            console.error('更改密碼錯誤:', err);
-            errorElement.textContent = '更改密碼時發生錯誤，請稍後再試';
-            errorElement.style.display = 'block';
+            console.error('登入錯誤:', err);
+            loginError.textContent = '登入發生錯誤，請稍後再試';
+            loginError.style.display = 'block';
           });
       }
-      
-      // 載入部門數據
-      function loadDepartments() {
-        fetch(`${API_URL}?action=getSubfolders&token=${userToken}`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              departmentsData = data.folders;
-              const departmentSelect = document.getElementById('department');
-              
-              // 清空現有選項
-              departmentSelect.innerHTML = '<option value="">請選擇部門</option>';
-              
-              // 添加新選項
-              departmentsData.forEach(folder => {
-                const option = document.createElement('option');
-                option.value = folder;
-                option.textContent = folder;
-                departmentSelect.appendChild(option);
-              });
-            } else if (data.needLogin) {
-              // Token 過期，重新登入
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('username');
-              localStorage.removeItem('userFullName');
-              localStorage.removeItem('userLevel');
-              window.location.reload();
-            } else {
-              console.error('載入部門失敗:', data.error);
-            }
-          })
-          .catch(error => {
-            console.error('載入部門錯誤:', error);
-          });
-      }
-      
-      // 載入類別數據
-      function loadCategories() {
-        if (!selectedDepartment) {
-          document.getElementById('category').innerHTML = '<option value="">請選擇類別</option>';
-          document.getElementById('file').innerHTML = '<option value="">請選擇檔案</option>';
-          document.getElementById('result').innerHTML = '';
-          return;
+
+      /*************************************************
+ * 4) 登出函數
+ *************************************************/
+function logoutUser() {
+  // 添加下拉菜單
+  var dropdown = document.createElement('div');
+  dropdown.className = 'logout-dropdown';
+  dropdown.style.position = 'absolute';
+  dropdown.style.top = '40px';
+  dropdown.style.right = '10px';
+  dropdown.style.backgroundColor = 'white';
+  dropdown.style.borderRadius = '5px';
+  dropdown.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+  dropdown.style.zIndex = '1000';
+  
+  // 添加登出選項
+  var logoutOption = document.createElement('div');
+  logoutOption.className = 'dropdown-option';
+  logoutOption.textContent = '登出系統';
+  logoutOption.style.padding = '10px 15px';
+  logoutOption.style.cursor = 'pointer';
+  logoutOption.style.borderBottom = '1px solid #eee';
+  logoutOption.onclick = function() {
+    performLogout();
+  };
+  
+  // 添加更改密碼選項
+  var changePasswordOption = document.createElement('div');
+  changePasswordOption.className = 'dropdown-option';
+  changePasswordOption.textContent = '更改密碼';
+  changePasswordOption.style.padding = '10px 15px';
+  changePasswordOption.style.cursor = 'pointer';
+  changePasswordOption.onclick = function() {
+    showChangePasswordModal();
+    document.body.removeChild(dropdown);
+  };
+  
+  dropdown.appendChild(changePasswordOption);
+  dropdown.appendChild(logoutOption);
+  document.body.appendChild(dropdown);
+  
+  // 點擊其他地方關閉下拉菜單
+  setTimeout(function() {
+    document.addEventListener('click', function closeDropdown(e) {
+      if (!dropdown.contains(e.target) && e.target.id !== 'logoutButton') {
+        if (document.body.contains(dropdown)) {
+          document.body.removeChild(dropdown);
         }
-        
-        fetch(`${API_URL}?action=getSubfolders&token=${userToken}&folder=${encodeURIComponent(selectedDepartment)}`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              categoriesData = data.folders;
-              const categorySelect = document.getElementById('category');
-              
-              // 清空現有選項
-              categorySelect.innerHTML = '<option value="">請選擇類別</option>';
-              
-              // 添加新選項
-              categoriesData.forEach(folder => {
-                const option = document.createElement('option');
-                option.value = folder;
-                option.textContent = folder;
-                categorySelect.appendChild(option);
-              });
-              
-              // 重置檔案選擇
-              document.getElementById('file').innerHTML = '<option value="">請選擇檔案</option>';
-              document.getElementById('result').innerHTML = '';
-            } else if (data.needLogin) {
-              // Token 過期，重新登入
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('username');
-              localStorage.removeItem('userFullName');
-              localStorage.removeItem('userLevel');
-              window.location.reload();
-            } else {
-              console.error('載入類別失敗:', data.error);
-            }
-          })
-          .catch(error => {
-            console.error('載入類別錯誤:', error);
-          });
+        document.removeEventListener('click', closeDropdown);
       }
-      
-      // 載入檔案數據
-      function loadFiles() {
-        if (!selectedDepartment || !selectedCategory) {
-          document.getElementById('file').innerHTML = '<option value="">請選擇檔案</option>';
-          document.getElementById('result').innerHTML = '';
-          return;
-        }
-        
-        const path = `${selectedDepartment}/${selectedCategory}`;
-        
-        fetch(`${API_URL}?action=getFiles&token=${userToken}&folder=${encodeURIComponent(path)}`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              filesData = data.files;
-              updateFileSelect(filesData);
-            } else if (data.needLogin) {
-              // Token 過期，重新登入
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('username');
-              localStorage.removeItem('userFullName');
-              localStorage.removeItem('userLevel');
-              window.location.reload();
-            } else {
-              console.error('載入檔案失敗:', data.error);
-            }
-          })
-          .catch(error => {
-            console.error('載入檔案錯誤:', error);
-          });
-      }
-      
-      // 更新檔案選擇下拉框
-      function updateFileSelect(files) {
-        const fileSelect = document.getElementById('file');
-        
-        // 清空現有選項
-        fileSelect.innerHTML = '<option value="">請選擇檔案</option>';
-        
-        // 根據用戶權限過濾檔案
-        const filteredFiles = files.filter(file => {
-          // s3 用戶可以訪問所有檔案
-          if (userLevel === 's3') return true;
-          
-          // s2 用戶不能訪問標有 "s3" 的檔案
-          if (userLevel === 's2' && file.name.toLowerCase().includes('s3')) return false;
-          
-          // s1 用戶只能訪問標有 "s1" 的檔案
-          if (userLevel === 's1' && !file.name.toLowerCase().includes('s1')) return false;
-          
-          return true;
+    });
+  }, 0);
+}
+
+function performLogout() {
+  // 添加按鈕點擊效果
+  const logoutBtn = document.getElementById('logoutButton');
+  logoutBtn.classList.add('button-clicked');
+  
+  // 更改按鈕顏色
+  logoutBtn.style.background = 'linear-gradient(45deg, #ff3333, #ff6b6b)';
+  
+  // 延遲執行登出操作
+  setTimeout(() => {
+    const loginRowIndex = localStorage.getItem('loginRowIndex');
+    if (loginRowIndex) {
+      callGAS('logLogout', { rowIndex: loginRowIndex })
+        .then(data => {
+          cleanupAndShowLogin();
+        })
+        .catch(err => {
+          cleanupAndShowLogin();
         });
+    } else {
+      cleanupAndShowLogin();
+    }
+  }, 300);
+}
+
+// 顯示更改密碼模態視窗
+function showChangePasswordModal() {
+  document.getElementById('currentPassword').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmPassword').value = '';
+  document.getElementById('passwordError').style.display = 'none';
+  document.getElementById('changePasswordModal').style.display = 'block';
+}
+
+// 關閉更改密碼模態視窗
+function closeChangePasswordModal() {
+  document.getElementById('changePasswordModal').style.display = 'none';
+}
+
+// 更改密碼
+function changePassword() {
+  const currentPassword = document.getElementById('currentPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const passwordError = document.getElementById('passwordError');
+  
+  // 驗證輸入
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    passwordError.textContent = '請填寫所有欄位';
+    passwordError.style.display = 'block';
+    return;
+  }
+  
+  if (newPassword !== confirmPassword) {
+    passwordError.textContent = '新密碼與確認密碼不符';
+    passwordError.style.display = 'block';
+    return;
+  }
+  
+  // 呼叫後端API更改密碼
+  callGAS('changePassword', { 
+    currentPassword: currentPassword,
+    newPassword: newPassword,
+    username: localStorage.getItem('username')
+  })
+  .then(data => {
+    if (data.success) {
+      alert('密碼更改成功！請重新登入。');
+      logoutUser();
+      closeChangePasswordModal();
+    } else {
+      passwordError.textContent = data.error || '密碼更改失敗';
+      passwordError.style.display = 'block';
+    }
+  })
+  .catch(err => {
+    console.error('更改密碼錯誤:', err);
+    passwordError.textContent = '更改密碼時發生錯誤，請稍後再試';
+    passwordError.style.display = 'block';
+  });
+}
+
+      /*************************************************
+       * 5) 更新用戶信息顯示 + s3按鈕顯示
+       *************************************************/
+      function updateUserInfo() {
+        if (currentUser) {
+          document.getElementById('userName').textContent = currentUser.name || currentUser.username;
+          document.getElementById('userRole').textContent = currentUser.role || '';
+          
+          const linksButton = document.getElementById('linksButton');
+          if (currentUser.permission === 's3') {
+            linksButton.style.display = 'block';
+          } else {
+            linksButton.style.display = 'none';
+          }
+        }
+      }
+
+      /*************************************************
+       * 6) 調用 Apps Script
+       *************************************************/
+      function callGAS(action, params = {}, useToken = true) {
+        if (useToken && action !== 'login') {
+          const token = localStorage.getItem('authToken');
+          if (token) {
+            params.token = token;
+          }
+        }
+        const query = new URLSearchParams({ action, ...params });
+        const url = GAS_WEBAPP_URL + "?" + query.toString();
+
+        return fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("HTTP error, status=" + response.status);
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.needLogin) {
+              localStorage.removeItem('authToken');
+              document.getElementById('loginScreen').style.display = 'flex';
+              throw new Error('需要重新登入');
+            }
+            return data;
+          });
+      }
+
+      /*************************************************
+       * 7) 填充部門下拉
+       *************************************************/
+      function populateFolderDropdown(folders) {
+        const select = document.getElementById('folderSelect');
+        select.innerHTML = '<option value="">請選擇...</option>';
         
-                // 添加新選項
-        filteredFiles.forEach(file => {
+        folders.forEach(folder => {
+          const option = document.createElement('option');
+          option.value = folder.id;
+          option.textContent = folder.name;
+          select.appendChild(option);
+        });
+      }
+
+      /*************************************************
+       * 8) 載入檔案 (含類別篩選 + 分級篩選)
+       *************************************************/
+      function loadFiles() {
+        const folderId = document.getElementById('folderSelect').value;
+        if (!folderId) return;
+
+        const keyword = document.getElementById('searchInput').value.trim();
+        const category = document.getElementById('typeSelect').value;
+
+        callGAS('getFiles', { folderId, keyword })
+          .then(data => {
+            if (data.success) {
+              let files = data.result;
+              files = filterByPermission(files);
+
+              if (category === '辦法') {
+                const keywords = ['辦法', '計畫', '細則'];
+                files = files.filter(file => {
+                  const nameLower = file.name.toLowerCase();
+                  return keywords.some(kw => nameLower.includes(kw));
+                });
+              } else if (category === '其他文件') {
+                const keywords = ['辦法', '計畫', '細則'];
+                files = files.filter(file => {
+                  const nameLower = file.name.toLowerCase();
+                  return !keywords.some(kw => nameLower.includes(kw));
+                });
+              }
+
+              populateFileDropdown(files);
+            } else {
+              console.error("Error:", data.error);
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+      /*************************************************
+       * 分級篩選邏輯
+       *************************************************/
+      function filterByPermission(files) {
+        const p = currentUser ? currentUser.permission : "";
+        if (p === 's3') {
+          return files;
+        } else if (p === 's2') {
+          return files.filter(file => !file.name.toLowerCase().includes('s3'));
+        } else if (p === 's1') {
+          return files.filter(file => file.name.toLowerCase().includes('s1'));
+        }
+        return files;
+      }
+
+      /*************************************************
+       * 9) 填充檔案下拉
+       *************************************************/
+      function populateFileDropdown(files) {
+        const select = document.getElementById('fileSelect');
+        select.innerHTML = '<option value="">請選擇...</option>';
+        files.forEach(file => {
           const option = document.createElement('option');
           option.value = file.id;
           option.textContent = file.name;
-          fileSelect.appendChild(option);
+          select.appendChild(option);
         });
-        
-        // 重置結果區域
-        document.getElementById('result').innerHTML = '';
       }
-      
-      // 根據搜尋關鍵字過濾檔案
-      function filterFiles(keyword) {
-        if (!keyword) {
-          updateFileSelect(filesData);
+
+      /*************************************************
+       * 10) 顯示檔案
+       *************************************************/
+      function showFile() {
+        const fileSelect = document.getElementById('fileSelect');
+        const fileId = fileSelect.value;
+        if (!fileId) {
+          document.getElementById('result').innerHTML = '';
           return;
         }
-        
-        const filteredFiles = filesData.filter(file => 
-          file.name.toLowerCase().includes(keyword.toLowerCase())
-        );
-        
-        updateFileSelect(filteredFiles);
-      }
-      
-      // 顯示檔案預覽
-      function showFilePreview(fileId) {
-        // 記錄檔案訪問
-        fetch(`${API_URL}?action=logAccess&token=${userToken}&fileId=${fileId}`)
-          .then(response => response.json())
-          .then(data => {
-            if (!data.success && data.needLogin) {
-              // Token 過期，重新登入
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('username');
-              localStorage.removeItem('userFullName');
-              localStorage.removeItem('userLevel');
-              window.location.reload();
-            }
-          })
-          .catch(error => {
-            console.error('記錄檔案訪問錯誤:', error);
-          });
-        
-        // 找到選中的檔案
-        const selectedFile = filesData.find(file => file.id === fileId);
-        if (!selectedFile) return;
-        
-        const resultDiv = document.getElementById('result');
-        
-        // 檢查檔案類型
-        const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
-        
-        if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt'].includes(fileExtension)) {
-          // 使用 Google Docs Viewer 預覽文件
-          resultDiv.innerHTML = `
-            <iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(selectedFile.url)}&embedded=true"></iframe>
-            <a href="${selectedFile.url}" class="download-link" target="_blank">下載檔案</a>
-          `;
-        } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(fileExtension)) {
-          // 直接顯示圖片
-          resultDiv.innerHTML = `
-            <img src="${selectedFile.url}" style="max-width:100%; max-height:800px; margin:20px 0; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
-            <a href="${selectedFile.url}" class="download-link" target="_blank">下載圖片</a>
-          `;
-        } else {
-          // 其他檔案類型提供下載連結
-          resultDiv.innerHTML = `
-            <div style="padding:50px; text-align:center; background:rgba(255,255,255,0.5); border-radius:10px; margin:20px 0;">
-              <h3 style="margin-bottom:20px; color:#054496;">無法預覽此類型檔案</h3>
-              <p style="margin-bottom:30px; color:#333;">檔案類型: ${fileExtension.toUpperCase()}</p>
-              <a href="${selectedFile.url}" class="download-link" target="_blank">下載檔案</a>
-            </div>
-          `;
-        }
-      }
-      
-      // 顯示使用統計模態框
-      function showStatsModal() {
-        document.getElementById('statsModal').style.display = 'block';
-        
-        fetch(`${API_URL}?action=getStats&token=${userToken}`)
-          .then(response => response.json())
+
+        const fileName = fileSelect.options[fileSelect.selectedIndex].text;
+        const folderSelect = document.getElementById('folderSelect');
+        const folderName = folderSelect.options[folderSelect.selectedIndex].text;
+
+        callGAS('getFilePreviewUrl', { fileId })
           .then(data => {
             if (data.success) {
-              drawChart(data.stats);
-            } else if (data.needLogin) {
-              // Token 過期，重新登入
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('username');
-              localStorage.removeItem('userFullName');
-              localStorage.removeItem('userLevel');
-              window.location.reload();
-            } else {
-              console.error('載入統計數據失敗:', data.error);
+              displayFile(data.result);
+              callGAS('logRetrieval', { 
+                vendorName: folderName, 
+                fileName: fileName,
+                username: currentUser ? currentUser.name || currentUser.username : ''
+              });
             }
           })
-          .catch(error => {
-            console.error('載入統計數據錯誤:', error);
-          });
+          .catch(err => console.error("Fetch error:", err));
       }
-      
-      // 關閉使用統計模態框
-      function closeStatsModal() {
+
+      function displayFile(fileInfo) {
+        const resultDiv = document.getElementById('result');
+        if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps')) {
+          resultDiv.innerHTML = `<iframe src="${fileInfo.url}" allowfullscreen></iframe>`;
+        } else {
+          resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank">下載 ${fileInfo.name}</a>`;
+        }
+      }
+
+      /*************************************************
+       * 12) 使用統計
+       *************************************************/
+      function showStats() {
+        callGAS('getStatisticsDataOnly')
+          .then(data => {
+            if (data.success) {
+              document.getElementById('statsModal').style.display = 'block';
+              drawCharts(data.result);
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+      function closeModal() {
         document.getElementById('statsModal').style.display = 'none';
       }
-      
-      // 繪製統計圖表
-      function drawChart(statsData) {
-        const data = new google.visualization.DataTable();
-        data.addColumn('string', '檔案');
-        data.addColumn('number', '訪問次數');
-        
-        // 添加數據
-        statsData.forEach(item => {
-          data.addRow([item.file, item.count]);
+
+      function drawCharts(statData) {
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(() => {
+          if (statData.vendors.length > 0) {
+            const vendorsData = new google.visualization.DataTable();
+            vendorsData.addColumn('string', '部門');
+            vendorsData.addColumn('number', '查詢次數');
+            vendorsData.addRows(statData.vendors);
+            const vendorsOptions = {
+              title: '【部門熱度】查詢統計',
+              pieHole: 0.4,
+              legend: { position: 'bottom' }
+            };
+            const vendorsChart = new google.visualization.PieChart(document.getElementById('vendorsChart'));
+            vendorsChart.draw(vendorsData, vendorsOptions);
+          } else {
+            document.getElementById('vendorsChart').innerHTML = '<p>暫無部門查詢數據</p>';
+          }
+
+          if (statData.files.length > 0) {
+            const filesData = new google.visualization.DataTable();
+            filesData.addColumn('string', '檔案');
+            filesData.addColumn('number', '查詢次數');
+            filesData.addRows(statData.files);
+            const filesOptions = {
+              title: '【檔案熱度】查詢統計',
+              legend: { position: 'bottom' }
+            };
+            const filesChart = new google.visualization.BarChart(document.getElementById('filesChart'));
+            filesChart.draw(filesData, filesOptions);
+          } else {
+            document.getElementById('filesChart').innerHTML = '<p>暫無檔案查詢數據</p>';
+          }
         });
+      }
+
+      /*************************************************
+       * 13) 點擊 modal 外關閉
+       *************************************************/
+      window.onclick = function(event) {
+        const statsModal = document.getElementById('statsModal');
+        const linksModal = document.getElementById('linksModal');
+        const aiModal    = document.getElementById('aiModal'); // ★ NEW
+
+        if (event.target === statsModal) {
+          statsModal.style.display = "none";
+        } else if (event.target === linksModal) {
+          linksModal.style.display = "none";
+        } else if (event.target === aiModal) {
+          aiModal.style.display = "none";
+        }
+      };
+
+      /*************************************************
+       * 14) TCC 字母特效
+       *************************************************/
+      function createTCCLetters() {
+        const lettersData = [
+          { text: 'T', className: 'letter-t' },
+          { text: 'C', className: 'letter-c1' },
+          { text: 'C', className: 'letter-c2' }
+        ];
         
-        // 設置圖表選項
-        const options = {
-          title: '檔案訪問統計',
-          titleTextStyle: {
-            color: '#054496',
-            fontSize: 16,
-            bold: true
-          },
-          colors: ['#2193b0'],
-          hAxis: {
-            title: '檔案名稱',
-            titleTextStyle: {
-              color: '#333',
-              italic: false,
-              bold: true
-            }
-          },
-          vAxis: {
-            title: '訪問次數',
-            titleTextStyle: {
-              color: '#333',
-              italic: false,
-              bold: true
-            },
-            minValue: 0
-          },
-          legend: { position: 'none' },
-          animation: {
-            startup: true,
-            duration: 1000,
-            easing: 'out'
-          },
-          bar: { groupWidth: '70%' },
-          backgroundColor: { fill: 'transparent' }
-        };
+        lettersData.forEach(ld => {
+          const el = document.createElement('div');
+          el.classList.add('letter', ld.className);
+          el.innerText = ld.text;
+          el.style.left = '50%';
+          el.style.top = '50%';
+          document.body.appendChild(el);
+        });
+      }
+
+      /*************************************************
+       * ★ NEW: 顯示「重要連結」(只有 s3)
+       *************************************************/
+      function showLinks() {
+        // 添加按鈕點擊效果
+        const linksBtn = document.getElementById('linksButton');
+        linksBtn.classList.add('button-clicked');
         
-        // 繪製圖表
-        const chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+        // 更改按鈕顏色
+        linksBtn.style.background = 'linear-gradient(45deg, #ff8c00, #ffb700)';
+        
+        setTimeout(() => {
+          callGAS('getImportantLinks')
+            .then(data => {
+              if (data.success) {
+                const links = data.result; 
+                renderLinksTable(links);
+                document.getElementById('linksModal').style.display = 'block';
+                
+                setTimeout(() => {
+                  linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+                  linksBtn.classList.remove('button-clicked');
+                }, 300);
+              } else {
+                console.error("Error:", data.error);
+                linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+                linksBtn.classList.remove('button-clicked');
+              }
+            })
+            .catch(err => {
+              console.error("Fetch error:", err);
+              linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+              linksBtn.classList.remove('button-clicked');
+            });
+        }, 300);
       }
       
-      // 顯示超級連結模態框
-      function showLinksModal() {
-        document.getElementById('linksModal').style.display = 'block';
-        
-        fetch(`${API_URL}?action=getLinks&token=${userToken}`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              populateLinksTable(data.links);
-            } else if (data.needLogin) {
-              // Token 過期，重新登入
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('username');
-              localStorage.removeItem('userFullName');
-              localStorage.removeItem('userLevel');
-              window.location.reload();
-            } else {
-              console.error('載入連結數據失敗:', data.error);
-            }
-          })
-          .catch(error => {
-            console.error('載入連結數據錯誤:', error);
-          });
-      }
-      
-      // 關閉超級連結模態框
       function closeLinksModal() {
         document.getElementById('linksModal').style.display = 'none';
+        const linksBtn = document.getElementById('linksButton');
+        linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+        linksBtn.classList.remove('button-clicked');
       }
       
-      // 填充連結表格
-      function populateLinksTable(links) {
-        const tableBody = document.querySelector('#linksTable tbody');
-        tableBody.innerHTML = '';
-        
-        links.forEach(link => {
-          const row = document.createElement('tr');
-          
-          const nameCell = document.createElement('td');
-          nameCell.textContent = link.name;
-          
-          const linkCell = document.createElement('td');
-          const linkElement = document.createElement('a');
-          linkElement.href = link.url;
-          linkElement.textContent = link.url;
-          linkElement.target = '_blank';
-          linkCell.appendChild(linkElement);
-          
-          row.appendChild(nameCell);
-          row.appendChild(linkCell);
-          tableBody.appendChild(row);
+      function renderLinksTable(links) {
+        const container = document.getElementById('linksContainer');
+        if (!links || links.length === 0) {
+          container.innerHTML = '<p>暫無重要連結資料</p>';
+          return;
+        }
+        let html = '<table id="linksTable">';
+        html += '<tr><th>名稱</th><th>超連結</th></tr>';
+        links.forEach(item => {
+          html += `<tr>
+                     <td>${item.name}</td>
+                     <td><a href="${item.url}" target="_blank">${item.url}</a></td>
+                   </tr>`;
         });
+        html += '</table>';
+        container.innerHTML = html;
       }
-      
-      // 顯示AI助理模態框
+
+      /*************************************************
+       * ★ NEW: AI助手按鈕 & Modal
+       *************************************************/
       function showAiModal() {
         document.getElementById('aiModal').style.display = 'block';
-        document.getElementById('aiInput').focus();
-        
-        // 如果聊天容器為空，添加歡迎訊息
+        // 初次開啟時，先放兩句話(問候 + 問問題)
         const chatContainer = document.getElementById('aiChatContainer');
-        if (chatContainer.innerHTML === '') {
-          const aiMessage = document.createElement('div');
-          aiMessage.className = 'ai-message';
-          aiMessage.innerHTML = '您好！我是昶青數位資料中心的AI助理。有什麼我可以幫您的嗎？';
-          chatContainer.appendChild(aiMessage);
-        }
+        chatContainer.innerHTML = `
+          <div class="chat-assistant">哈囉～希望你今天一切順利。</div>
+          <div class="chat-assistant">你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～</div>
+        `;
       }
-      
-      // 關閉AI助理模態框
+
       function closeAiModal() {
         document.getElementById('aiModal').style.display = 'none';
       }
-      
-      // 發送AI問題
-      function sendAiQuestion() {
-        const question = document.getElementById('aiInput').value.trim();
-        if (!question) return;
+
+      function sendMessageToAi() {
+        const userInput = document.getElementById('aiUserInput').value.trim();
+        if (!userInput) return;
         
-        // 清空輸入框
-        document.getElementById('aiInput').value = '';
-        
-        // 添加用戶訊息到聊天容器
+        // 先把使用者的話顯示在畫面
         const chatContainer = document.getElementById('aiChatContainer');
-        const userMessage = document.createElement('div');
-        userMessage.className = 'user-message';
-        userMessage.textContent = question;
-        chatContainer.appendChild(userMessage);
-        
-        // 顯示AI思考中動畫
-        document.getElementById('aiLoading').style.display = 'block';
+        const userMsgHtml = `<div class="chat-user">${escapeHtml(userInput)}</div>`;
+        chatContainer.innerHTML += userMsgHtml;
         chatContainer.scrollTop = chatContainer.scrollHeight;
         
-        // 發送請求到後端
-        fetch(`${API_URL}?action=askAI&token=${userToken}&question=${encodeURIComponent(question)}`)
-          .then(response => response.json())
+        // 呼叫後端
+        callGAS('aiAssistant', { userMessage: userInput })
           .then(data => {
-            // 隱藏AI思考中動畫
-            document.getElementById('aiLoading').style.display = 'none';
-            
             if (data.success) {
-              // 添加AI回覆到聊天容器
-              const aiMessage = document.createElement('div');
-              aiMessage.className = 'ai-message';
-              
-              // 處理回覆中的換行
-              const formattedResponse = data.response.replace(/\n/g, '<br>');
-              aiMessage.innerHTML = formattedResponse;
-              
-              chatContainer.appendChild(aiMessage);
-              chatContainer.scrollTop = chatContainer.scrollHeight;
-            } else if (data.needLogin) {
-              // Token 過期，重新登入
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('username');
-              localStorage.removeItem('userFullName');
-              localStorage.removeItem('userLevel');
-              window.location.reload();
-            } else {
-              // 顯示錯誤訊息
-              const aiMessage = document.createElement('div');
-              aiMessage.className = 'ai-message';
-              aiMessage.innerHTML = '抱歉，處理您的問題時出現錯誤。請稍後再試。';
-              chatContainer.appendChild(aiMessage);
-              chatContainer.scrollTop = chatContainer.scrollHeight;
-              
-              console.error('AI回覆錯誤:', data.error);
-            }
+          const aiReply = data.result.reply;
+          // 改成直接插入 HTML 字串，不呼叫 escapeHtml
+          const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`; 
+          chatContainer.innerHTML += assistantMsgHtml;
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        } else {
+          chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
+  }
           })
-          .catch(error => {
-            // 隱藏AI思考中動畫
-            document.getElementById('aiLoading').style.display = 'none';
-            
-            // 顯示錯誤訊息
-            const aiMessage = document.createElement('div');
-            aiMessage.className = 'ai-message';
-            aiMessage.innerHTML = '抱歉，連接服務器時出現錯誤。請檢查您的網絡連接並稍後再試。';
-            chatContainer.appendChild(aiMessage);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            
-            console.error('AI請求錯誤:', error);
+          .catch(err => {
+            console.error("sendMessageToAi error:", err);
+            chatContainer.innerHTML += `<div class="chat-assistant">抱歉，目前無法取得回應。</div>`;
+          })
+          .finally(() => {
+            document.getElementById('aiUserInput').value = "";
           });
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/[<>&"]/g, function(c){
+          switch(c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '"': return '&quot;';
+          }
+          return c;
+        });
       }
     </script>
   </body>
 </html>
-
-
