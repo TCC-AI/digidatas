@@ -707,7 +707,7 @@ a.download-link::before {
   #aiButton {
     font-size: 1em;
     min-height: 35px;
-    min-width: 110px;
+        min-width: 110px;
     padding: 8px 12px;
     top: 240px;
     left: 125px;
@@ -915,7 +915,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw8y1J11xeDTtVbzEGXu_KbWL5NA_QsVMr7GIdgmmREjuf3RHRuXDo3PdN6pKeZ_la0/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwwXTwzpay7dGfVZ2hfXLoC-ZAa-Xh8CBaowK2d-Fck93TRTsVUaB9wCzVqSFxadogF/exec";
       let currentUser = null;
       
       /*************************************************
@@ -923,7 +923,8 @@ a.download-link::before {
        *************************************************/
       window.onload = function() {
         const token = localStorage.getItem('authToken');
-        if (token) {
+        const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token 檢查
+        if (token && csrfToken) {
           callGAS('getSubfolders')
             .then(data => {
               if (data.success) {
@@ -937,19 +938,30 @@ a.download-link::before {
                 updateUserInfo();
                 populateFolderDropdown(data.result);
               } else {
-                localStorage.removeItem('authToken');
+                clearAuthData();
                 document.getElementById('loginScreen').style.display = 'flex';
               }
             })
             .catch(err => {
               console.error("Fetch error:", err);
-              localStorage.removeItem('authToken');
+              clearAuthData();
               document.getElementById('loginScreen').style.display = 'flex';
             });
         }
         
         createTCCLetters(); // 建立 T, C, C 字母特效
       };
+
+      // 清除所有身份驗證數據
+      function clearAuthData() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('csrfToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('name');
+        localStorage.removeItem('role');
+        localStorage.removeItem('loginRowIndex');
+        localStorage.removeItem('permissionLevel');
+      }
 
       /*************************************************
        * 3) 登入函數
@@ -969,6 +981,7 @@ a.download-link::before {
           .then(data => {
             if (data.success) {
               localStorage.setItem('authToken', data.result.token);
+              localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
               localStorage.setItem('username', data.result.username);
               localStorage.setItem('name', data.result.name);
               localStorage.setItem('role', data.result.role);
@@ -1121,12 +1134,7 @@ function performLogout() {
 // 執行登出的實際操作
 function doLogout() {
   // 清除本地存儲
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('username');
-  localStorage.removeItem('name');
-  localStorage.removeItem('role');
-  localStorage.removeItem('loginRowIndex');
-  localStorage.removeItem('permissionLevel');
+  clearAuthData();
 
   // 重置當前用戶
   currentUser = null;
@@ -1224,8 +1232,10 @@ function changePassword() {
       function callGAS(action, params = {}, useToken = true) {
         if (useToken && action !== 'login') {
           const token = localStorage.getItem('authToken');
+          const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token
           if (token) {
             params.token = token;
+            params.csrf = csrfToken; // 每次請求都帶上 CSRF token
           }
         }
         const query = new URLSearchParams({ action, ...params });
@@ -1240,7 +1250,7 @@ function changePassword() {
           })
           .then(data => {
             if (data.needLogin) {
-              localStorage.removeItem('authToken');
+              clearAuthData();
               document.getElementById('loginScreen').style.display = 'flex';
               throw new Error('需要重新登入');
             }
@@ -1476,7 +1486,7 @@ function changePassword() {
               if (data.success) {
                 const links = data.result; 
                 renderLinksTable(links);
-                document.getElementById('linksModal').style.display = 'block';
+                                document.getElementById('linksModal').style.display = 'block';
                 
                 setTimeout(() => {
                   linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
@@ -1627,3 +1637,5 @@ function changePassword() {
 
   </body>
 </html>
+
+
