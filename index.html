@@ -433,23 +433,22 @@
   font-size: 1em;
 }
 
-/* 下拉菜單容器 */
+/* 用戶選項下拉菜單 */
 .dropdown {
   position: absolute;
-  top: 10px; 
-  right: 10px;
+  top: 10px; right: 10px;
+  display: inline-block;
 }
 
-/* 下拉菜單按鈕 */
-#logoutButton {
-  position: relative;
+/* 下拉按鈕 */
+.dropdown-button {
   padding: 8px 15px;
   background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
   color: white; 
   border: none; 
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3), 0 3px 8px rgba(0,0,0,0.15);
   transition: all 0.3s ease;
   font-size: 0.8em; 
   font-weight: bold;
@@ -458,15 +457,14 @@
   justify-content: center;
   min-height: 30px;
 }
-#logoutButton:hover {
+
+.dropdown-button:hover {
   background: linear-gradient(45deg, #ff8e8e, #ff6b6b);
   box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5), 0 5px 12px rgba(0,0,0,0.2);
   transform: translateY(-2px);
 }
-#logoutButton:active {
-  background: linear-gradient(45deg, #b50404, #ff6b6b);
-}
-#logoutButton::before {
+
+.dropdown-button::before {
   content: "🚪";
   margin-right: 8px;
   font-size: 0.8em;
@@ -474,20 +472,39 @@
   transition: all 0.3s ease;
 }
 
-/* 下拉菜單內容 */
+/* 下拉內容 */
 .dropdown-content {
   display: none;
   position: absolute;
   right: 0;
-  top: 100%;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px);
   min-width: 120px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 100;
   border-radius: 10px;
-  z-index: 1000;
   overflow: hidden;
+}
+
+/* 下拉選項 */
+.dropdown-content a {
+  color: #333;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: all 0.2s;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.dropdown-content a:hover {
+  background-color: rgba(255, 107, 107, 0.2);
+}
+
+/* 顯示下拉內容 */
+.dropdown:hover .dropdown-content {
+  display: block;
   animation: fadeIn 0.3s;
-  margin-top: 5px;
 }
 
 @keyframes fadeIn {
@@ -495,34 +512,27 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 下拉菜單選項 */
-.dropdown-content a {
-  color: #333;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  font-size: 0.9em;
-  transition: all 0.2s;
+/* 下拉箭頭 */
+.dropdown-arrow {
+  margin-left: 5px;
+  font-size: 0.7em;
+  transition: transform 0.3s;
 }
 
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
+.dropdown:hover .dropdown-arrow {
+  transform: rotate(180deg);
 }
 
-/* 第一個選項 (登出) */
-.dropdown-content a:first-child {
-  color: #ff6b6b;
-  border-bottom: 1px solid #eee;
+/* 更改密碼選項 */
+#changePasswordOption::before {
+  content: "🔑";
+  margin-right: 8px;
 }
 
-/* 第二個選項 (更改密碼) */
-.dropdown-content a:last-child {
-  color: #2193b0;
-}
-
-/* 顯示下拉菜單 */
-.show {
-  display: block;
+/* 登出選項 */
+#logoutOption::before {
+  content: "🚪";
+  margin-right: 8px;
 }
 
 /* User Info */
@@ -714,11 +724,76 @@ a.download-link::before {
 }
 }
 
-/* ★ NEW: AI Modal (寬度90%) */
+/* 更改密碼 Modal */
+#changePasswordModal {
+  display: none;
+  position: fixed;
+  z-index: 1002;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+#changePasswordModal .modal-content {
+  position: relative;
+  background: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width: 90%;
+    max-width: 500px;
+  animation: modalOpen 0.4s;
+}
+#changePasswordModal h2 {
+  color: #054496;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  text-align: center;
+}
+#changePasswordModal .form-group {
+  margin-bottom: 15px;
+}
+#changePasswordModal label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #147802;
+}
+#changePasswordModal input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid rgba(33, 147, 176, 0.3);
+  border-radius: 10px;
+  font-size: 1em;
+}
+#passwordChangeError {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+  display: none;
+}
+#changePasswordModal button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(45deg, #2193b0, #6dd5ed);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 10px;
+}
+#changePasswordModal button:hover {
+  background: linear-gradient(45deg, #6dd5ed, #2193b0);
+}
+
+/* AI 助手 Modal */
 #aiModal {
   display: none;
   position: fixed;
-  z-index: 1002; /* 比 linksModal、statsModal 更前 */
+  z-index: 1002;
   left: 0; top: 0;
   width: 100%; height: 100%;
   background-color: rgba(0,0,0,0.7);
@@ -732,174 +807,187 @@ a.download-link::before {
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.3);
   width: 90%;
-  max-width: 1200px;
+  max-width: 800px;
+  height: 80%;
   animation: modalOpen 0.4s;
-}
-#aiModal .close {
-  position: absolute;
-  top: 15px; right: 20px;
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0
-/* ★ NEW: AI Modal (寬度90%) 續 */
-#aiModal .close:hover {
-  color: #333;
-  transform: rotate(90deg);
-}
-
-/* AI 對話區域 */
-#aiChatContainer {
   display: flex;
   flex-direction: column;
-  height: 500px;
+}
+#aiModal h2 {
+  color: #054496;
+  margin-bottom: 15px;
+  font-size: 1.8em;
+  text-align: center;
+}
+#aiChatContainer {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
-  margin-bottom: 15px;
-  overflow: hidden;
-}
-
-#aiChatHistory {
-  flex: 1;
-  overflow-y: auto;
-  padding: 15px;
   background-color: #f9f9f9;
 }
-
+#aiInputContainer {
+  display: flex;
+  gap: 10px;
+}
+#aiInput {
+  flex-grow: 1;
+  padding: 10px;
+  border: 2px solid rgba(33, 147, 176, 0.3);
+  border-radius: 10px;
+  font-size: 1em;
+}
+#aiSendButton {
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #2193b0, #6dd5ed);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+}
+#aiSendButton:hover {
+  background: linear-gradient(45deg, #6dd5ed, #2193b0);
+}
 .ai-message, .user-message {
-  margin-bottom: 10px;
   padding: 10px 15px;
+  margin: 5px 0;
   border-radius: 15px;
   max-width: 80%;
   word-wrap: break-word;
 }
-
 .ai-message {
   background-color: #e3f2fd;
   align-self: flex-start;
   margin-right: auto;
   border-bottom-left-radius: 5px;
 }
-
 .user-message {
-  background-color: #e8f5e9;
+  background-color: #e1f5fe;
   align-self: flex-end;
   margin-left: auto;
   text-align: right;
   border-bottom-right-radius: 5px;
 }
-
-#aiInputContainer {
-  display: flex;
-  padding: 10px;
-  background-color: #fff;
-  border-top: 1px solid #ddd;
+#aiResults {
+  margin-top: 15px;
+  width: 100%;
+  border-collapse: collapse;
 }
-
-#aiInput {
-  flex: 1;
-  padding: 10px 15px;
+#aiResults th, #aiResults td {
   border: 1px solid #ddd;
-  border-radius: 20px;
-  margin-right: 10px;
-  font-size: 1em;
+  padding: 8px;
+  text-align: left;
 }
-
-#aiSendButton {
-  padding: 10px 20px;
-  background: linear-gradient(45deg, #2193b0, #6dd5ed);
-  color: white;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
+#aiResults th {
+  background-color: #f2f2f2;
+  position: sticky;
+  top: 0;
 }
-
-#aiSendButton:hover {
-  background: linear-gradient(45deg, #6dd5ed, #2193b0);
+#aiResults tr:hover {
+  background-color: #f5f5f5;
 }
-
-/* AI 功能選項區 */
-#aiOptions {
-  display: flex;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.ai-option-button {
-  padding: 8px 15px;
-  background: linear-gradient(45deg, #9c27b0, #ba68c8);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: all 0.3s ease;
-}
-
-.ai-option-button:hover {
-  background: linear-gradient(45deg, #ba68c8, #9c27b0);
-  transform: translateY(-2px);
-}
-
-/* 更改密碼模態視窗 */
-#changePasswordModal {
+#aiLoading {
+  text-align: center;
+  margin: 20px 0;
   display: none;
-  position: fixed;
-  z-index: 1003; /* 比其他模態視窗更前 */
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.7);
-  overflow: auto;
 }
-
-#changePasswordModal .modal-content {
+.ai-thinking {
+  display: inline-block;
   position: relative;
-  background: white;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-  width: 90%;
-  max-width: 500px;
-  animation: modalOpen 0.4s;
+  width: 80px;
+  height: 13px;
+}
+.ai-thinking div {
+  position: absolute;
+  top: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #2193b0;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.ai-thinking div:nth-child(1) {
+  left: 8px;
+  animation: ai-thinking1 0.6s infinite;
+}
+.ai-thinking div:nth-child(2) {
+  left: 8px;
+  animation: ai-thinking2 0.6s infinite;
+}
+.ai-thinking div:nth-child(3) {
+  left: 32px;
+  animation: ai-thinking2 0.6s infinite;
+}
+.ai-thinking div:nth-child(4) {
+  left: 56px;
+  animation: ai-thinking3 0.6s infinite;
+}
+@keyframes ai-thinking1 {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+@keyframes ai-thinking3 {
+  0% { transform: scale(1); }
+  100% { transform: scale(0); }
+}
+@keyframes ai-thinking2 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(24px, 0); }
 }
 
-#passwordError {
-  color: #ff6b6b;
-  margin: 10px 0;
-  font-weight: bold;
-  display: none;
-}
-
-/* 響應式設計 */
+/* Responsive Design */
 @media (max-width: 768px) {
   .container {
+    padding: 15px 10px;
+  }
+  h2 {
+    font-size: 1.8em;
+  }
+  label {
+    font-size: 1.1em;
+  }
+  select, button, input[type="text"] {
+    font-size: 0.9em;
+    padding: 10px;
+  }
+  #statsButton, #linksButton, #aiButton {
+    font-size: 0.9em;
+    padding: 5px 10px;
+    min-width: 60px;
+    width: 70px;
+  }
+  #statsButton {
+    top: 10px;
+    left: 10px;
+  }
+  #linksButton {
+    top: 10px;
+    left: 90px;
+  }
+  #aiButton {
+    top: 10px;
+    left: 170px;
+  }
+  iframe {
+    height: 600px;
+  }
+  .dropdown-button {
+    font-size: 0.7em;
+    padding: 5px 10px;
+  }
+  #userInfo {
+    font-size: 0.5em;
+  }
+  .modal-content {
+    margin: 20% auto;
     padding: 15px;
   }
-  
-  h2 {
-    font-size: 2em;
-  }
-  
-  select, button, input[type="text"], input[type="password"] {
-    padding: 12px;
-    font-size: 1em;
-  }
-  
-  #statsButton, #linksButton, #aiButton {
-    font-size: 1em;
-    padding: 6px 10px;
-  }
-  
   .chart-container {
     height: 300px;
-  }
-  
-  #aiChatContainer {
-    height: 400px;
   }
 }
 
@@ -907,40 +995,22 @@ a.download-link::before {
   h2 {
     font-size: 1.5em;
   }
-  
   label {
-    font-size: 1.2em;
+    font-size: 1em;
   }
-  
-  #statsButton, #linksButton, #aiButton {
+  select, button, input[type="text"] {
     font-size: 0.8em;
-    min-width: 70px;
-    width: 75px;
+    padding: 8px;
   }
-  
-  #statsButton {
-    left: 5px;
+  iframe {
+    height: 400px;
   }
-  
-  #linksButton {
-    left: 85px;
+  .modal-content {
+    margin: 30% auto;
+    padding: 10px;
   }
-  
-  #aiButton {
-    left: 165px;
-  }
-  
   .chart-container {
     height: 250px;
-  }
-  
-  .modal-content {
-    margin: 15% auto;
-    padding: 15px;
-  }
-  
-  #aiChatContainer {
-    height: 350px;
   }
 }
     </style>
@@ -954,86 +1024,96 @@ a.download-link::before {
     <!-- 登入畫面 -->
     <div id="loginScreen">
       <div id="loginBox">
-        <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
+        <img src="https://raw.githubusercontent.com/Bingdoal/demo/master/logo.png" alt="Logo" class="logo-img">
         <h3>昶青數位資料中心</h3>
         <div class="form-group">
-          <input type="text" id="username" placeholder="使用者名稱" required>
+          <label for="username">帳號</label>
+          <input type="text" id="username" placeholder="請輸入帳號">
         </div>
         <div class="form-group">
-          <input type="password" id="password" placeholder="密碼" required>
+          <label for="password">密碼</label>
+          <input type="password" id="password" placeholder="請輸入密碼">
         </div>
         <div id="loginError"></div>
-        <button id="loginButton">登入</button>
+        <button id="loginButton">登入系統</button>
       </div>
     </div>
 
-    <!-- 主容器 -->
-    <div class="container">
-      <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
+    <!-- 主要容器 -->
+    <div class="container" id="mainContainer" style="display:none;">
       <h2>昶青數位資料中心</h2>
       
-      <!-- 登出按鈕 -->
-      <div class="dropdown" id="userActions">
-        <button id="logoutButton">登出 ▾</button>
-        <div class="dropdown-content" id="userActionMenu">
-          <a href="#" id="logoutAction">登出系統</a>
-          <a href="#" id="changePasswordAction">更改密碼</a>
+      <!-- 使用統計按鈕 -->
+      <button id="statsButton">使用統計</button>
+      
+      <!-- 超級連結按鈕 (s3限定) -->
+      <button id="linksButton">超級連結</button>
+      
+      <!-- AI助理按鈕 -->
+      <button id="aiButton">AI助理</button>
+      
+      <!-- 用戶選項下拉菜單 -->
+      <div class="dropdown">
+        <button class="dropdown-button">
+          <span>選項</span>
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="dropdown-content">
+          <a href="#" id="changePasswordOption">更改密碼</a>
+          <a href="#" id="logoutOption">登出系統</a>
         </div>
       </div>
       
-      <!-- 使用者資訊 -->
+      <!-- 用戶資訊 -->
       <div id="userInfo">
-        <div>使用者：<span id="userName"></span></div>
+        <div>使用者: <span id="userName"></span></div>
+        <div>權限: <span id="userRole"></span></div>
       </div>
       
-      <!-- 統計按鈕 -->
-      <button id="statsButton">統計</button>
-      
-      <!-- 超級連結按鈕 (s3限定) -->
-      <button id="linksButton">連結</button>
-      
-      <!-- AI助手按鈕 -->
-      <button id="aiButton">AI助手</button>
-      
-      <!-- 表單區域 -->
+      <!-- 部門選擇 -->
       <div class="form-group first-form-group">
-        <label for="department">選擇部門</label>
+        <label for="department">部門選擇</label>
         <select id="department">
           <option value="">請選擇部門</option>
         </select>
       </div>
       
+      <!-- 文件類別 -->
       <div class="form-group">
-        <label for="docType">文件類型</label>
-        <select id="docType">
-          <option value="all">全部</option>
-          <option value="辦法計畫">辦法計畫</option>
-          <option value="其他文件">其他文件</option>
+        <label for="category">文件類別</label>
+        <select id="category">
+          <option value="">請選擇類別</option>
         </select>
       </div>
       
+      <!-- 檔案搜尋 -->
       <div class="form-group">
-        <label for="keyword">關鍵字搜尋</label>
-        <input type="text" id="keyword" placeholder="輸入關鍵字">
+        <label for="search">檔案搜尋</label>
+        <input type="text" id="search" placeholder="輸入關鍵字搜尋檔案">
       </div>
       
-      <button id="searchButton">搜尋</button>
+      <!-- 檔案選擇 -->
+      <div class="form-group">
+        <label for="file">檔案選擇</label>
+        <select id="file">
+          <option value="">請選擇檔案</option>
+        </select>
+      </div>
       
-      <!-- 結果顯示區 -->
+      <!-- 結果顯示 -->
       <div id="result"></div>
     </div>
-    
-    <!-- 統計模態視窗 -->
+
+    <!-- 使用統計模態框 -->
     <div id="statsModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeStatsModal()">&times;</span>
-        <h2>使用統計</h2>
-        <div class="chart-container" id="deptChart"></div>
-        <div class="chart-container" id="fileChart"></div>
+        <h2>使用統計資料</h2>
+        <div class="chart-container" id="chart_div"></div>
       </div>
     </div>
     
-    <!-- 超級連結模態視窗 -->
+    <!-- 超級連結模態框 -->
     <div id="linksModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeLinksModal()">&times;</span>
@@ -1045,35 +1125,30 @@ a.download-link::before {
               <th>連結</th>
             </tr>
           </thead>
-          <tbody id="linksTableBody">
-            <!-- 連結將在這裡動態添加 -->
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </div>
     
-    <!-- AI助手模態視窗 -->
+    <!-- AI助理模態框 -->
     <div id="aiModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeAiModal()">&times;</span>
-        <h2>AI 助手</h2>
-        <div id="aiOptions">
-          <button class="ai-option-button" id="aiSearchHelp">搜尋建議</button>
-          <button class="ai-option-button" id="aiExtractKeywords">關鍵詞提取</button>
+        <h2>AI助理</h2>
+        <div id="aiChatContainer"></div>
+        <div id="aiLoading">
+          <div class="ai-thinking">
+            <div></div><div></div><div></div><div></div>
+          </div>
         </div>
-        <div id="aiChatContainer">
-          <div id="aiChatHistory">
-            <div class="ai-message">您好！我是昶青數位資料中心的AI助手，有什麼我能幫您的嗎？</div>
-          </div>
-          <div id="aiInputContainer">
-            <input type="text" id="aiInput" placeholder="輸入您的問題...">
-            <button id="aiSendButton">發送</button>
-          </div>
+        <div id="aiInputContainer">
+          <input type="text" id="aiInput" placeholder="請輸入您的問題...">
+          <button id="aiSendButton">發送</button>
         </div>
       </div>
     </div>
     
-    <!-- 更改密碼模態視窗 -->
+    <!-- 更改密碼模態框 -->
     <div id="changePasswordModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeChangePasswordModal()">&times;</span>
@@ -1090,710 +1165,726 @@ a.download-link::before {
           <label for="confirmPassword">確認新密碼</label>
           <input type="password" id="confirmPassword" placeholder="請再次輸入新密碼">
         </div>
-        <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
+        <div id="passwordChangeError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
         <button onclick="changePassword()">確認更改</button>
       </div>
     </div>
 
     <script>
       // 全局變數
-      let currentUser = null;
-      let departmentData = null;
+      let userToken = '';
+      let userLevel = '';
+      let selectedDepartment = '';
+      let selectedCategory = '';
+      let filesData = [];
+      let departmentsData = [];
+      let categoriesData = [];
+      let currentUsername = '';
+      let currentUserFullName = '';
       
-      // 頁面載入完成後執行
+      // 常數
+      const API_URL = 'https://script.google.com/macros/s/AKfycbxPLPxOuPEHzKmFBBQd1eWxgKcSVWWcHKdtDkdCZD-u-HNjWIcZPRQNmMHe4ZDLzpZL/exec';
+      
+      // 初始化 Google Charts
+      google.charts.load('current', {'packages':['corechart']});
+      
+      // 頁面加載時執行
       document.addEventListener('DOMContentLoaded', function() {
         // 檢查是否已登入
-        checkLoginStatus();
+        checkLogin();
         
         // 登入按鈕事件
         document.getElementById('loginButton').addEventListener('click', login);
         
-        // 登出按鈕點擊事件
-        document.getElementById('logoutButton').addEventListener('click', function(event) {
-          event.stopPropagation(); // 防止事件冒泡
-          document.getElementById('userActionMenu').classList.toggle('show');
+        // 登出按鈕事件
+        document.getElementById('logoutOption').addEventListener('click', logout);
+        
+        // 更改密碼按鈕事件
+        document.getElementById('changePasswordOption').addEventListener('click', showChangePasswordModal);
+        
+        // 部門選擇事件
+        document.getElementById('department').addEventListener('change', function() {
+          selectedDepartment = this.value;
+          loadCategories();
         });
         
-        // 登出操作
-        document.getElementById('logoutAction').addEventListener('click', function() {
-          logoutUser(); // 使用原有的登出函數
+        // 類別選擇事件
+        document.getElementById('category').addEventListener('change', function() {
+          selectedCategory = this.value;
+          loadFiles();
         });
         
-        // 更改密碼操作
-        document.getElementById('changePasswordAction').addEventListener('click', function() {
-          document.getElementById('userActionMenu').classList.remove('show');
-          showChangePasswordModal();
-        });
-        
-        // 點擊其他地方關閉下拉菜單
-        window.addEventListener('click', function(event) {
-          if (!event.target.matches('#logoutButton')) {
-            var dropdowns = document.getElementsByClassName('dropdown-content');
-            for (var i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
+        // 檔案選擇事件
+        document.getElementById('file').addEventListener('change', function() {
+          if (this.value) {
+            showFilePreview(this.value);
+          } else {
+            document.getElementById('result').innerHTML = '';
           }
         });
         
-        // 搜尋按鈕事件
-        document.getElementById('searchButton').addEventListener('click', searchFiles);
+        // 搜尋框事件
+        document.getElementById('search').addEventListener('input', function() {
+          filterFiles(this.value);
+        });
         
-        // 統計按鈕事件
-        document.getElementById('statsButton').addEventListener('click', showStatsModal);
+        // 使用統計按鈕事件
+        document.getElementById('statsButton').addEventListener('click', function() {
+          showStatsModal();
+        });
         
         // 超級連結按鈕事件
-        document.getElementById('linksButton').addEventListener('click', showLinksModal);
+        document.getElementById('linksButton').addEventListener('click', function() {
+          showLinksModal();
+        });
         
-        // AI助手按鈕事件
-        document.getElementById('aiButton').addEventListener('click', showAiModal);
+        // AI助理按鈕事件
+        document.getElementById('aiButton').addEventListener('click', function() {
+          showAiModal();
+        });
         
         // AI發送按鈕事件
-        document.getElementById('aiSendButton').addEventListener('click', sendAiMessage);
+        document.getElementById('aiSendButton').addEventListener('click', sendAiQuestion);
         
-        // AI輸入框按Enter發送
+        // AI輸入框回車事件
         document.getElementById('aiInput').addEventListener('keypress', function(e) {
           if (e.key === 'Enter') {
-            sendAiMessage();
+            sendAiQuestion();
           }
         });
         
-        // AI功能按鈕事件
-        document.getElementById('aiSearchHelp').addEventListener('click', function() {
-          addAiMessage("請告訴我您想搜尋的內容，我會幫您提供搜尋建議。");
-        });
+        // 點擊模態框外部關閉
+        window.onclick = function(event) {
+          if (event.target === document.getElementById('statsModal')) {
+            closeStatsModal();
+          } else if (event.target === document.getElementById('linksModal')) {
+            closeLinksModal();
+          } else if (event.target === document.getElementById('aiModal')) {
+            closeAiModal();
+          } else if (event.target === document.getElementById('changePasswordModal')) {
+            closeChangePasswordModal();
+          }
+        };
         
-        document.getElementById('aiExtractKeywords').addEventListener('click', function() {
-          addAiMessage("請輸入一段文字，我將為您提取關鍵詞。");
+        // 密碼輸入框回車事件
+        document.getElementById('password').addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            login();
+          }
         });
       });
       
-      // 檢查登入狀態
-      function checkLoginStatus() {
-        const token = localStorage.getItem('token');
-        const username = localStorage.getItem('username');
-        const role = localStorage.getItem('role');
+      // 檢查是否已登入
+      function checkLogin() {
+        const savedToken = localStorage.getItem('userToken');
+        const savedUsername = localStorage.getItem('username');
+        const savedUserFullName = localStorage.getItem('userFullName');
+        const savedUserLevel = localStorage.getItem('userLevel');
         
-        if (token && username) {
-          // 驗證 token
-          callGAS('validateToken', { token: token, username: username })
-            .then(data => {
-              if (data.success) {
-                // 登入成功
-                currentUser = {
-                  username: username,
-                  role: role,
-                  token: token
-                };
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('userName').textContent = username;
-                
-                // 根據權限顯示/隱藏功能
-                if (role === 's3') {
-                  document.getElementById('linksButton').style.display = 'flex';
-                }
-                
-                // 載入部門數據
-                loadDepartments();
-              } else {
-                // Token 無效，清除本地存儲
-                localStorage.removeItem('token');
-                localStorage.removeItem('username');
-                localStorage.removeItem('role');
-              }
-            })
-            .catch(err => {
-              console.error('Token 驗證錯誤:', err);
-              localStorage.removeItem('token');
-              localStorage.removeItem('username');
-              localStorage.removeItem('role');
-            });
+        if (savedToken && savedUsername) {
+          userToken = savedToken;
+          currentUsername = savedUsername;
+          currentUserFullName = savedUserFullName;
+          userLevel = savedUserLevel;
+          
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('mainContainer').style.display = 'block';
+          document.getElementById('userName').textContent = currentUserFullName;
+          document.getElementById('userRole').textContent = userLevel;
+          
+          // 根據權限顯示超級連結按鈕
+          if (userLevel === 's3') {
+            document.getElementById('linksButton').style.display = 'flex';
+          }
+          
+          loadDepartments();
         }
       }
       
-      // 登入函數
+      // 登入功能
       function login() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const loginError = document.getElementById('loginError');
         
         if (!username || !password) {
-          loginError.textContent = '請輸入使用者名稱和密碼';
-          loginError.style.display = 'block';
+          showLoginError('請輸入帳號和密碼');
           return;
         }
         
-        callGAS('login', { username: username, password: password })
+        fetch(`${API_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
+          .then(response => response.json())
           .then(data => {
             if (data.success) {
-              // 登入成功
-              localStorage.setItem('token', data.token);
-              localStorage.setItem('username', username);
-              localStorage.setItem('role', data.role);
+              userToken = data.token;
+              currentUsername = username;
+              currentUserFullName = data.fullName;
+              userLevel = data.level;
               
-              currentUser = {
-                username: username,
-                role: data.role,
-                token: data.token
-              };
+              // 保存登入資訊
+              localStorage.setItem('userToken', userToken);
+              localStorage.setItem('username', username);
+              localStorage.setItem('userFullName', currentUserFullName);
+              localStorage.setItem('userLevel', userLevel);
               
               document.getElementById('loginScreen').style.display = 'none';
-              document.getElementById('userName').textContent = username;
+              document.getElementById('mainContainer').style.display = 'block';
+              document.getElementById('userName').textContent = currentUserFullName;
+              document.getElementById('userRole').textContent = userLevel;
               
-              // 根據權限顯示/隱藏功能
-              if (data.role === 's3') {
+              // 根據權限顯示超級連結按鈕
+              if (userLevel === 's3') {
                 document.getElementById('linksButton').style.display = 'flex';
               }
               
-              // 載入部門數據
               loadDepartments();
             } else {
-              // 登入失敗
-              loginError.textContent = data.error || '登入失敗';
-              loginError.style.display = 'block';
+              showLoginError(data.error || '登入失敗');
             }
           })
-          .catch(err => {
-            console.error('登入錯誤:', err);
-            loginError.textContent = '登入時發生錯誤，請稍後再試';
-            loginError.style.display = 'block';
+          .catch(error => {
+            console.error('登入錯誤:', error);
+            showLoginError('登入時發生錯誤，請稍後再試');
           });
       }
       
-      // 登出函數
-      function logoutUser() {
-        callGAS('logout', { 
-          username: currentUser.username,
-          token: currentUser.token
-        })
-        .then(() => {
-          // 清除本地存儲
-          localStorage.removeItem('token');
-          localStorage.removeItem('username');
-          localStorage.removeItem('role');
-          
-          // 重新載入頁面
-          window.location.reload();
-        })
-        .catch(err => {
-          console.error('登出錯誤:', err);
-          // 即使發生錯誤，也清除本地存儲並重新載入
-          localStorage.removeItem('token');
-          localStorage.removeItem('username');
-          localStorage.removeItem('role');
-          window.location.reload();
-        });
+      // 顯示登入錯誤
+      function showLoginError(message) {
+        const errorElement = document.getElementById('loginError');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        
+        // 3秒後自動隱藏錯誤訊息
+        setTimeout(() => {
+          errorElement.style.display = 'none';
+        }, 3000);
       }
       
-      // 載入部門數據
-      function loadDepartments() {
-        callGAS('getDepartments', { token: currentUser.token })
-          .then(data => {
-            if (data.success) {
-              departmentData = data.departments;
-              const departmentSelect = document.getElementById('department');
-              
-              // 清除現有選項
-              while (departmentSelect.options.length > 1) {
-                departmentSelect.remove(1);
-              }
-              
-              // 添加新選項
-              departmentData.forEach(dept => {
-                const option = document.createElement('option');
-                option.value = dept.id;
-                option.textContent = dept.name;
-                departmentSelect.appendChild(option);
-              });
-            } else {
-              console.error('載入部門失敗:', data.error);
-              if (data.needLogin) {
-                // 需要重新登入
-                localStorage.removeItem('token');
-                localStorage.removeItem('username');
-                localStorage.removeItem('role');
-                window.location.reload();
-              }
-            }
-          })
-          .catch(err => {
-            console.error('載入部門錯誤:', err);
-          });
-      }
-      
-      // 搜尋檔案
-      function searchFiles() {
-        const department = document.getElementById('department').value;
-        const docType = document.getElementById('docType').value;
-        const keyword = document.getElementById('keyword').value;
-        
-        if (!department) {
-          alert('請選擇部門');
-          return;
-        }
-        
-        callGAS('searchFiles', {
-          token: currentUser.token,
-          department: department,
-          docType: docType,
-          keyword: keyword
-        })
-        .then(data => {
-          if (data.success) {
-            // 顯示結果
-            const resultDiv = document.getElementById('result');
+      // 登出功能
+      function logout() {
+        // 呼叫登出API
+        fetch(`${API_URL}?action=logLogout&token=${userToken}`)
+          .then(() => {
+            // 清除本地存儲
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('username');
+            localStorage.removeItem('userFullName');
+            localStorage.removeItem('userLevel');
             
-            if (data.files.length === 0) {
-              resultDiv.innerHTML = '<p style="text-align:center; margin:20px; font-size:1.2em; color:#666;">沒有找到符合條件的檔案</p>';
-              return;
-            }
-            
-            // 創建 iframe 顯示檔案列表
-            const iframe = document.createElement('iframe');
-            iframe.srcdoc = generateFileListHTML(data.files);
-            resultDiv.innerHTML = '';
-            resultDiv.appendChild(iframe);
-          } else {
-            console.error('搜尋檔案失敗:', data.error);
-            if (data.needLogin) {
-              // 需要重新登入
-              localStorage.removeItem('token');
-              localStorage.removeItem('username');
-              localStorage.removeItem('role');
-              window.location.reload();
-            }
-          }
-        })
-        .catch(err => {
-          console.error('搜尋檔案錯誤:', err);
-        });
-      }
-      
-      // 生成檔案列表 HTML
-      function generateFileListHTML(files) {
-        let html = `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <style>
-              body {
-                font-family: -apple-system, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                padding: 20px;
-                background-color: #f9f9f9;
-              }
-              table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-                background-color: white;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                border-radius: 10px;
-                overflow: hidden;
-              }
-              th, td {
-                padding: 12px 15px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-              }
-              th {
-                background-color: #2193b0;
-                color: white;
-                font-weight: bold;
-              }
-              tr:hover {
-                background-color: #f5f5f5;
-              }
-              a {
-                color: #2193b0;
-                text-decoration: none;
-                transition: all 0.2s;
-              }
-              a:hover {
-                color: #6dd5ed;
-                text-decoration: underline;
-              }
-              .file-icon {
-                font-size: 1.2em;
-                margin-right: 5px;
-              }
-              .pdf-icon::before {
-                content: "📄";
-              }
-              .doc-icon::before {
-                content: "📝";
-              }
-              .xls-icon::before {
-                content: "📊";
-              }
-              .ppt-icon::before {
-                content: "📋";
-              }
-              .other-icon::before {
-                content: "📁";
-              }
-            </style>
-          </head>
-          <body>
-            <table>
-              <thead>
-                <tr>
-                  <th>檔案名稱</th>
-                  <th>類型</th>
-                  <th>最後更新</th>
-                </tr>
-              </thead>
-              <tbody>
-        `;
-        
-        files.forEach(file => {
-          let iconClass = 'other-icon';
-          if (file.name.endsWith('.pdf')) {
-            iconClass = 'pdf-icon';
-          } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
-            iconClass = 'doc-icon';
-          } else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
-            iconClass = 'xls-icon';
-          } else if (file.name.endsWith('.ppt') || file.name.endsWith('.pptx')) {
-            iconClass = 'ppt-icon';
-          }
-          
-          html += `
-            <tr>
-              <td>
-                <span class="file-icon ${iconClass}"></span>
-                <a href="${file.viewUrl}" target="_blank">${file.name}</a>
-              </td>
-              <td>${file.type}</td>
-              <td>${file.lastModified}</td>
-            </tr>
-          `;
-        });
-        
-        html += `
-              </tbody>
-            </table>
-          </body>
-          </html>
-        `;
-        
-        return html;
-      }
-      
-      // 顯示統計模態視窗
-      function showStatsModal() {
-        callGAS('getStats', { token: currentUser.token })
-          .then(data => {
-            if (data.success) {
-              document.getElementById('statsModal').style.display = 'block';
-              
-              // 載入 Google Charts
-              google.charts.load('current', {'packages':['corechart']});
-              google.charts.setOnLoadCallback(() => {
-                // 部門熱度圖表
-                drawDeptChart(data.deptStats);
-                // 檔案熱度圖表
-                drawFileChart(data.fileStats);
-              });
-            } else {
-              console.error('獲取統計數據失敗:', data.error);
-              if (data.needLogin) {
-                // 需要重新登入
-                localStorage.removeItem('token');
-                localStorage.removeItem('username');
-                localStorage.removeItem('role');
-                window.location.reload();
-              }
-            }
+            // 重新載入頁面
+            window.location.reload();
           })
-          .catch(err => {
-            console.error('獲取統計數據錯誤:', err);
+          .catch(error => {
+            console.error('登出錯誤:', error);
+            // 即使API失敗，也強制登出
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('username');
+            localStorage.removeItem('userFullName');
+            localStorage.removeItem('userLevel');
+            window.location.reload();
           });
       }
       
-      // 繪製部門熱度圖表
-      function drawDeptChart(deptStats) {
-        const data = new google.visualization.DataTable();
-        data.addColumn('string', '部門');
-        data.addColumn('number', '查詢次數');
-        
-        deptStats.forEach(item => {
-          data.addRow([item.name, item.count]);
-        });
-        
-        const options = {
-          title: '部門資料查詢熱度',
-          titleTextStyle: { fontSize: 18, bold: true },
-          colors: ['#2193b0', '#6dd5ed', '#54a0ff', '#5f27cd', '#ff9f43'],
-          is3D: true
-        };
-        
-        const chart = new google.visualization.PieChart(document.getElementById('deptChart'));
-        chart.draw(data, options);
-      }
-      
-      // 繪製檔案熱度圖表
-      function drawFileChart(fileStats) {
-        const data = new google.visualization.DataTable();
-        data.addColumn('string', '檔案');
-        data.addColumn('number', '查看次數');
-        
-        fileStats.forEach(item => {
-          data.addRow([item.name, item.count]);
-        });
-        
-        const options = {
-          title: '檔案查看熱度 (Top 10)',
-          titleTextStyle: { fontSize: 18, bold: true },
-          colors: ['#2193b0', '#6dd5ed', '#54a0ff', '#5f27cd', '#ff9f43'],
-          legend: { position: 'none' }
-        };
-        
-        const chart = new google.visualization.ColumnChart(document.getElementById('fileChart'));
-        chart.draw(data, options);
-      }
-      
-      // 關閉統計模態視窗
-      function closeStatsModal() {
-        document.getElementById('statsModal').style.display = 'none';
-      }
-      
-      // 顯示超級連結模態視窗
-      function showLinksModal() {
-        callGAS('getLinks', { token: currentUser.token })
-          .then(data => {
-            if (data.success) {
-              document.getElementById('linksModal').style.display = 'block';
-              
-              // 填充連結表格
-              const tableBody = document.getElementById('linksTableBody');
-              tableBody.innerHTML = '';
-              
-              data.links.forEach(link => {
-                const row = document.createElement('tr');
-                
-                const nameCell = document.createElement('td');
-                nameCell.textContent = link.name;
-                
-                const urlCell = document.createElement('td');
-                const linkElement = document.createElement('a');
-                linkElement.href = link.url;
-                linkElement.textContent = link.url;
-                linkElement.target = '_blank';
-                urlCell.appendChild(linkElement);
-                
-                row.appendChild(nameCell);
-                row.appendChild(urlCell);
-                tableBody.appendChild(row);
-              });
-            } else {
-              console.error('獲取連結失敗:', data.error);
-              if (data.needLogin) {
-                // 需要重新登入
-                localStorage.removeItem('token');
-                localStorage.removeItem('username');
-                localStorage.removeItem('role');
-                window.location.reload();
-              }
-            }
-          })
-          .catch(err => {
-            console.error('獲取連結錯誤:', err);
-          });
-      }
-      
-      // 關閉超級連結模態視窗
-      function closeLinksModal() {
-        document.getElementById('linksModal').style.display = 'none';
-      }
-      
-      // 顯示AI助手模態視窗
-      function showAiModal() {
-        document.getElementById('aiModal').style.display = 'block';
-      }
-      
-      // 關閉AI助手模態視窗
-      function closeAiModal() {
-        document.getElementById('aiModal').style.display = 'none';
-      }
-      
-            // 發送AI消息
-      function sendAiMessage() {
-        const input = document.getElementById('aiInput');
-        const message = input.value.trim();
-        
-        if (!message) return;
-        
-        // 添加用戶消息到聊天歷史
-        const chatHistory = document.getElementById('aiChatHistory');
-        const userMessageDiv = document.createElement('div');
-        userMessageDiv.className = 'user-message';
-        userMessageDiv.textContent = message;
-        chatHistory.appendChild(userMessageDiv);
-        
-        // 清空輸入框
-        input.value = '';
-        
-        // 滾動到底部
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-        
-        // 顯示AI正在思考
-        const thinkingDiv = document.createElement('div');
-        thinkingDiv.className = 'ai-message';
-        thinkingDiv.textContent = '思考中...';
-        chatHistory.appendChild(thinkingDiv);
-        
-        // 發送請求到後端
-        callGAS('aiChat', {
-          token: currentUser.token,
-          message: message,
-          username: currentUser.username
-        })
-        .then(data => {
-          // 移除"思考中"消息
-          chatHistory.removeChild(thinkingDiv);
-          
-          if (data.success) {
-            // 添加AI回應
-            const aiMessageDiv = document.createElement('div');
-            aiMessageDiv.className = 'ai-message';
-            aiMessageDiv.textContent = data.response;
-            chatHistory.appendChild(aiMessageDiv);
-          } else {
-            // 添加錯誤消息
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'ai-message';
-            errorDiv.textContent = '抱歉，處理您的請求時發生錯誤。';
-            chatHistory.appendChild(errorDiv);
-            
-            console.error('AI回應錯誤:', data.error);
-            if (data.needLogin) {
-              // 需要重新登入
-              alert('您的登入已過期，請重新登入。');
-              localStorage.removeItem('token');
-              localStorage.removeItem('username');
-              localStorage.removeItem('role');
-              window.location.reload();
-            }
-          }
-          
-          // 滾動到底部
-          chatHistory.scrollTop = chatHistory.scrollHeight;
-        })
-        .catch(err => {
-          // 移除"思考中"消息
-          chatHistory.removeChild(thinkingDiv);
-          
-          // 添加錯誤消息
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'ai-message';
-          errorDiv.textContent = '抱歉，連接服務器時發生錯誤。';
-          chatHistory.appendChild(errorDiv);
-          
-          console.error('AI請求錯誤:', err);
-          
-          // 滾動到底部
-          chatHistory.scrollTop = chatHistory.scrollHeight;
-        });
-      }
-      
-      // 添加AI消息
-      function addAiMessage(message) {
-        const chatHistory = document.getElementById('aiChatHistory');
-        const aiMessageDiv = document.createElement('div');
-        aiMessageDiv.className = 'ai-message';
-        aiMessageDiv.textContent = message;
-        chatHistory.appendChild(aiMessageDiv);
-        
-        // 滾動到底部
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-      }
-      
-      // 顯示更改密碼模態視窗
+      // 顯示更改密碼模態框
       function showChangePasswordModal() {
-        document.getElementById('changePasswordModal').style.display = 'block';
         document.getElementById('currentPassword').value = '';
         document.getElementById('newPassword').value = '';
         document.getElementById('confirmPassword').value = '';
-        document.getElementById('passwordError').style.display = 'none';
+        document.getElementById('passwordChangeError').style.display = 'none';
+        document.getElementById('changePasswordModal').style.display = 'block';
       }
       
-      // 關閉更改密碼模態視窗
+      // 關閉更改密碼模態框
       function closeChangePasswordModal() {
         document.getElementById('changePasswordModal').style.display = 'none';
       }
       
-      // 處理更改密碼
+      // 更改密碼功能
       function changePassword() {
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-        const passwordError = document.getElementById('passwordError');
+        const errorElement = document.getElementById('passwordChangeError');
         
-        // 檢查輸入
+        // 基本驗證
         if (!currentPassword || !newPassword || !confirmPassword) {
-          passwordError.textContent = '請填寫所有密碼欄位';
-          passwordError.style.display = 'block';
+          errorElement.textContent = '所有欄位都必須填寫';
+          errorElement.style.display = 'block';
           return;
         }
         
         if (newPassword !== confirmPassword) {
-          passwordError.textContent = '新密碼與確認密碼不符';
-          passwordError.style.display = 'block';
+          errorElement.textContent = '新密碼與確認密碼不符';
+          errorElement.style.display = 'block';
           return;
         }
         
         if (newPassword.length < 6) {
-          passwordError.textContent = '新密碼長度至少需要6個字元';
-          passwordError.style.display = 'block';
+          errorElement.textContent = '新密碼長度至少需要6個字元';
+          errorElement.style.display = 'block';
           return;
         }
         
-        // 呼叫後端 API 更改密碼
-        callGAS('changePassword', { 
-          currentPassword: currentPassword,
-          newPassword: newPassword,
-          username: currentUser.username
-        })
-        .then(data => {
-          if (data.success) {
-            alert('密碼已成功更改！請使用新密碼重新登入。');
-            closeChangePasswordModal();
-            logoutUser(); // 更改密碼後登出
-          } else {
-            passwordError.textContent = data.error || '密碼更改失敗';
-            passwordError.style.display = 'block';
-          }
-        })
-        .catch(err => {
-          console.error('更改密碼錯誤:', err);
-          passwordError.textContent = '更改密碼時發生錯誤，請稍後再試';
-          passwordError.style.display = 'block';
+        // 調用後端 API 更改密碼
+        fetch(`${API_URL}?action=changePassword&token=${userToken}&currentPassword=${encodeURIComponent(currentPassword)}&newPassword=${encodeURIComponent(newPassword)}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // 顯示成功訊息
+              alert('密碼已成功更改，請使用新密碼重新登入');
+              // 登出用戶
+              logout();
+              closeChangePasswordModal();
+            } else {
+              errorElement.textContent = data.error || '密碼更改失敗';
+              errorElement.style.display = 'block';
+            }
+          })
+          .catch(err => {
+            console.error('更改密碼錯誤:', err);
+            errorElement.textContent = '更改密碼時發生錯誤，請稍後再試';
+            errorElement.style.display = 'block';
+          });
+      }
+      
+      // 載入部門數據
+      function loadDepartments() {
+        fetch(`${API_URL}?action=getSubfolders&token=${userToken}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              departmentsData = data.folders;
+              const departmentSelect = document.getElementById('department');
+              
+              // 清空現有選項
+              departmentSelect.innerHTML = '<option value="">請選擇部門</option>';
+              
+              // 添加新選項
+              departmentsData.forEach(folder => {
+                const option = document.createElement('option');
+                option.value = folder;
+                option.textContent = folder;
+                departmentSelect.appendChild(option);
+              });
+            } else if (data.needLogin) {
+              // Token 過期，重新登入
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('username');
+              localStorage.removeItem('userFullName');
+              localStorage.removeItem('userLevel');
+              window.location.reload();
+            } else {
+              console.error('載入部門失敗:', data.error);
+            }
+          })
+          .catch(error => {
+            console.error('載入部門錯誤:', error);
+          });
+      }
+      
+      // 載入類別數據
+      function loadCategories() {
+        if (!selectedDepartment) {
+          document.getElementById('category').innerHTML = '<option value="">請選擇類別</option>';
+          document.getElementById('file').innerHTML = '<option value="">請選擇檔案</option>';
+          document.getElementById('result').innerHTML = '';
+          return;
+        }
+        
+        fetch(`${API_URL}?action=getSubfolders&token=${userToken}&folder=${encodeURIComponent(selectedDepartment)}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              categoriesData = data.folders;
+              const categorySelect = document.getElementById('category');
+              
+              // 清空現有選項
+              categorySelect.innerHTML = '<option value="">請選擇類別</option>';
+              
+              // 添加新選項
+              categoriesData.forEach(folder => {
+                const option = document.createElement('option');
+                option.value = folder;
+                option.textContent = folder;
+                categorySelect.appendChild(option);
+              });
+              
+              // 重置檔案選擇
+              document.getElementById('file').innerHTML = '<option value="">請選擇檔案</option>';
+              document.getElementById('result').innerHTML = '';
+            } else if (data.needLogin) {
+              // Token 過期，重新登入
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('username');
+              localStorage.removeItem('userFullName');
+              localStorage.removeItem('userLevel');
+              window.location.reload();
+            } else {
+              console.error('載入類別失敗:', data.error);
+            }
+          })
+          .catch(error => {
+            console.error('載入類別錯誤:', error);
+          });
+      }
+      
+      // 載入檔案數據
+      function loadFiles() {
+        if (!selectedDepartment || !selectedCategory) {
+          document.getElementById('file').innerHTML = '<option value="">請選擇檔案</option>';
+          document.getElementById('result').innerHTML = '';
+          return;
+        }
+        
+        const path = `${selectedDepartment}/${selectedCategory}`;
+        
+        fetch(`${API_URL}?action=getFiles&token=${userToken}&folder=${encodeURIComponent(path)}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              filesData = data.files;
+              updateFileSelect(filesData);
+            } else if (data.needLogin) {
+              // Token 過期，重新登入
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('username');
+              localStorage.removeItem('userFullName');
+              localStorage.removeItem('userLevel');
+              window.location.reload();
+            } else {
+              console.error('載入檔案失敗:', data.error);
+            }
+          })
+          .catch(error => {
+            console.error('載入檔案錯誤:', error);
+          });
+      }
+      
+      // 更新檔案選擇下拉框
+      function updateFileSelect(files) {
+        const fileSelect = document.getElementById('file');
+        
+        // 清空現有選項
+        fileSelect.innerHTML = '<option value="">請選擇檔案</option>';
+        
+        // 根據用戶權限過濾檔案
+        const filteredFiles = files.filter(file => {
+          // s3 用戶可以訪問所有檔案
+          if (userLevel === 's3') return true;
+          
+          // s2 用戶不能訪問標有 "s3" 的檔案
+          if (userLevel === 's2' && file.name.toLowerCase().includes('s3')) return false;
+          
+          // s1 用戶只能訪問標有 "s1" 的檔案
+          if (userLevel === 's1' && !file.name.toLowerCase().includes('s1')) return false;
+          
+          return true;
+        });
+        
+                // 添加新選項
+        filteredFiles.forEach(file => {
+          const option = document.createElement('option');
+          option.value = file.id;
+          option.textContent = file.name;
+          fileSelect.appendChild(option);
+        });
+        
+        // 重置結果區域
+        document.getElementById('result').innerHTML = '';
+      }
+      
+      // 根據搜尋關鍵字過濾檔案
+      function filterFiles(keyword) {
+        if (!keyword) {
+          updateFileSelect(filesData);
+          return;
+        }
+        
+        const filteredFiles = filesData.filter(file => 
+          file.name.toLowerCase().includes(keyword.toLowerCase())
+        );
+        
+        updateFileSelect(filteredFiles);
+      }
+      
+      // 顯示檔案預覽
+      function showFilePreview(fileId) {
+        // 記錄檔案訪問
+        fetch(`${API_URL}?action=logAccess&token=${userToken}&fileId=${fileId}`)
+          .then(response => response.json())
+          .then(data => {
+            if (!data.success && data.needLogin) {
+              // Token 過期，重新登入
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('username');
+              localStorage.removeItem('userFullName');
+              localStorage.removeItem('userLevel');
+              window.location.reload();
+            }
+          })
+          .catch(error => {
+            console.error('記錄檔案訪問錯誤:', error);
+          });
+        
+        // 找到選中的檔案
+        const selectedFile = filesData.find(file => file.id === fileId);
+        if (!selectedFile) return;
+        
+        const resultDiv = document.getElementById('result');
+        
+        // 檢查檔案類型
+        const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
+        
+        if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt'].includes(fileExtension)) {
+          // 使用 Google Docs Viewer 預覽文件
+          resultDiv.innerHTML = `
+            <iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(selectedFile.url)}&embedded=true"></iframe>
+            <a href="${selectedFile.url}" class="download-link" target="_blank">下載檔案</a>
+          `;
+        } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(fileExtension)) {
+          // 直接顯示圖片
+          resultDiv.innerHTML = `
+            <img src="${selectedFile.url}" style="max-width:100%; max-height:800px; margin:20px 0; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
+            <a href="${selectedFile.url}" class="download-link" target="_blank">下載圖片</a>
+          `;
+        } else {
+          // 其他檔案類型提供下載連結
+          resultDiv.innerHTML = `
+            <div style="padding:50px; text-align:center; background:rgba(255,255,255,0.5); border-radius:10px; margin:20px 0;">
+              <h3 style="margin-bottom:20px; color:#054496;">無法預覽此類型檔案</h3>
+              <p style="margin-bottom:30px; color:#333;">檔案類型: ${fileExtension.toUpperCase()}</p>
+              <a href="${selectedFile.url}" class="download-link" target="_blank">下載檔案</a>
+            </div>
+          `;
+        }
+      }
+      
+      // 顯示使用統計模態框
+      function showStatsModal() {
+        document.getElementById('statsModal').style.display = 'block';
+        
+        fetch(`${API_URL}?action=getStats&token=${userToken}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              drawChart(data.stats);
+            } else if (data.needLogin) {
+              // Token 過期，重新登入
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('username');
+              localStorage.removeItem('userFullName');
+              localStorage.removeItem('userLevel');
+              window.location.reload();
+            } else {
+              console.error('載入統計數據失敗:', data.error);
+            }
+          })
+          .catch(error => {
+            console.error('載入統計數據錯誤:', error);
+          });
+      }
+      
+      // 關閉使用統計模態框
+      function closeStatsModal() {
+        document.getElementById('statsModal').style.display = 'none';
+      }
+      
+      // 繪製統計圖表
+      function drawChart(statsData) {
+        const data = new google.visualization.DataTable();
+        data.addColumn('string', '檔案');
+        data.addColumn('number', '訪問次數');
+        
+        // 添加數據
+        statsData.forEach(item => {
+          data.addRow([item.file, item.count]);
+        });
+        
+        // 設置圖表選項
+        const options = {
+          title: '檔案訪問統計',
+          titleTextStyle: {
+            color: '#054496',
+            fontSize: 16,
+            bold: true
+          },
+          colors: ['#2193b0'],
+          hAxis: {
+            title: '檔案名稱',
+            titleTextStyle: {
+              color: '#333',
+              italic: false,
+              bold: true
+            }
+          },
+          vAxis: {
+            title: '訪問次數',
+            titleTextStyle: {
+              color: '#333',
+              italic: false,
+              bold: true
+            },
+            minValue: 0
+          },
+          legend: { position: 'none' },
+          animation: {
+            startup: true,
+            duration: 1000,
+            easing: 'out'
+          },
+          bar: { groupWidth: '70%' },
+          backgroundColor: { fill: 'transparent' }
+        };
+        
+        // 繪製圖表
+        const chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+      
+      // 顯示超級連結模態框
+      function showLinksModal() {
+        document.getElementById('linksModal').style.display = 'block';
+        
+        fetch(`${API_URL}?action=getLinks&token=${userToken}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              populateLinksTable(data.links);
+            } else if (data.needLogin) {
+              // Token 過期，重新登入
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('username');
+              localStorage.removeItem('userFullName');
+              localStorage.removeItem('userLevel');
+              window.location.reload();
+            } else {
+              console.error('載入連結數據失敗:', data.error);
+            }
+          })
+          .catch(error => {
+            console.error('載入連結數據錯誤:', error);
+          });
+      }
+      
+      // 關閉超級連結模態框
+      function closeLinksModal() {
+        document.getElementById('linksModal').style.display = 'none';
+      }
+      
+      // 填充連結表格
+      function populateLinksTable(links) {
+        const tableBody = document.querySelector('#linksTable tbody');
+        tableBody.innerHTML = '';
+        
+        links.forEach(link => {
+          const row = document.createElement('tr');
+          
+          const nameCell = document.createElement('td');
+          nameCell.textContent = link.name;
+          
+          const linkCell = document.createElement('td');
+          const linkElement = document.createElement('a');
+          linkElement.href = link.url;
+          linkElement.textContent = link.url;
+          linkElement.target = '_blank';
+          linkCell.appendChild(linkElement);
+          
+          row.appendChild(nameCell);
+          row.appendChild(linkCell);
+          tableBody.appendChild(row);
         });
       }
       
-      // 調用 Google Apps Script
-      function callGAS(action, params = {}) {
-        const baseUrl = 'https://script.google.com/macros/s/AKfycbzY2lIDCL-CRw3Jo8hdSeb6a1a48rLA-PHZv2Nb1XvvxglA0KGtofOti55ZMf3M7IL0/exec';
+      // 顯示AI助理模態框
+      function showAiModal() {
+        document.getElementById('aiModal').style.display = 'block';
+        document.getElementById('aiInput').focus();
         
-        // 構建完整 URL
-        let url = `${baseUrl}?action=${action}`;
-        for (const key in params) {
-          if (params.hasOwnProperty(key)) {
-            url += `&${key}=${encodeURIComponent(params[key])}`;
-          }
+        // 如果聊天容器為空，添加歡迎訊息
+        const chatContainer = document.getElementById('aiChatContainer');
+        if (chatContainer.innerHTML === '') {
+          const aiMessage = document.createElement('div');
+          aiMessage.className = 'ai-message';
+          aiMessage.innerHTML = '您好！我是昶青數位資料中心的AI助理。有什麼我可以幫您的嗎？';
+          chatContainer.appendChild(aiMessage);
         }
+      }
+      
+      // 關閉AI助理模態框
+      function closeAiModal() {
+        document.getElementById('aiModal').style.display = 'none';
+      }
+      
+      // 發送AI問題
+      function sendAiQuestion() {
+        const question = document.getElementById('aiInput').value.trim();
+        if (!question) return;
         
-        return fetch(url)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
+        // 清空輸入框
+        document.getElementById('aiInput').value = '';
+        
+        // 添加用戶訊息到聊天容器
+        const chatContainer = document.getElementById('aiChatContainer');
+        const userMessage = document.createElement('div');
+        userMessage.className = 'user-message';
+        userMessage.textContent = question;
+        chatContainer.appendChild(userMessage);
+        
+        // 顯示AI思考中動畫
+        document.getElementById('aiLoading').style.display = 'block';
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // 發送請求到後端
+        fetch(`${API_URL}?action=askAI&token=${userToken}&question=${encodeURIComponent(question)}`)
+          .then(response => response.json())
+          .then(data => {
+            // 隱藏AI思考中動畫
+            document.getElementById('aiLoading').style.display = 'none';
+            
+            if (data.success) {
+              // 添加AI回覆到聊天容器
+              const aiMessage = document.createElement('div');
+              aiMessage.className = 'ai-message';
+              
+              // 處理回覆中的換行
+              const formattedResponse = data.response.replace(/\n/g, '<br>');
+              aiMessage.innerHTML = formattedResponse;
+              
+              chatContainer.appendChild(aiMessage);
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+            } else if (data.needLogin) {
+              // Token 過期，重新登入
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('username');
+              localStorage.removeItem('userFullName');
+              localStorage.removeItem('userLevel');
+              window.location.reload();
+            } else {
+              // 顯示錯誤訊息
+              const aiMessage = document.createElement('div');
+              aiMessage.className = 'ai-message';
+              aiMessage.innerHTML = '抱歉，處理您的問題時出現錯誤。請稍後再試。';
+              chatContainer.appendChild(aiMessage);
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+              
+              console.error('AI回覆錯誤:', data.error);
             }
-            return response.json();
+          })
+          .catch(error => {
+            // 隱藏AI思考中動畫
+            document.getElementById('aiLoading').style.display = 'none';
+            
+            // 顯示錯誤訊息
+            const aiMessage = document.createElement('div');
+            aiMessage.className = 'ai-message';
+            aiMessage.innerHTML = '抱歉，連接服務器時出現錯誤。請檢查您的網絡連接並稍後再試。';
+            chatContainer.appendChild(aiMessage);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            console.error('AI請求錯誤:', error);
           });
       }
     </script>
   </body>
 </html>
+
 
