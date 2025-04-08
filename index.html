@@ -611,7 +611,18 @@ a.download-link::before {
   font-weight: bold;
   display: none;
 }
-
+/* 在這裡加入 passwordError 樣式 */
+#passwordError {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+  display: none; /* 預設隱藏 */
+  padding: 8px;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-radius: 5px;
+  text-align: center;
+}
+      
 /* Modal (使用統計) */
 .modal {
   display: none;
@@ -1633,6 +1644,7 @@ function changePassword() {
     passwordError.style.display = 'block';
   });
 }
+
 
       /*************************************************
        * 5) 更新用戶信息顯示 + s3按鈕顯示 + 管理員按鈕顯示
