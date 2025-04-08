@@ -1407,7 +1407,7 @@ a.download-link::before {
        *************************************************/
       window.onload = function() {
   const token = localStorage.getItem('authToken');
-  const csrfToken = localStorage.getItem('csrfToken');
+  const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token 檢查
   if (token && csrfToken) {
     callGAS('getSubfolders')
       .then(data => {
@@ -1421,8 +1421,8 @@ a.download-link::before {
           };
           updateUserInfo();
           populateFolderDropdown(data.result);
-          // 新增：檢查公告
-          checkAnnouncement();
+          // 延遲呼叫公告檢查
+          setTimeout(checkAnnouncement, 500);
         } else {
           clearAuthData();
           document.getElementById('loginScreen').style.display = 'flex';
@@ -1437,6 +1437,7 @@ a.download-link::before {
   
   createTCCLetters(); // 建立 T, C, C 字母特效
 };
+
 
 
       // 清除所有身份驗證數據
