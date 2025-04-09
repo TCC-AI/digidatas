@@ -5,7 +5,8 @@
     <title>昶青數位資料中心APP</title>
     <!-- 載入 Google Charts -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=
+      device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <style>
       /* ----- Reset & Global ----- */
@@ -1155,8 +1156,8 @@ a.download-link::before {
       </div>
     </div>
 
-    <!-- 主應用程式 -->
-    <div class="container">
+    <!-- 主應用程式：預設隱藏，待公告確認後再顯示 -->
+      <div class="container" style="display: none;">
       <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
       <h2>昶青數位資料中心</h2>
       
@@ -1399,7 +1400,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxAsob_cShm04dVoqFoRrPuXdhXVhFhgPcRxtWWX4oGKkjqYxuGvJUFjvfomaX3H_ZL/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwFJGoicMtgqGmjT_dRJwKDOV5wHWawjo80AWcRAn76zYOE8lOIDc0JuL7eKFSjqsIG/exec";
       let currentUser = null;
       
       /*************************************************
@@ -2543,10 +2544,14 @@ function checkAnnouncement() {
     .then(data => {
       if (data.success && data.result && data.result.announcement) {
         showAnnouncementPopupModal(data.result.announcement);
+      } else {
+        // 若公告內容不存在，則直接顯示主畫面
+        document.querySelector('.container').style.display = 'block';
       }
     })
     .catch(err => {
       console.error("checkAnnouncement error:", err);
+      document.querySelector('.container').style.display = 'block';
     });
 }
 
@@ -2560,6 +2565,8 @@ function showAnnouncementPopupModal(announcement) {
 // 關閉公告 Popup Modal
 function closeAnnouncementPopupModal() {
   document.getElementById('announcementPopupModal').style.display = 'none';
+  // 顯示主應用畫面（container）
+  document.querySelector('.container').style.display = 'block';
 }
 
       </script>
