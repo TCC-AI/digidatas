@@ -1409,42 +1409,32 @@ a.download-link::before {
       window.onload = function() {
   const token = localStorage.getItem('authToken');
   const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token 檢查
- if (token && csrfToken) {
-  // 不必等待 getSubfolders 完成，直接平行發送公告請求
-  callGAS('getAnnouncement')
-    .then(announcementData => {
-      if (announcementData.success && announcementData.result && announcementData.result.announcement) {
-        showAnnouncementPopupModal(announcementData.result.announcement);
-      } else {
-        // 若無公告則顯示主畫面
-        document.querySelector('.container').style.display = 'block';
-      }
-    })
-    .catch(err => {
-      console.error("Announcement error:", err);
-      document.querySelector('.container').style.display = 'block';
-    });
-
-  // 同時發送 getSubfolders 請求
-  callGAS('getSubfolders')
-    .then(data => {
-      if (data.success) {
-        updateUserInfo();
-        populateFolderDropdown(data.result);
-        // 隱藏登入畫面（順便）
-        document.getElementById('loginScreen').style.display = 'none';
-      } else {
+  if (token && csrfToken) {
+    callGAS('getSubfolders')
+      .then(data => {
+        if (data.success) {
+          document.getElementById('loginScreen').style.display = 'none';
+          currentUser = {
+            username: localStorage.getItem('username'),
+            name: localStorage.getItem('name'),
+            role: localStorage.getItem('role'),
+            permission: localStorage.getItem('permissionLevel') || ''
+          };
+          updateUserInfo();
+          populateFolderDropdown(data.result);
+          // 延遲呼叫公告檢查
+          checkAnnouncement();
+        } else {
+          clearAuthData();
+          document.getElementById('loginScreen').style.display = 'flex';
+        }
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
         clearAuthData();
         document.getElementById('loginScreen').style.display = 'flex';
-      }
-    })
-    .catch(err => {
-      console.error("Subfolders error:", err);
-      clearAuthData();
-      document.getElementById('loginScreen').style.display = 'flex';
-    });
-}
-
+      });
+  }
   
   createTCCLetters(); // 建立 T, C, C 字母特效
 };
