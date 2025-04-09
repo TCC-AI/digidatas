@@ -1158,6 +1158,17 @@ a.download-link::before {
 
     <!-- 主應用程式：預設隱藏，待公告確認後再顯示 -->
       <div class="container" style="display: none;">
+         <div id="announcementEditModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAnnouncementEditModal()">&times;</span>
+    <h2>新增公告</h2>
+    <textarea id="announcementText" placeholder="請輸入公告內容..." style="width:100%; height:150px; padding:10px; font-size:1em;"></textarea>
+    <div style="margin-top:10px; text-align:right;">
+      <button onclick="closeAnnouncementEditModal()" style="margin-right:10px;">取消</button>
+      <button onclick="saveAnnouncement()">存檔</button>
+    </div>
+  </div>
+</div>
       <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
       <h2>昶青數位資料中心</h2>
       
@@ -1217,17 +1228,7 @@ a.download-link::before {
       </div>
     </div>
 
-    <div id="announcementEditModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeAnnouncementEditModal()">&times;</span>
-    <h2>新增公告</h2>
-    <textarea id="announcementText" placeholder="請輸入公告內容..." style="width:100%; height:150px; padding:10px; font-size:1em;"></textarea>
-    <div style="margin-top:10px; text-align:right;">
-      <button onclick="closeAnnouncementEditModal()" style="margin-right:10px;">取消</button>
-      <button onclick="saveAnnouncement()">存檔</button>
-    </div>
-  </div>
-</div>
+   
 
     <div id="announcementPopupModal" class="modal">
   <div class="modal-content" style="text-align:center;">
