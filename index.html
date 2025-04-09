@@ -623,6 +623,50 @@ a.download-link::before {
   border-radius: 5px;
   text-align: center;
 }
+
+/* NEW: 公告事項按鈕，樣式與用戶管理按鈕一致 */
+#announcementButton {
+  position: absolute;
+  top: 310px; /* 與用戶管理按鈕 (top:250px) 的對稱下方 */
+  left: 310px; /* 與用戶管理按鈕保持水平對齊 */
+  padding: 8px 8px;
+  background: linear-gradient(45deg, #9c27b0, #d81b60);
+  color: white; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(156, 39, 176, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: block;
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  width: 90px; /* 與用戶管理按鈕一致 */
+}
+#announcementButton:hover {
+  background: linear-gradient(45deg, #d81b60, #9c27b0);
+  box-shadow: 0 8px 20px rgba(156, 39, 176, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#announcementButton:active {
+  background: linear-gradient(45deg, #7b1fa2, #c2185b);
+}
+#announcementButton::before {
+  content: "📢";
+  margin-right: 8px;
+  font-size: 0.8em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#announcementButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
+
       
 /* Modal (使用統計) */
 .modal {
@@ -1186,6 +1230,8 @@ a.download-link::before {
       
       <!-- 新增：用戶管理按鈕 (僅管理員可見) -->
       <button id="userManageButton" onclick="showUserManageModal()">用戶管理</button>
+         <!-- 新增：公告事項按鈕 (所有人可見)，位置與【用戶管理】按鈕對齊但在其下方 -->
+      <button id="announcementButton" onclick="showAnnouncementModal()">公告事項</button>
       
       <div class="form-group first-form-group">
         <label for="folderSelect">請選擇部門</label>
@@ -1401,7 +1447,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwFJGoicMtgqGmjT_dRJwKDOV5wHWawjo80AWcRAn76zYOE8lOIDc0JuL7eKFSjqsIG/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwv-7fnS8FOkCo0LClBCvbldgpPa8wHb8JsyLBn8seYuipz3b0MmsSxQXxQ5lir6X8F/exec";
       let currentUser = null;
       
       /*************************************************
@@ -2569,6 +2615,29 @@ function closeAnnouncementPopupModal() {
   // 顯示主應用畫面（container）
   document.querySelector('.container').style.display = 'block';
 }
+function showAnnouncementModal() {
+  // 呼叫後端 API 取得公告內容
+  callGAS('getAnnouncement')
+    .then(data => {
+      if(data.success && data.result && data.result.announcement) {
+        document.getElementById('announcementPopupContent').innerText = data.result.announcement;
+      } else {
+        document.getElementById('announcementPopupContent').innerText = "目前無公告事項";
+      }
+      document.getElementById('announcementPopupModal').style.display = 'block';
+    })
+    .catch(err => {
+      console.error("getAnnouncement error:", err);
+      document.getElementById('announcementPopupContent').innerText = "公告讀取錯誤";
+      document.getElementById('announcementPopupModal').style.display = 'block';
+    });
+}
+
+function closeAnnouncementPopupModal() {
+  document.getElementById('announcementPopupModal').style.display = 'none';
+  // 此處僅關閉公告視窗，主畫面不受影響
+}
+
 
       </script>
   </body>
