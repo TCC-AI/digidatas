@@ -438,6 +438,37 @@
         transform: translateY(20px);
       }
 
+      .error-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  margin: 10px 0;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-bottom: 15px;
+}
+
+.retry-button {
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.retry-button:hover {
+  background-color: #9b59b6;
+}
+
+
 
       @media (max-width: 820px) {
         .container { padding: 30px; }
@@ -478,19 +509,18 @@
           <p>昶青集團職工福利委員會聯合會，旨在促進員工福利，增進員工身心健康，提升工作士氣與向心力。本會由各事業單位福委會代表組成，定期舉辦各項活動與福利措施。</p>
         </div>
 
-       <!-- 將原來的硬編碼公告卡片 -->
-<div class="welfare-section">
+    <div class="welfare-section">
   <h3>最新公告</h3>
   <div class="welfare-grid" id="announcementGrid">
     <!-- 公告內容將由 JavaScript 動態生成 -->
     <div id="loadingAnnouncements">載入公告中...</div>
   </div>
 </div>
+
 <div class="welfare-section">
-  <h3>最新公告</h3>
-  <div class="welfare-grid" id="announcementGrid">
-    <!-- 公告內容將由 JavaScript 動態生成 -->
-    <div id="loadingAnnouncements">載入公告中...</div>
+  <h3>福利項目</h3>
+  <div class="welfare-grid" id="benefitsGrid">
+    <!-- 福利項目將由 JavaScript 動態生成或靜態定義 -->
   </div>
 </div>
 
@@ -535,7 +565,43 @@
       window.onload = function() {
         createTCCLetters();
         updateUserInfo();
+        fetchAnnouncements();
+       displayBenefitItems(); // 新增顯示福利項目的函數
       };
+
+      // 顯示福利項目
+function displayBenefitItems() {
+  const benefitsGrid = document.getElementById('benefitsGrid');
+  
+  // 福利項目數據 - 可以改為從服務器獲取
+  const benefits = [
+    { title: "結婚補助", content: "員工本人結婚，補助新台幣6,000元整。" },
+    { title: "生育補助", content: "員工本人或配偶生育，每胎補助新台幣6,000元整。" },
+    { title: "住院補助", content: "員工本人住院，每日補助新台幣1,000元，最高補助10日。" },
+    { title: "員工旅遊", content: "每年舉辦員工旅遊，依年資提供不同補助金額。" },
+    { title: "節慶禮金/禮品", content: "端午節、中秋節及春節發放禮金或禮品。" },
+    { title: "子女教育獎學金", content: "員工子女就學成績優良者，可申請獎學金。" }
+  ];
+  
+  // 清空容器
+  benefitsGrid.innerHTML = '';
+  
+  // 創建福利項目卡片
+  benefits.forEach(benefit => {
+    const card = document.createElement('div');
+    card.className = 'welfare-card';
+    
+    const title = document.createElement('h4');
+    title.textContent = benefit.title;
+    
+    const content = document.createElement('p');
+    content.textContent = benefit.content;
+    
+    card.appendChild(title);
+    card.appendChild(content);
+    benefitsGrid.appendChild(card);
+  });
+}
 
       function createTCCLetters() {
         const lettersData = [
@@ -598,8 +664,11 @@ window.onload = function() {
   fetchAnnouncements();
 };
 
-// 獲取福委會公告
+// 修正獲取福委會公告的函數
 function fetchAnnouncements() {
+  const grid = document.getElementById('announcementGrid');
+  grid.innerHTML = '<div id="loadingAnnouncements">載入公告中...</div>';
+  
   // 獲取身份驗證信息
   const authToken = sessionStorage.getItem('authToken');
   const csrfToken = sessionStorage.getItem('csrfToken');
@@ -615,21 +684,47 @@ function fetchAnnouncements() {
   // 準備請求參數
   const url = `${scriptUrl}?action=getWelfareAnnouncements&authToken=${authToken}&csrfToken=${csrfToken}`;
   
+  // 添加超時處理
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超時
+  
   // 發送請求獲取公告數據
-  fetch(url)
-    .then(response => response.json())
+  fetch(url, { signal: controller.signal })
+    .then(response => {
+      clearTimeout(timeoutId);
+      if (!response.ok) {
+        throw new Error("伺服器回應異常");
+      }
+      return response.json();
+    })
     .then(data => {
       if (data.status === "success") {
         displayAnnouncements(data.announcements);
       } else {
-        displayError(data.message || "獲取公告失敗");
+        throw new Error(data.message || "獲取公告失敗");
       }
     })
     .catch(error => {
       console.error("Error fetching announcements:", error);
-      displayError("連接服務器失敗，請稍後再試");
+      if (error.name === 'AbortError') {
+        displayError("連接超時，請檢查網絡連接後重試");
+      } else {
+        displayError("連接服務器失敗，請稍後再試");
+      }
     });
 }
+
+// 修正顯示錯誤信息的函數
+function displayError(message) {
+  const grid = document.getElementById('announcementGrid');
+  grid.innerHTML = `
+    <div class="error-card">
+      <p class="error-message">${message}</p>
+      <button onclick="fetchAnnouncements()" class="retry-button">重試</button>
+    </div>
+  `;
+}
+
 
 // 顯示公告
 function displayAnnouncements(announcements) {
