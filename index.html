@@ -238,7 +238,7 @@
       }
       /* 調整第一個表單組的上邊距，使其位於超級連結按鈕下方 */
       .first-form-group {
-        margin-top: 50px; /* 根據超級連結按鈕的位置調整這個值 */
+        margin-top: 100px; /* 根據超級連結按鈕的位置調整這個值 */
       }
 
       label {
@@ -430,6 +430,51 @@
   transform: rotate(360deg);
   font-size: 1em;
 }
+
+/* 福委會按鈕樣式 */
+#welfareButton {
+  position: absolute;
+  top: 290px; /* 將按鈕放在使用統計按鈕下方 */
+  left: 10px;
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  color: #333; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  min-width: 80px;
+  width: 90px;
+}
+
+#welfareButton:hover {
+  background: linear-gradient(45deg, #fad0c4, #ff9a9e);
+  box-shadow: 0 8px 20px rgba(255, 154, 158, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+#welfareButton::before {
+  content: "🎁";
+  margin-right: 8px;
+  font-size: 0.7em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+
+#welfareButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
+
 
 /* Logout Button */
 #logoutButton {
@@ -712,6 +757,21 @@ a.download-link::before {
     top: 240px;
     left: 125px;
   }}
+
+  /* 媒體查詢調整 */
+@media (max-width: 820px) {
+  #welfareButton { 
+    font-size: 1em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 290px; 
+  }
+  
+  .first-form-group {
+    margin-top: 120px; /* 在小螢幕上調整邊距 */
+  }
+}
   @media (max-width: 600px) {
   #linksTable td:nth-child(1) {
     font-size: 16px;
@@ -847,6 +907,8 @@ a.download-link::before {
 
       <!-- ★ NEW: AI助手按鈕 (所有人可見) -->
       <button id="aiButton" onclick="showAiModal()">AI助理</button>
+      <!-- 在 #aiButton 後添加福委會按鈕 -->
+      <button id="welfareButton" onclick="showWelfarePage()">福委會</button>
       
       <div class="form-group first-form-group">
         <label for="folderSelect">請選擇部門</label>
@@ -1591,6 +1653,33 @@ function changePassword() {
           return c;
         });
       }
+
+      // 添加到原有 JavaScript 中
+function showWelfarePage() {
+  // 添加按鈕點擊效果
+  const welfareBtn = document.getElementById('welfareButton');
+  welfareBtn.classList.add('button-clicked');
+  
+  // 更改按鈕顏色
+  welfareBtn.style.background = 'linear-gradient(45deg, #ff7e5f, #feb47b)';
+  
+  // 延遲執行跳轉操作
+  setTimeout(() => {
+    // 儲存當前用戶資訊到 sessionStorage，以便在福委會頁面使用
+    if (currentUser) {
+      sessionStorage.setItem('username', currentUser.username);
+      sessionStorage.setItem('name', currentUser.name);
+      sessionStorage.setItem('role', currentUser.role);
+      sessionStorage.setItem('permissionLevel', currentUser.permission);
+      sessionStorage.setItem('authToken', localStorage.getItem('authToken'));
+      sessionStorage.setItem('csrfToken', localStorage.getItem('csrfToken'));
+    }
+    
+    // 跳轉到福委會頁面
+    window.location.href = 'welfare.html';
+  }, 300);
+}
+
     </script>
     <!-- 更改密碼模態視窗 -->
 <div id="changePasswordModal" class="modal">
