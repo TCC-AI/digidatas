@@ -416,60 +416,6 @@
         color: #555;
       }
 
-      /* 添加到現有 CSS 中 */
-      #loadingAnnouncements {
-        text-align: center;
-        padding: 20px;
-        color: #8e44ad;
-        font-style: italic;
-      }
-      
-      .error-message {
-        color: #e74c3c;
-        text-align: center;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 10px;
-        margin: 10px 0;
-      }
-      
-      .welfare-card {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      .error-card {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  width: 100%;
-  margin: 10px 0;
-}
-
-.error-message {
-  color: #e74c3c;
-  margin-bottom: 15px;
-}
-
-.retry-button {
-  background-color: #8e44ad;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.retry-button:hover {
-  background-color: #9b59b6;
-}
-
-
-
       @media (max-width: 820px) {
         .container { padding: 30px; }
         h2 { font-size: 2em; }
@@ -506,54 +452,57 @@
       <div class="welfare-content">
         <div class="welfare-section">
           <h3>福委會簡介</h3>
-          <p>昶青集團職工福利委員會聯合會，旨在促進員工福利，增進員工身心健康，提升工作士氣與向心力。本會由各事業單位福委會代表組成，定期舉辦各項活動與福利措施。</p>
+          <p>昶青集團職工福利委員會聯合會成立於民國XX年，旨在促進員工福利，增進員工身心健康，提升工作士氣與向心力。本會由各事業單位福委會代表組成，定期舉辦各項活動與福利措施。</p>
         </div>
 
-    <div class="welfare-section">
-  <h3>最新公告</h3>
-  <div class="welfare-grid" id="announcementGrid">
-    <!-- 公告內容將由 JavaScript 動態生成 -->
-    <div id="loadingAnnouncements">載入公告中...</div>
-  </div>
-</div>
+        <div class="welfare-section">
+          <h3>最新公告</h3>
+          <div class="welfare-grid">
+            <div class="welfare-card">
+              <h4>2025年度旅遊計畫</h4>
+              <p>2025年度旅遊計畫已排定，請各單位於2024/12/31前回報參加人數。</p>
+            </div>
+            <div class="welfare-card">
+              <h4>年終尾牙活動</h4>
+              <p>2025年尾牙將於1/18舉行，地點：福華飯店，請各單位準備節目表演。</p>
+            </div>
+            <div class="welfare-card">
+              <h4>員工子女獎學金申請</h4>
+              <p>2024學年度獎學金申請開始，請於11/30前提交成績單及相關證明文件。</p>
+            </div>
+          </div>
+        </div>
 
-<div class="welfare-section">
-  <h3>福利項目</h3>
-  <div class="welfare-grid" id="benefitsGrid">
-    <!-- 福利項目將由 JavaScript 動態生成或靜態定義 -->
-  </div>
-</div>
-
-<div class="welfare-section">
-  <h3>福利項目</h3>
-  <div class="welfare-grid">
-    <div class="welfare-card">
-      <h4>結婚補助</h4>
-      <p>員工本人結婚，補助新台幣6,000元整。</p>
-    </div>
-    <div class="welfare-card">
-      <h4>生育補助</h4>
-      <p>員工本人或配偶生育，每胎補助新台幣6,000元整。</p>
-    </div>
-    <div class="welfare-card">
-      <h4>住院補助</h4>
-      <p>員工本人住院，每日補助新台幣1,000元，最高補助10日。</p>
-    </div>
-    <div class="welfare-card">
-      <h4>員工旅遊</h4>
-      <p>每年舉辦員工旅遊，依年資提供不同補助金額。</p>
-    </div>
-    <div class="welfare-card">
-      <h4>節慶禮金/禮品</h4>
-      <p>端午節、中秋節及春節發放禮金或禮品。</p>
-    </div>
-    <div class="welfare-card">
-      <h4>子女教育獎學金</h4>
-      <p>員工子女就學成績優良者，可申請獎學金。</p>
-    </div>
-  </div>
-</div>
-
+        <div class="welfare-section">
+          <h3>福利項目</h3>
+          <div class="welfare-grid">
+            <div class="welfare-card">
+              <h4>結婚補助</h4>
+              <p>員工本人結婚，補助新台幣6,000元整。</p>
+            </div>
+            <div class="welfare-card">
+              <h4>生育補助</h4>
+              <p>員工本人或配偶生育，每胎補助新台幣6,000元整。</p>
+            </div>
+            <div class="welfare-card">
+              <h4>住院補助</h4>
+              <p>員工本人住院，每日補助新台幣1,000元，最高補助10日。</p>
+            </div>
+            <div class="welfare-card">
+              <h4>員工旅遊</h4>
+              <p>每年舉辦員工旅遊，依年資提供不同補助金額。</p>
+            </div>
+            <div class="welfare-card">
+              <h4>節慶禮金/禮品</h4>
+              <p>端午節、中秋節及春節發放禮金或禮品。</p>
+            </div>
+            <div class="welfare-card">
+              <h4>子女教育獎學金</h4>
+              <p>員工子女就學成績優良者，可申請獎學金。</p>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <h6 style="text-align: center; color: #808080; margin-top: 20px;">Designed by T.C.C.管理本部</h6>
     </div>
@@ -565,43 +514,7 @@
       window.onload = function() {
         createTCCLetters();
         updateUserInfo();
-        fetchAnnouncements();
-       displayBenefitItems(); // 新增顯示福利項目的函數
       };
-
-      // 顯示福利項目
-function displayBenefitItems() {
-  const benefitsGrid = document.getElementById('benefitsGrid');
-  
-  // 福利項目數據 - 可以改為從服務器獲取
-  const benefits = [
-    { title: "結婚補助", content: "員工本人結婚，補助新台幣6,000元整。" },
-    { title: "生育補助", content: "員工本人或配偶生育，每胎補助新台幣6,000元整。" },
-    { title: "住院補助", content: "員工本人住院，每日補助新台幣1,000元，最高補助10日。" },
-    { title: "員工旅遊", content: "每年舉辦員工旅遊，依年資提供不同補助金額。" },
-    { title: "節慶禮金/禮品", content: "端午節、中秋節及春節發放禮金或禮品。" },
-    { title: "子女教育獎學金", content: "員工子女就學成績優良者，可申請獎學金。" }
-  ];
-  
-  // 清空容器
-  benefitsGrid.innerHTML = '';
-  
-  // 創建福利項目卡片
-  benefits.forEach(benefit => {
-    const card = document.createElement('div');
-    card.className = 'welfare-card';
-    
-    const title = document.createElement('h4');
-    title.textContent = benefit.title;
-    
-    const content = document.createElement('p');
-    content.textContent = benefit.content;
-    
-    card.appendChild(title);
-    card.appendChild(content);
-    benefitsGrid.appendChild(card);
-  });
-}
 
       function createTCCLetters() {
         const lettersData = [
@@ -653,130 +566,6 @@ function displayBenefitItems() {
           window.location.href = 'index.html';
         }, 300);
       }
-
-      /*************************************************
- * 4) 從 Google Sheets 獲取福委會公告
- *************************************************/
-// 頁面加載時獲取公告
-window.onload = function() {
-  createTCCLetters();
-  updateUserInfo();
-  fetchAnnouncements();
-};
-
-// 修正獲取福委會公告的函數
-function fetchAnnouncements() {
-  const grid = document.getElementById('announcementGrid');
-  grid.innerHTML = '<div id="loadingAnnouncements">載入公告中...</div>';
-  
-  // 獲取身份驗證信息
-  const authToken = sessionStorage.getItem('authToken');
-  const csrfToken = sessionStorage.getItem('csrfToken');
-  
-  if (!authToken || !csrfToken) {
-    displayError("身份驗證失敗，請重新登入");
-    return;
-  }
-  
-  // 使用 Google Apps Script 作為後端 API
-  const scriptUrl = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
-  
-  // 準備請求參數
-  const url = `${scriptUrl}?action=getWelfareAnnouncements&authToken=${authToken}&csrfToken=${csrfToken}`;
-  
-  // 添加超時處理
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超時
-  
-  // 發送請求獲取公告數據
-  fetch(url, { signal: controller.signal })
-    .then(response => {
-      clearTimeout(timeoutId);
-      if (!response.ok) {
-        throw new Error("伺服器回應異常");
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.status === "success") {
-        displayAnnouncements(data.announcements);
-      } else {
-        throw new Error(data.message || "獲取公告失敗");
-      }
-    })
-    .catch(error => {
-      console.error("Error fetching announcements:", error);
-      if (error.name === 'AbortError') {
-        displayError("連接超時，請檢查網絡連接後重試");
-      } else {
-        displayError("連接服務器失敗，請稍後再試");
-      }
-    });
-}
-
-// 修正顯示錯誤信息的函數
-function displayError(message) {
-  const grid = document.getElementById('announcementGrid');
-  grid.innerHTML = `
-    <div class="error-card">
-      <p class="error-message">${message}</p>
-      <button onclick="fetchAnnouncements()" class="retry-button">重試</button>
-    </div>
-  `;
-}
-
-
-// 顯示公告
-function displayAnnouncements(announcements) {
-  const grid = document.getElementById('announcementGrid');
-  
-  // 清除載入提示
-  grid.innerHTML = '';
-  
-  // 檢查是否有公告
-  if (!announcements || announcements.length === 0) {
-    grid.innerHTML = '<p>目前沒有公告</p>';
-    return;
-  }
-  
-  // 按順位排序公告
-  announcements.sort((a, b) => parseInt(a.order) - parseInt(b.order));
-  
-  // 創建公告卡片
-  announcements.forEach(announcement => {
-    const card = document.createElement('div');
-    card.className = 'welfare-card';
-    
-    const title = document.createElement('h4');
-    title.textContent = announcement.title;
-    
-    const content = document.createElement('p');
-    content.textContent = announcement.content;
-    
-    card.appendChild(title);
-    card.appendChild(content);
-    grid.appendChild(card);
-    
-    // 添加淡入動畫效果
-    setTimeout(() => {
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(20px)';
-      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      
-      setTimeout(() => {
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-      }, 50);
-    }, 0);
-  });
-}
-
-// 顯示錯誤信息
-function displayError(message) {
-  const grid = document.getElementById('announcementGrid');
-  grid.innerHTML = `<p class="error-message">${message}</p>`;
-}
-
     </script>
   </body>
 </html>
