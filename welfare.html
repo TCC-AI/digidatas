@@ -326,6 +326,33 @@
         display: inline-block;
         transition: all 0.3s ease;
       }
+      /* 建議按鈕樣式 */
+.suggestion-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #a18cd1, #fbc2eb);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(161, 140, 209, 0.3);
+  transition: all 0.3s ease;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.suggestion-btn:hover {
+  background: linear-gradient(45deg, #fbc2eb, #a18cd1);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(161, 140, 209, 0.5);
+}
+
+.suggestion-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(161, 140, 209, 0.3);
+}
+
 
       /* User Info */
       #userInfo {
@@ -520,10 +547,11 @@
               <h4>總幹事</h4>
               <p>昶青：蔡嘉駿（分機：333）<br>生展：李佳樺（分機：300）</p>
             </div>
-            <div class="welfare-card">
-             <h4>給福委會建議~</h4>
-              <p>連結：https://forms.gle/sFjUCXPQZAcBQPkz8</p>
-            </div>
+           <div class="welfare-card">
+            <h4>給福委會建議~</h4>
+            <a href="https://forms.gle/sFjUCXPQZAcBQPkz8" target="_blank" class="suggestion-btn">提供建議</a>
+          </div>
+
           </div>
         </div>
       </div>
