@@ -1069,9 +1069,9 @@ a.download-link::before {
         <div class="ai-suggestions">
           <p>舉例問題：</p>
           <div class="suggestion-chips">
-            <span class="suggestion-chip" onclick="useAiSuggestion(this)">停車</span>
-            <span class="suggestion-chip" onclick="useAiSuggestion(this)">吸菸</span>
-            <span class="suggestion-chip" onclick="useAiSuggestion(this)">公司規章制度</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">特休獎勵金</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">環境品質</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">菸害防制</span>
           </div>
         </div>
       </div>
@@ -1734,7 +1734,7 @@ a.download-link::before {
         const chatContainer = document.getElementById('aiChatContainer');
         if (chatContainer.innerHTML === '') {
           chatContainer.innerHTML = `
-            <div class="chat-assistant">哈囉～希望你今天一切順利。</div>
+            <div class="chat-assistant">哈囉～願你擁有美好的一天～</div>
             <div class="chat-assistant">你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～</div>
           `;
           
@@ -1742,7 +1742,7 @@ a.download-link::before {
           chatHistory = [
             {
               role: "assistant",
-              content: "哈囉～希望你今天一切順利。"
+              content: "哈囉～願你擁有美好的一天～"
             },
             {
               role: "assistant",
