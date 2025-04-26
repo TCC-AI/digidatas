@@ -1362,10 +1362,6 @@ function showChangePasswordModal() {
   document.getElementById('changePasswordModal').style.display = 'block';
 }
 
-// 關閉更改密碼模態視窗
-function closeChangePasswordModal() {
-  document.getElementById('changePasswordModal').style.display = 'none';
-}
 
 // 更改密碼
 function changePassword() {
@@ -1735,51 +1731,154 @@ function changePassword() {
       /*************************************************
        * ★ NEW: AI助手按鈕 & Modal
        *************************************************/
-      function showAiModal() {
-        document.getElementById('aiModal').style.display = 'block';
-        // 初次開啟時，先放兩句話(問候 + 問問題)
-        const chatContainer = document.getElementById('aiChatContainer');
-        chatContainer.innerHTML = `
-          <div class="chat-assistant">哈囉～希望你今天一切順利。</div>
-          <div class="chat-assistant">你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～</div>
-        `;
-      }
+     // 更新AI對話相關JS函數
+let chatHistory = [];
+
+function showAiModal() {
+  document.getElementById('aiModal').style.display = 'block';
+  // 初次開啟時，先放歡迎訊息
+  const chatContainer = document.getElementById('aiChatContainer');
+  if (chatContainer.innerHTML === '') {
+    chatContainer.innerHTML = 
+      `<div class="chat-assistant">哈囉～我是昶青數位資料中心的AI助手。我可以幫你：<br>
+      1. 搜尋文件<br>
+      2. 回答關於公司制度的問題<br>
+      3. 解釋特定文件的內容<br><br>
+      請告訴我你需要什麼幫助？</div>`;
+    
+    // 儲存對話歷史
+    chatHistory.push({
+      role: "assistant",
+      content: "哈囉～我是昶青數位資料中心的AI助手。我可以幫你：\n1. 搜尋文件\n2. 回答關於公司制度的問題\n3. 解釋特定文件的內容\n\n請告訴我你需要什麼幫助？"
+    });
+  }
+}
+
 
       function closeAiModal() {
         document.getElementById('aiModal').style.display = 'none';
       }
 
       function sendMessageToAi() {
-        const userInput = document.getElementById('aiUserInput').value.trim();
-        if (!userInput) return;
+  const userInput = document.getElementById('aiUserInput').value.trim();
+  if (!userInput) return;
+  
+  // 先把使用者的話顯示在畫面
+  const chatContainer = document.getElementById('aiChatContainer');
+  const userMsgHtml = `<div class="chat-user">${escapeHtml(userInput)}</div>`;
+  chatContainer.innerHTML += userMsgHtml;
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  
+  // 顯示載入中動畫
+  const loadingId = showLoadingMessage();
+  
+  // 儲存用戶訊息到歷史
+  chatHistory.push({
+    role: "user",
+    content: userInput
+  });
+  
+  // 呼叫後端
+  callGAS('aiAssistant', { 
+    userMessage: userInput,
+    chatHistory: JSON.stringify(chatHistory)
+  })
+    .then(data => {
+      // 移除載入中訊息
+      removeLoadingMessage(loadingId);
+      
+      if (data.success) {
+        const aiReply = data.result.reply;
+        // 直接插入 HTML 字串
+        const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`;
+        chatContainer.innerHTML += assistantMsgHtml;
         
-        // 先把使用者的話顯示在畫面
-        const chatContainer = document.getElementById('aiChatContainer');
-        const userMsgHtml = `<div class="chat-user">${escapeHtml(userInput)}</div>`;
-        chatContainer.innerHTML += userMsgHtml;
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        // 儲存AI回覆到歷史
+        chatHistory.push({
+          role: "assistant",
+          content: aiReply.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '') // 移除HTML標籤，保留換行
+        });
         
-        // 呼叫後端
-        callGAS('aiAssistant', { userMessage: userInput })
-          .then(data => {
-            if (data.success) {
-          const aiReply = data.result.reply;
-          // 改成直接插入 HTML 字串，不呼叫 escapeHtml
-          const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`; 
-          chatContainer.innerHTML += assistantMsgHtml;
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-        } else {
-          chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
-  }
-          })
-          .catch(err => {
-            console.error("sendMessageToAi error:", err);
-            chatContainer.innerHTML += `<div class="chat-assistant">抱歉，目前無法取得回應。</div>`;
-          })
-          .finally(() => {
-            document.getElementById('aiUserInput').value = "";
-          });
+        // 限制歷史長度，避免過長
+        if (chatHistory.length > 10) {
+          chatHistory = chatHistory.slice(-10);
+        }
+        
+        // 更新建議問題
+        updateSuggestions(aiReply);
+      } else {
+        chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
       }
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    })
+    .catch(err => {
+      console.error("sendMessageToAi error:", err);
+      removeLoadingMessage(loadingId);
+      chatContainer.innerHTML += `<div class="chat-assistant">抱歉，目前無法取得回應。</div>`;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    })
+    .finally(() => {
+      document.getElementById('aiUserInput').value = "";
+    });
+}
+// 顯示載入中動畫
+function showLoadingMessage() {
+  const chatContainer = document.getElementById('aiChatContainer');
+  const loadingId = 'loading-' + Date.now();
+  chatContainer.innerHTML += `
+    <div id="${loadingId}" class="chat-assistant" style="display:flex; align-items:center;">
+      <div class="loading-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <span style="margin-left:10px">正在思考中...</span>
+    </div>
+  `;
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  return loadingId;
+}
+
+// 移除載入中訊息
+function removeLoadingMessage(loadingId) {
+  const loadingElement = document.getElementById(loadingId);
+  if (loadingElement) {
+    loadingElement.remove();
+  }
+}
+
+// 更新建議問題
+function updateSuggestions(aiReply) {
+  // 從AI回覆中提取建議問題
+  const suggestionsMatch = aiReply.match(/您可能還想了解：<br>(.*?)(?:<br>|$)/s);
+  
+  if (suggestionsMatch && suggestionsMatch[1]) {
+    const suggestionsText = suggestionsMatch[1];
+    const suggestions = suggestionsText.split('<br>').map(s => s.trim().replace(/^[•\-]\s*/, '').replace(/「|」/g, ''));
+    
+    const validSuggestions = suggestions.filter(s => s && s.length > 0 && s.length < 50);
+    
+    if (validSuggestions.length > 0) {
+      const suggestionsContainer = document.querySelector('.suggestion-chips');
+      suggestionsContainer.innerHTML = '';
+      
+      validSuggestions.forEach(suggestion => {
+        const chip = document.createElement('span');
+        chip.className = 'suggestion-chip';
+        chip.textContent = suggestion;
+        chip.onclick = function() { useAiSuggestion(this); };
+        suggestionsContainer.appendChild(chip);
+      });
+    }
+  }
+}
+
+// 使用建議問題
+function useAiSuggestion(element) {
+  const suggestion = element.textContent;
+  document.getElementById('aiUserInput').value = suggestion;
+  sendMessageToAi();
+}
 
       function escapeHtml(str) {
         return str.replace(/[<>&"]/g, function(c){
