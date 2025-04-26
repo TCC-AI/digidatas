@@ -871,6 +871,128 @@ a.download-link::before {
 }
 
     </style>
+
+    <style>
+/* 增強AI對話框樣式 */
+#aiChatContainer {
+  margin-bottom: 15px;
+  min-height: 300px; 
+  max-height: 500px; 
+  overflow-y: auto; 
+  border: 1px solid #ccc; 
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.chat-assistant {
+  background: linear-gradient(to right, #e8f4f8, #f2f9ff);
+  padding: 12px;
+  margin: 8px 5px;
+  border-radius: 12px;
+  border-top-left-radius: 4px;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 85%;
+  margin-right: auto;
+  position: relative;
+}
+
+.chat-user {
+  background: linear-gradient(to right, #dcf8c6, #e5f7d3);
+  padding: 12px;
+  margin: 8px 5px;
+  border-radius: 12px;
+  border-top-right-radius: 4px;
+  text-align: right;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 85%;
+  margin-left: auto;
+  position: relative;
+}
+
+.ai-input-container {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+#aiUserInput {
+  flex: 1;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+#sendAiBtn {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: linear-gradient(45deg, #00bfff, #007fff);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.ai-suggestions {
+  margin-top: 10px;
+}
+
+.ai-suggestions p {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestion-chip {
+  background: #f0f0f0;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #ddd;
+}
+
+.suggestion-chip:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.loading-dots {
+  display: flex;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  margin: 0 3px;
+  background: #888;
+  border-radius: 50%;
+  animation: dot-pulse 1.5s infinite ease-in-out;
+}
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+</style>
+
   </head>
 
   <body>
@@ -962,20 +1084,35 @@ a.download-link::before {
       </div>
     </div>
 
-    <!-- ★ NEW: AI對話 Modal -->
-    <div id="aiModal">
-      <div class="modal-content">
-        <span class="close" onclick="closeAiModal()">&times;</span>
-        <h2>AI搜查助理</h2>
-        <div id="aiChatContainer"></div>
-        <div>
-          <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題">
-          <button id="sendAiBtn" onclick="sendMessageToAi()">送出</button>
-        </div>
+    <!-- 更新AI對話 Modal -->
+<div id="aiModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAiModal()">&times;</span>
+    <h2>AI搜查助理</h2>
+    <div id="aiChatContainer"></div>
+    <div class="ai-input-container">
+      <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題">
+      <button id="sendAiBtn" onclick="sendMessageToAi()">送出</button>
+    </div>
+    <div class="ai-suggestions">
+      <p>建議問題：</p>
+      <div class="suggestion-chips">
+        <span class="suggestion-chip" onclick="useAiSuggestion(this)">如何申請請假？</span>
+        <span class="suggestion-chip" onclick="useAiSuggestion(this)">員工福利有哪些？</span>
+        <span class="suggestion-chip" onclick="useAiSuggestion(this)">公司規章制度</span>
       </div>
     </div>
+  </div>
+</div>
+
 
     <script>
+
+      // 更新AI對話相關JS函數
+let chatHistory = [];
+
+function show
+
       /*************************************************
        * 1) Web App URL
        *************************************************/
