@@ -693,7 +693,8 @@ a.download-link::before {
 }
 #linksTable th {
   background-color: #f2f2f2;
- 
+}
+
 /* 第一欄 */
 #linksTable td:nth-child(1) {
   font-size: 11px;
@@ -704,7 +705,6 @@ a.download-link::before {
 #linksTable td:nth-child(2) {
   font-size: 6px;
   width: 50%;  /* 佔表格寬度的 70% */
-}
 }
 
 /* 
@@ -754,13 +754,14 @@ a.download-link::before {
   #aiButton {
     font-size: 1em;
     min-height: 35px;
-        min-width: 110px;
+    min-width: 110px;
     padding: 8px 12px;
     top: 240px;
     left: 125px;
-  }}
+  }
+}
 
-  /* 媒體查詢調整 */
+/* 媒體查詢調整 */
 @media (max-width: 820px) {
   #welfareButton { 
     font-size: 1em; 
@@ -774,14 +775,17 @@ a.download-link::before {
     margin-top: 120px; /* 在小螢幕上調整邊距 */
   }
 }
-  @media (max-width: 600px) {
+
+@media (max-width: 600px) {
   #linksTable td:nth-child(1) {
     font-size: 16px;
-    width: 70%;  /* 名稱欄位佔表格寬度的 35% */  }
+    width: 70%;  /* 名稱欄位佔表格寬度的 35% */  
+  }
   
   #linksTable td:nth-child(2) {
     font-size: 10px;
-    width: 30%;  /* 名稱欄位佔表格寬度的 35% */  }
+    width: 30%;  /* 名稱欄位佔表格寬度的 35% */  
+  }
   
   #linksTable td {
     padding: 10px 8px; /* 在手機上增加垂直間距 */
@@ -826,53 +830,7 @@ a.download-link::before {
   color: #333;
   transform: rotate(90deg);
 }
-/* 簡易聊天區域 */
-#aiChatContainer {
-  margin-bottom: 15px;
-  min-height: 200px; 
-  max-height: 500px; 
-  overflow-y: auto; 
-  border: 1px solid #ccc; 
-  padding: 10px;
-  border-radius: 8px;
-}
-.chat-assistant {
-  background: #f2f2f2;
-  padding: 8px;
-  margin: 5px;
-  border-radius: 8px;
-  color: #333;
-}
-.chat-user {
-  background: #dff9fb;
-  padding: 8px;
-  margin: 5px;
-  border-radius: 8px;
-  text-align: right;
-  color: #333;
-}
-#aiUserInput {
-  width: 70%;
-  padding: 8px;
-  margin-right: 5px;
-  border-radius: 8px;
-}
-#sendAiBtn {
-  padding: 8px 15px;
-  border-radius: 8px;
-  background: linear-gradient(45deg, #00bfff, #007fff);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-#sendAiBtn:hover {
-  background: linear-gradient(45deg, #007fff, #00bfff);
-}
 
-    </style>
-
-    <style>
 /* 增強AI對話框樣式 */
 #aiChatContainer {
   margin-bottom: 15px;
@@ -991,7 +949,21 @@ a.download-link::before {
   0%, 100% { transform: scale(0.8); opacity: 0.5; }
   50% { transform: scale(1.2); opacity: 1; }
 }
-</style>
+
+/* 更改密碼模態視窗樣式 */
+#changePasswordModal .modal-content {
+  max-width: 500px;
+}
+#changePasswordModal .form-group {
+  margin-bottom: 15px;
+}
+#passwordError {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+  display: none;
+}
+    </style>
 
   </head>
 
@@ -1085,38 +1057,53 @@ a.download-link::before {
     </div>
 
     <!-- 更新AI對話 Modal -->
-<div id="aiModal">
-  <div class="modal-content">
-    <span class="close" onclick="closeAiModal()">&times;</span>
-    <h2>AI搜查助理</h2>
-    <div id="aiChatContainer"></div>
-    <div class="ai-input-container">
-      <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題">
-      <button id="sendAiBtn" onclick="sendMessageToAi()">送出</button>
-    </div>
-    <div class="ai-suggestions">
-      <p>建議問題：</p>
-      <div class="suggestion-chips">
-        <span class="suggestion-chip" onclick="useAiSuggestion(this)">如何申請請假？</span>
-        <span class="suggestion-chip" onclick="useAiSuggestion(this)">員工福利有哪些？</span>
-        <span class="suggestion-chip" onclick="useAiSuggestion(this)">公司規章制度</span>
+    <div id="aiModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeAiModal()">&times;</span>
+        <h2>AI搜查助理</h2>
+        <div id="aiChatContainer"></div>
+        <div class="ai-input-container">
+          <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題" onkeypress="if(event.keyCode === 13) sendMessageToAi()">
+          <button id="sendAiBtn" onclick="sendMessageToAi()">送出</button>
+        </div>
+        <div class="ai-suggestions">
+          <p>建議問題：</p>
+          <div class="suggestion-chips">
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">如何申請請假？</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">員工福利有哪些？</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">公司規章制度</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
+    <!-- 更改密碼模態視窗 -->
+    <div id="changePasswordModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+        <h2>更改密碼</h2>
+        <div class="form-group">
+          <label for="currentPassword">目前密碼:</label>
+          <input type="password" id="currentPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">新密碼:</label>
+          <input type="password" id="newPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">確認新密碼:</label>
+          <input type="password" id="confirmPassword" required>
+        </div>
+        <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
+        <button onclick="changePassword()">確認更改</button>
+      </div>
+    </div>
 
     <script>
-
-      // 更新AI對話相關JS函數
-let chatHistory = [];
-
-function show
-
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxCn00zFFYw2ymHKexPkjuXZbk8oQ0aQx1sGhnb0_NWvjGk_euQzT6S7qcSXAqRBNSv/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxs5Fh7sjsCGd2IWiNsiDO98aVMwW1sxZyE9R2t3n7lDb2Igsg-Pn2wrE4J2W2OYF7K/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1224,187 +1211,191 @@ function show
           });
       }
 
- /*************************************************
- * 4) 登出函數
- *************************************************/
-function logoutUser() {
-  // 檢查是否已經存在下拉選單
-  const existingDropdown = document.querySelector('.logout-dropdown');
-  if (existingDropdown) {
-    document.body.removeChild(existingDropdown);
-    return;
-  }
-
-  // 添加下拉菜單
-  var dropdown = document.createElement('div');
-  dropdown.className = 'logout-dropdown';
-  dropdown.style.position = 'absolute';
-  dropdown.style.top = '45px';
-  dropdown.style.right = '10px';
-  dropdown.style.backgroundColor = 'white';
-  dropdown.style.borderRadius = '10px';
-  dropdown.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
-  dropdown.style.zIndex = '1000';
-  dropdown.style.overflow = 'hidden';
-  dropdown.style.minWidth = '120px';
-  
-  // 添加更改密碼選項
-  var changePasswordOption = document.createElement('div');
-  changePasswordOption.className = 'dropdown-option';
-  changePasswordOption.textContent = '更改密碼';
-  changePasswordOption.style.padding = '12px 15px';
-  changePasswordOption.style.cursor = 'pointer';
-  changePasswordOption.style.borderBottom = '1px solid #eee';
-  changePasswordOption.style.transition = 'background-color 0.3s';
-  changePasswordOption.style.color = '#333';
-  changePasswordOption.style.fontWeight = 'bold';
-  changePasswordOption.onmouseover = function() {
-    this.style.backgroundColor = '#f5f5f5';
-  };
-  changePasswordOption.onmouseout = function() {
-    this.style.backgroundColor = 'white';
-  };
-  changePasswordOption.onclick = function(e) {
-    e.stopPropagation(); // 防止事件冒泡
-    showChangePasswordModal();
-    document.body.removeChild(dropdown);
-  };
-  
-  // 添加登出選項
-  var logoutOption = document.createElement('div');
-  logoutOption.className = 'dropdown-option';
-  logoutOption.textContent = '登出系統';
-  logoutOption.style.padding = '12px 15px';
-  logoutOption.style.cursor = 'pointer';
-  logoutOption.style.color = '#ff3333';
-  logoutOption.style.fontWeight = 'bold';
-  logoutOption.style.transition = 'background-color 0.3s';
-  logoutOption.onmouseover = function() {
-    this.style.backgroundColor = '#fff0f0';
-  };
-  logoutOption.onmouseout = function() {
-    this.style.backgroundColor = 'white';
-  };
-  logoutOption.onclick = function(e) {
-    e.stopPropagation(); // 防止事件冒泡
-    performLogout();
-  };
-  
-  dropdown.appendChild(changePasswordOption);
-  dropdown.appendChild(logoutOption);
-  document.body.appendChild(dropdown);
-  
-  // 點擊其他地方關閉下拉菜單
-  setTimeout(function() {
-    document.addEventListener('click', function closeDropdown(e) {
-      if (!dropdown.contains(e.target) && e.target.id !== 'logoutButton') {
-        if (document.body.contains(dropdown)) {
-          document.body.removeChild(dropdown);
-        }
-        document.removeEventListener('click', closeDropdown);
+     /*************************************************
+     * 4) 登出函數
+     *************************************************/
+    function logoutUser() {
+      // 檢查是否已經存在下拉選單
+      const existingDropdown = document.querySelector('.logout-dropdown');
+      if (existingDropdown) {
+        document.body.removeChild(existingDropdown);
+        return;
       }
-    });
-  }, 0);
-}
 
-function performLogout() {
-  // 添加按鈕點擊效果
-  const logoutBtn = document.getElementById('logoutButton');
-  logoutBtn.classList.add('button-clicked');
-  
-  // 更改按鈕顏色
-  logoutBtn.style.background = 'linear-gradient(45deg, #ff3333, #ff6b6b)';
-  
-  // 延遲執行登出操作
-  setTimeout(() => {
-    const loginRowIndex = localStorage.getItem('loginRowIndex');
-    if (loginRowIndex) {
-      callGAS('logLogout', { rowIndex: loginRowIndex })
-        .then(data => {
-          doLogout();
-        })
-        .catch(err => {
-          doLogout();
+      // 添加下拉菜單
+      var dropdown = document.createElement('div');
+      dropdown.className = 'logout-dropdown';
+      dropdown.style.position = 'absolute';
+      dropdown.style.top = '45px';
+      dropdown.style.right = '10px';
+      dropdown.style.backgroundColor = 'white';
+      dropdown.style.borderRadius = '10px';
+      dropdown.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+      dropdown.style.zIndex = '1000';
+      dropdown.style.overflow = 'hidden';
+      dropdown.style.minWidth = '120px';
+      
+      // 添加更改密碼選項
+      var changePasswordOption = document.createElement('div');
+      changePasswordOption.className = 'dropdown-option';
+      changePasswordOption.textContent = '更改密碼';
+      changePasswordOption.style.padding = '12px 15px';
+      changePasswordOption.style.cursor = 'pointer';
+      changePasswordOption.style.borderBottom = '1px solid #eee';
+      changePasswordOption.style.transition = 'background-color 0.3s';
+      changePasswordOption.style.color = '#333';
+      changePasswordOption.style.fontWeight = 'bold';
+      changePasswordOption.onmouseover = function() {
+        this.style.backgroundColor = '#f5f5f5';
+      };
+      changePasswordOption.onmouseout = function() {
+        this.style.backgroundColor = 'white';
+      };
+      changePasswordOption.onclick = function(e) {
+        e.stopPropagation(); // 防止事件冒泡
+        showChangePasswordModal();
+        document.body.removeChild(dropdown);
+      };
+      
+      // 添加登出選項
+      var logoutOption = document.createElement('div');
+      logoutOption.className = 'dropdown-option';
+      logoutOption.textContent = '登出系統';
+      logoutOption.style.padding = '12px 15px';
+      logoutOption.style.cursor = 'pointer';
+      logoutOption.style.color = '#ff3333';
+      logoutOption.style.fontWeight = 'bold';
+      logoutOption.style.transition = 'background-color 0.3s';
+      logoutOption.onmouseover = function() {
+        this.style.backgroundColor = '#fff0f0';
+      };
+      logoutOption.onmouseout = function() {
+        this.style.backgroundColor = 'white';
+      };
+      logoutOption.onclick = function(e) {
+        e.stopPropagation(); // 防止事件冒泡
+        performLogout();
+      };
+      
+      dropdown.appendChild(changePasswordOption);
+      dropdown.appendChild(logoutOption);
+      document.body.appendChild(dropdown);
+      
+      // 點擊其他地方關閉下拉菜單
+      setTimeout(function() {
+        document.addEventListener('click', function closeDropdown(e) {
+          if (!dropdown.contains(e.target) && e.target.id !== 'logoutButton') {
+            if (document.body.contains(dropdown)) {
+              document.body.removeChild(dropdown);
+            }
+            document.removeEventListener('click', closeDropdown);
+          }
         });
-    } else {
-      doLogout();
+      }, 0);
     }
-  }, 300);
-}
 
-// 執行登出的實際操作
-function doLogout() {
-  // 清除本地存儲
-  clearAuthData();
-
-  // 重置當前用戶
-  currentUser = null;
-  
-  // 顯示登入畫面
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('username').value = '';
-  document.getElementById('password').value = '';
-  document.getElementById('loginError').style.display = 'none';
-  
-  // 重置登出按鈕顏色
-  const logoutBtn = document.getElementById('logoutButton');
-  logoutBtn.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e8e)';
-  logoutBtn.classList.remove('button-clicked');
-}
-
-
-// 顯示更改密碼模態視窗
-function showChangePasswordModal() {
-  document.getElementById('currentPassword').value = '';
-  document.getElementById('newPassword').value = '';
-  document.getElementById('confirmPassword').value = '';
-  document.getElementById('passwordError').style.display = 'none';
-  document.getElementById('changePasswordModal').style.display = 'block';
-}
-
-
-// 更改密碼
-function changePassword() {
-  const currentPassword = document.getElementById('currentPassword').value;
-  const newPassword = document.getElementById('newPassword').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
-  const passwordError = document.getElementById('passwordError');
-  
-  // 驗證輸入
-  if (!currentPassword || !newPassword || !confirmPassword) {
-    passwordError.textContent = '請填寫所有欄位';
-    passwordError.style.display = 'block';
-    return;
-  }
-  
-  if (newPassword !== confirmPassword) {
-    passwordError.textContent = '新密碼與確認密碼不符';
-    passwordError.style.display = 'block';
-    return;
-  }
-  
-  // 呼叫後端API更改密碼
-  callGAS('changePassword', { 
-    currentPassword: currentPassword,
-    newPassword: newPassword,
-    username: localStorage.getItem('username')
-  })
-  .then(data => {
-    if (data.success) {
-      alert('密碼更改成功！請重新登入。');
-      closeChangePasswordModal();
-      performLogout();
-    } else {
-      passwordError.textContent = data.error || '密碼更改失敗';
-      passwordError.style.display = 'block';
+    function performLogout() {
+      // 添加按鈕點擊效果
+      const logoutBtn = document.getElementById('logoutButton');
+      logoutBtn.classList.add('button-clicked');
+      
+      // 更改按鈕顏色
+      logoutBtn.style.background = 'linear-gradient(45deg, #ff3333, #ff6b6b)';
+      
+      // 延遲執行登出操作
+      setTimeout(() => {
+        const loginRowIndex = localStorage.getItem('loginRowIndex');
+        if (loginRowIndex) {
+          callGAS('logLogout', { rowIndex: loginRowIndex })
+            .then(data => {
+              doLogout();
+            })
+            .catch(err => {
+              doLogout();
+            });
+        } else {
+          doLogout();
+        }
+      }, 300);
     }
-  })
-  .catch(err => {
-    console.error('更改密碼錯誤:', err);
-    passwordError.textContent = '更改密碼時發生錯誤，請稍後再試';
-    passwordError.style.display = 'block';
-  });
-}
+
+    // 執行登出的實際操作
+    function doLogout() {
+      // 清除本地存儲
+      clearAuthData();
+
+      // 重置當前用戶
+      currentUser = null;
+      
+      // 顯示登入畫面
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('loginError').style.display = 'none';
+      
+      // 重置登出按鈕顏色
+      const logoutBtn = document.getElementById('logoutButton');
+      logoutBtn.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e8e)';
+      logoutBtn.classList.remove('button-clicked');
+    }
+
+
+    // 顯示更改密碼模態視窗
+    function showChangePasswordModal() {
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      document.getElementById('passwordError').style.display = 'none';
+      document.getElementById('changePasswordModal').style.display = 'block';
+    }
+
+    // 關閉更改密碼模態視窗
+    function closeChangePasswordModal() {
+      document.getElementById('changePasswordModal').style.display = 'none';
+    }
+
+    // 更改密碼
+    function changePassword() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const passwordError = document.getElementById('passwordError');
+      
+      // 驗證輸入
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        passwordError.textContent = '請填寫所有欄位';
+        passwordError.style.display = 'block';
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        passwordError.textContent = '新密碼與確認密碼不符';
+        passwordError.style.display = 'block';
+        return;
+      }
+      
+      // 呼叫後端API更改密碼
+      callGAS('changePassword', { 
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        username: localStorage.getItem('username')
+      })
+      .then(data => {
+        if (data.success) {
+          alert('密碼更改成功！請重新登入。');
+          closeChangePasswordModal();
+          performLogout();
+        } else {
+          passwordError.textContent = data.error || '密碼更改失敗';
+          passwordError.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        console.error('更改密碼錯誤:', err);
+        passwordError.textContent = '更改密碼時發生錯誤，請稍後再試';
+        passwordError.style.display = 'block';
+      });
+    }
 
       /*************************************************
        * 5) 更新用戶信息顯示 + s3按鈕顯示
@@ -1488,7 +1479,7 @@ function changePassword() {
 
               if (category === '辦法') {
                 const keywords = ['辦法', '計畫', '細則'];
-                files = files.filter(file => {
+                                files = files.filter(file => {
                   const nameLower = file.name.toLowerCase();
                   return keywords.some(kw => nameLower.includes(kw));
                 });
@@ -1635,7 +1626,8 @@ function changePassword() {
       window.onclick = function(event) {
         const statsModal = document.getElementById('statsModal');
         const linksModal = document.getElementById('linksModal');
-        const aiModal    = document.getElementById('aiModal'); // ★ NEW
+        const aiModal    = document.getElementById('aiModal'); 
+        const changePasswordModal = document.getElementById('changePasswordModal');
 
         if (event.target === statsModal) {
           statsModal.style.display = "none";
@@ -1643,6 +1635,8 @@ function changePassword() {
           linksModal.style.display = "none";
         } else if (event.target === aiModal) {
           aiModal.style.display = "none";
+        } else if (event.target === changePasswordModal) {
+          changePasswordModal.style.display = "none";
         }
       };
 
@@ -1683,7 +1677,7 @@ function changePassword() {
               if (data.success) {
                 const links = data.result; 
                 renderLinksTable(links);
-                                document.getElementById('linksModal').style.display = 'block';
+                document.getElementById('linksModal').style.display = 'block';
                 
                 setTimeout(() => {
                   linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
@@ -1731,154 +1725,158 @@ function changePassword() {
       /*************************************************
        * ★ NEW: AI助手按鈕 & Modal
        *************************************************/
-     // 更新AI對話相關JS函數
-let chatHistory = [];
+      // 更新AI對話相關JS函數
+      let chatHistory = [];
 
-function showAiModal() {
-  document.getElementById('aiModal').style.display = 'block';
-  // 初次開啟時，先放歡迎訊息
-  const chatContainer = document.getElementById('aiChatContainer');
-  if (chatContainer.innerHTML === '') {
-    chatContainer.innerHTML = 
-      `<div class="chat-assistant">哈囉～我是昶青數位資料中心的AI助手。我可以幫你：<br>
-      1. 搜尋文件<br>
-      2. 回答關於公司制度的問題<br>
-      3. 解釋特定文件的內容<br><br>
-      請告訴我你需要什麼幫助？</div>`;
-    
-    // 儲存對話歷史
-    chatHistory.push({
-      role: "assistant",
-      content: "哈囉～我是昶青數位資料中心的AI助手。我可以幫你：\n1. 搜尋文件\n2. 回答關於公司制度的問題\n3. 解釋特定文件的內容\n\n請告訴我你需要什麼幫助？"
-    });
-  }
-}
-
+      function showAiModal() {
+        document.getElementById('aiModal').style.display = 'block';
+        // 初次開啟時，先放兩句話(問候 + 問問題)
+        const chatContainer = document.getElementById('aiChatContainer');
+        if (chatContainer.innerHTML === '') {
+          chatContainer.innerHTML = `
+            <div class="chat-assistant">哈囉～希望你今天一切順利。</div>
+            <div class="chat-assistant">你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～</div>
+          `;
+          
+          // 儲存對話歷史
+          chatHistory = [
+            {
+              role: "assistant",
+              content: "哈囉～希望你今天一切順利。"
+            },
+            {
+              role: "assistant",
+              content: "你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～"
+            }
+          ];
+        }
+      }
 
       function closeAiModal() {
         document.getElementById('aiModal').style.display = 'none';
       }
 
       function sendMessageToAi() {
-  const userInput = document.getElementById('aiUserInput').value.trim();
-  if (!userInput) return;
-  
-  // 先把使用者的話顯示在畫面
-  const chatContainer = document.getElementById('aiChatContainer');
-  const userMsgHtml = `<div class="chat-user">${escapeHtml(userInput)}</div>`;
-  chatContainer.innerHTML += userMsgHtml;
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-  
-  // 顯示載入中動畫
-  const loadingId = showLoadingMessage();
-  
-  // 儲存用戶訊息到歷史
-  chatHistory.push({
-    role: "user",
-    content: userInput
-  });
-  
-  // 呼叫後端
-  callGAS('aiAssistant', { 
-    userMessage: userInput,
-    chatHistory: JSON.stringify(chatHistory)
-  })
-    .then(data => {
-      // 移除載入中訊息
-      removeLoadingMessage(loadingId);
-      
-      if (data.success) {
-        const aiReply = data.result.reply;
-        // 直接插入 HTML 字串
-        const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`;
-        chatContainer.innerHTML += assistantMsgHtml;
+        const userInput = document.getElementById('aiUserInput').value.trim();
+        if (!userInput) return;
         
-        // 儲存AI回覆到歷史
+        // 先把使用者的話顯示在畫面
+        const chatContainer = document.getElementById('aiChatContainer');
+        const userMsgHtml = `<div class="chat-user">${escapeHtml(userInput)}</div>`;
+        chatContainer.innerHTML += userMsgHtml;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // 顯示載入中動畫
+        const loadingId = showLoadingMessage();
+        
+        // 儲存用戶訊息到歷史
         chatHistory.push({
-          role: "assistant",
-          content: aiReply.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '') // 移除HTML標籤，保留換行
+          role: "user",
+          content: userInput
         });
         
-        // 限制歷史長度，避免過長
-        if (chatHistory.length > 10) {
-          chatHistory = chatHistory.slice(-10);
-        }
-        
-        // 更新建議問題
-        updateSuggestions(aiReply);
-      } else {
-        chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
+        // 呼叫後端
+        callGAS('aiAssistant', { 
+          userMessage: userInput,
+          chatHistory: JSON.stringify(chatHistory)
+        })
+          .then(data => {
+            // 移除載入中訊息
+            removeLoadingMessage(loadingId);
+            
+            if (data.success) {
+              const aiReply = data.result.reply;
+              // 直接插入 HTML 字串
+              const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`;
+              chatContainer.innerHTML += assistantMsgHtml;
+              
+              // 儲存AI回覆到歷史
+              chatHistory.push({
+                role: "assistant",
+                content: aiReply.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '') // 移除HTML標籤，保留換行
+              });
+              
+              // 限制歷史長度，避免過長
+              if (chatHistory.length > 10) {
+                chatHistory = chatHistory.slice(-10);
+              }
+              
+              // 更新建議問題
+              updateSuggestions(aiReply);
+            } else {
+              chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
+            }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          })
+          .catch(err => {
+            console.error("sendMessageToAi error:", err);
+            removeLoadingMessage(loadingId);
+            chatContainer.innerHTML += `<div class="chat-assistant">抱歉，目前無法取得回應。</div>`;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          })
+          .finally(() => {
+            document.getElementById('aiUserInput').value = "";
+          });
       }
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    })
-    .catch(err => {
-      console.error("sendMessageToAi error:", err);
-      removeLoadingMessage(loadingId);
-      chatContainer.innerHTML += `<div class="chat-assistant">抱歉，目前無法取得回應。</div>`;
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    })
-    .finally(() => {
-      document.getElementById('aiUserInput').value = "";
-    });
-}
-// 顯示載入中動畫
-function showLoadingMessage() {
-  const chatContainer = document.getElementById('aiChatContainer');
-  const loadingId = 'loading-' + Date.now();
-  chatContainer.innerHTML += `
-    <div id="${loadingId}" class="chat-assistant" style="display:flex; align-items:center;">
-      <div class="loading-dots">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
-      <span style="margin-left:10px">正在思考中...</span>
-    </div>
-  `;
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-  return loadingId;
-}
 
-// 移除載入中訊息
-function removeLoadingMessage(loadingId) {
-  const loadingElement = document.getElementById(loadingId);
-  if (loadingElement) {
-    loadingElement.remove();
-  }
-}
+      // 顯示載入中動畫
+      function showLoadingMessage() {
+        const chatContainer = document.getElementById('aiChatContainer');
+        const loadingId = 'loading-' + Date.now();
+        chatContainer.innerHTML += `
+          <div id="${loadingId}" class="chat-assistant" style="display:flex; align-items:center;">
+            <div class="loading-dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <span style="margin-left:10px">正在思考中...</span>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        return loadingId;
+      }
 
-// 更新建議問題
-function updateSuggestions(aiReply) {
-  // 從AI回覆中提取建議問題
-  const suggestionsMatch = aiReply.match(/您可能還想了解：<br>(.*?)(?:<br>|$)/s);
-  
-  if (suggestionsMatch && suggestionsMatch[1]) {
-    const suggestionsText = suggestionsMatch[1];
-    const suggestions = suggestionsText.split('<br>').map(s => s.trim().replace(/^[•\-]\s*/, '').replace(/「|」/g, ''));
-    
-    const validSuggestions = suggestions.filter(s => s && s.length > 0 && s.length < 50);
-    
-    if (validSuggestions.length > 0) {
-      const suggestionsContainer = document.querySelector('.suggestion-chips');
-      suggestionsContainer.innerHTML = '';
+      // 移除載入中訊息
+      function removeLoadingMessage(loadingId) {
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) {
+          loadingElement.remove();
+        }
+      }
       
-      validSuggestions.forEach(suggestion => {
-        const chip = document.createElement('span');
-        chip.className = 'suggestion-chip';
-        chip.textContent = suggestion;
-        chip.onclick = function() { useAiSuggestion(this); };
-        suggestionsContainer.appendChild(chip);
-      });
-    }
-  }
-}
+      // 更新建議問題
+      function updateSuggestions(aiReply) {
+        // 從AI回覆中提取建議問題
+        const suggestionsMatch = aiReply.match(/您可能還想了解：<br>(.*?)(?:<br>|$)/s);
+        
+        if (suggestionsMatch && suggestionsMatch[1]) {
+          const suggestionsText = suggestionsMatch[1];
+          const suggestions = suggestionsText.split('<br>').map(s => s.trim().replace(/^[•\-]\s*/, '').replace(/「|」/g, ''));
+          
+          const validSuggestions = suggestions.filter(s => s && s.length > 0 && s.length < 50);
+          
+          if (validSuggestions.length > 0) {
+            const suggestionsContainer = document.querySelector('.suggestion-chips');
+            suggestionsContainer.innerHTML = '';
+            
+            validSuggestions.forEach(suggestion => {
+              const chip = document.createElement('span');
+              chip.className = 'suggestion-chip';
+              chip.textContent = suggestion;
+              chip.onclick = function() { useAiSuggestion(this); };
+              suggestionsContainer.appendChild(chip);
+            });
+          }
+        }
+      }
 
-// 使用建議問題
-function useAiSuggestion(element) {
-  const suggestion = element.textContent;
-  document.getElementById('aiUserInput').value = suggestion;
-  sendMessageToAi();
-}
+      // 使用建議問題
+      function useAiSuggestion(element) {
+        const suggestion = element.textContent;
+        document.getElementById('aiUserInput').value = suggestion;
+        sendMessageToAi();
+      }
 
       function escapeHtml(str) {
         return str.replace(/[<>&"]/g, function(c){
@@ -1893,74 +1891,31 @@ function useAiSuggestion(element) {
       }
 
       // 添加到原有 JavaScript 中
-function showWelfarePage() {
-  // 添加按鈕點擊效果
-  const welfareBtn = document.getElementById('welfareButton');
-  welfareBtn.classList.add('button-clicked');
-  
-  // 更改按鈕顏色
-  welfareBtn.style.background = 'linear-gradient(45deg, #ff7e5f, #feb47b)';
-  
-  // 延遲執行跳轉操作
-  setTimeout(() => {
-    // 儲存當前用戶資訊到 sessionStorage，以便在福委會頁面使用
-    if (currentUser) {
-      sessionStorage.setItem('username', currentUser.username);
-      sessionStorage.setItem('name', currentUser.name);
-      sessionStorage.setItem('role', currentUser.role);
-      sessionStorage.setItem('permissionLevel', currentUser.permission);
-      sessionStorage.setItem('authToken', localStorage.getItem('authToken'));
-      sessionStorage.setItem('csrfToken', localStorage.getItem('csrfToken'));
-    }
-    
-    // 跳轉到福委會頁面
-    window.location.href = 'welfare.html';
-  }, 300);
-}
-
+      function showWelfarePage() {
+        // 添加按鈕點擊效果
+        const welfareBtn = document.getElementById('welfareButton');
+        welfareBtn.classList.add('button-clicked');
+        
+        // 更改按鈕顏色
+        welfareBtn.style.background = 'linear-gradient(45deg, #ff7e5f, #feb47b)';
+        
+        // 延遲執行跳轉操作
+        setTimeout(() => {
+          // 儲存當前用戶資訊到 sessionStorage，以便在福委會頁面使用
+          if (currentUser) {
+            sessionStorage.setItem('username', currentUser.username);
+            sessionStorage.setItem('name', currentUser.name);
+            sessionStorage.setItem('role', currentUser.role);
+            sessionStorage.setItem('permissionLevel', currentUser.permission);
+            sessionStorage.setItem('authToken', localStorage.getItem('authToken'));
+            sessionStorage.setItem('csrfToken', localStorage.getItem('csrfToken'));
+          }
+          
+          // 跳轉到福委會頁面
+          window.location.href = 'welfare.html';
+        }, 300);
+      }
     </script>
-    <!-- 更改密碼模態視窗 -->
-<div id="changePasswordModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-    <h2>更改密碼</h2>
-    <div class="form-group">
-      <label for="currentPassword">目前密碼:</label>
-      <input type="password" id="currentPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="newPassword">新密碼:</label>
-      <input type="password" id="newPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="confirmPassword">確認新密碼:</label>
-      <input type="password" id="confirmPassword" required>
-    </div>
-    <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
-    <button onclick="changePassword()">確認更改</button>
-  </div>
-</div>
-<!-- 更改密碼模態視窗 -->
-<div id="changePasswordModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeChangePasswordModal()">&times;</span>
-    <h2>更改密碼</h2>
-    <div class="form-group">
-      <label for="currentPassword">目前密碼:</label>
-      <input type="password" id="currentPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="newPassword">新密碼:</label>
-      <input type="password" id="newPassword" required>
-    </div>
-    <div class="form-group">
-      <label for="confirmPassword">確認新密碼:</label>
-      <input type="password" id="confirmPassword" required>
-    </div>
-    <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
-    <button onclick="changePassword()">確認更改</button>
-  </div>
-</div>
-
   </body>
 </html>
+
