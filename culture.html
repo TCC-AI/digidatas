@@ -243,6 +243,23 @@
       font-weight: bold;
       font-size: 1.1em;
     }
+
+    /* 針對文化頁面的圖示 */
+.culture-card img {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* 保持圖片原始比例 */
+  max-height: 200px; /* 可根據需要調整 */
+}
+
+/* 如果使用背景圖片方式 */
+.culture-card .image-container {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 200px; /* 可根據需要調整 */
+}
+
   </style>
 </head>
 <body>
