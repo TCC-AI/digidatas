@@ -1053,16 +1053,18 @@ a.download-link::before {
         歡迎, <span id="userName"></span>
         <div id="userRole"></div>
       </div>
-      <button id="statsButton" onclick="showStats()">使用統計</button>
-      <!-- 只有s3看到的按鈕 -->
-      <button id="linksButton" onclick="showLinks()">超級連結</button>
+           <!-- 按鈕區域的HTML結構修改 -->
+      <div class="button-container">
+        <!-- 第一行按鈕 -->
+        <button id="statsButton" onclick="showStats()">使用統計</button>
+        <button id="aiButton" onclick="showAIAssistant()">AI助理</button>
+        <button id="linkButton" onclick="showLinks()">超級連結</button>
+        
+        <!-- 第二行按鈕 -->
+        <button id="welfareButton" onclick="showWelfarePage()">福委會</button>
+        <button id="cultureButton" onclick="showCulturePage()">昶青文化</button>
+      </div>
 
-      <!-- ★ NEW: AI助手按鈕 (所有人可見) -->
-      <button id="aiButton" onclick="showAiModal()">AI助理</button>
-      <!-- 在 #aiButton 後添加福委會按鈕 -->
-      <button id="welfareButton" onclick="showWelfarePage()">福委會</button>
-      <!-- 新增：昶青文化按鈕 -->
-      <button id="cultureButton" onclick="showCulturePage()">昶青文化</button>
       
       <div class="form-group first-form-group">
         <label for="folderSelect">請選擇部門</label>
