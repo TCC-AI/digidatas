@@ -300,849 +300,875 @@
         box-shadow: 0 5px 10px rgba(33, 147, 176, 0.3);
       }
 
-     /* 按鈕容器 - 新增的CSS */
-     .button-container {
-       display: flex;
-       justify-content: center;
-       flex-wrap: wrap;
-       gap: 10px;
-       position: absolute;
-       top: 250px;
-       left: 0;
-       right: 0;
-       margin: 0 auto;
-     }
-
      /* Stats Button */
-     #statsButton {
-       padding: 3px 3px;
-       background: linear-gradient(45deg, #20b2aa, #3cb371);
-       color: white; 
-       border: none; 
-       border-radius: 20px;
-       cursor: pointer;
-       box-shadow: 0 6px 15px rgba(32, 178, 170, 0.4), 0 3px 8px rgba(0,0,0,0.15);
-       transition: all 0.3s ease;
-       font-size: 1.3em; 
-       font-weight: bold;
-       display: flex; 
-       align-items: center; 
-       justify-content: center;
-       min-height: 35px;
-       min-width: 80px; /* 調整為固定寬度 */
-       width: 90px;     /* 添加固定寬度 */
-       position: static; /* 移除絕對定位 */
-     }
-     #statsButton:hover {
-       background: linear-gradient(45deg, #3cb371, #20b2aa);
-       box-shadow: 0 8px 20px rgba(32, 178, 170, 0.5), 0 5px 12px rgba(0,0,0,0.2);
-       transform: translateY(-2px);
-     }
-     #statsButton::before {
-       content: "📊";
-       margin-right: 8px;
-       font-size: 0.7em;
-       display: inline-block;
-       transition: all 0.3s ease;
-       position: relative;
-       top: -1px;
-     }
-     #statsButton:hover::before {
-       transform: rotate(360deg);
-       font-size: 1em;
-     }
+#statsButton {
+  position: absolute;
+  top: 250px; 
+  left: 10px;
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #20b2aa, #3cb371);
+  color: white; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(32, 178, 170, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  
+  min-width: 80px; /* 調整為固定寬度 */
+  width: 90px;     /* 添加固定寬度 */
+}
+#statsButton:hover {
+  background: linear-gradient(45deg, #3cb371, #20b2aa);
+  box-shadow: 0 8px 20px rgba(32, 178, 170, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#statsButton::before {
+  content: "📊";
+  margin-right: 8px;
+  font-size: 0.7em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#statsButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
 
-     /* 超級連結按鈕 (s3限定) */
-     #linksButton {
-       padding: 8px 8px;
-       background: linear-gradient(45deg, #e0a204, #fad270);
-       color: #001a26; 
-       border: none; 
-       border-radius: 20px;
-       cursor: pointer;
-       box-shadow: 0 6px 15px rgba(255, 182, 72, 0.4), 0 3px 8px rgba(0,0,0,0.15);
-       transition: all 0.3s ease;
-       font-size: 1.3em; 
-       font-weight: bold;
-       display: none;  /* 預設隱藏，s3才顯示 */
-       align-items: center; 
-       justify-content: center;
-       min-height: 35px;
-       min-width: 80px; /* 調整為固定寬度 */
-       width: 90px;     /* 添加固定寬度 */
-       position: static; /* 移除絕對定位 */
-     }
-     #linksButton:hover {
-       background: linear-gradient(45deg, #ffc947, #ffb700);
-       box-shadow: 0 8px 20px rgba(255, 182, 72, 0.5), 0 5px 12px rgba(0,0,0,0.2);
-       transform: translateY(-2px);
-     }
-     #linksButton:active {
-       background: linear-gradient(45deg, #bd6802, #ffb700);
-     }
-     #linksButton::before {
-       content: "🔗";
-       margin-right: 8px;
-       font-size: 0.7em; /* 調整為和statsButton一致 */
-       display: inline-block;
-       transition: all 0.3s ease;
-       position: relative;
-       top: -1px;
-     }
-     #linksButton:hover::before {
-       transform: rotate(360deg); /* 添加和statsButton一致的旋轉效果 */
-       font-size: 1em;
-     }
+/* NEW: 超級連結按鈕 (s3限定) */
+#linksButton {
+  position: absolute;
+  top: 250px;
+  left: 110px;
+  padding: 8px 8px;
+  background: linear-gradient(45deg, #e0a204, #fad270);
+  color: #001a26; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 182, 72, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: none;  /* 預設隱藏，s3才顯示 */
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  
+  min-width: 80px; /* 調整為固定寬度 */
+  width: 90px;     /* 添加固定寬度 */
+}
+#linksButton:hover {
+  background: linear-gradient(45deg, #ffc947, #ffb700);
+  box-shadow: 0 8px 20px rgba(255, 182, 72, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#linksButton:active {
+  background: linear-gradient(45deg, #bd6802, #ffb700);
+}
+#linksButton::before {
+  content: "🔗";
+  margin-right: 8px;
+  font-size: 0.7em; /* 調整為和statsButton一致 */
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#linksButton:hover::before {
+  transform: rotate(360deg); /* 添加和statsButton一致的旋轉效果 */
+  font-size: 1em;
+}
 
-     /* AI助手 按鈕 (所有人可見，大小與linksButton相同) */
-     #aiButton {
-       padding: 8px 8px;
-       background: linear-gradient(45deg,#6fd1f7,#178fd4);
-       color: #001a26; 
-       border: none; 
-       border-radius: 20px;
-       cursor: pointer;
-       box-shadow: 0 6px 15px rgba(255, 182, 72, 0.4), 0 3px 8px rgba(0,0,0,0.15);
-       transition: all 0.3s ease;
-       font-size: 1.3em; 
-       font-weight: bold;
-       display: block; /* 所有人都可見 */
-       align-items: center; 
-       justify-content: center;
-       min-height: 35px;
-       width: 90px; /* 與 linksButton 一致 */
-       position: static; /* 移除絕對定位 */
-     }
-     #aiButton:hover {
-       background: linear-gradient(45deg, #ffc947, #ffb700);
-       box-shadow: 0 8px 20px rgba(255, 182, 72, 0.5), 0 5px 12px rgba(0,0,0,0.2);
-       transform: translateY(-2px);
-     }
-     #aiButton:active {
-       background: linear-gradient(45deg, #cb4cf5, #eac3f7);
-     }
-     #aiButton::before {
-       content: "🤖";
-       margin-right: 8px;
-       font-size: 0.8em;
-       display: inline-block;
-       transition: all 0.3s ease;
-       position: relative;
-       top: -1px;
-     }
-     #aiButton:hover::before {
-       transform: rotate(360deg);
-       font-size: 1em;
-     }
+/* ★ NEW CODE: AI助手 按鈕 (所有人可見，大小與linksButton相同) */
+#aiButton {
+  position: absolute;
+  top: 250px;
+  left: 210px; /* 與 linksButton 的 left:110px 做區隔 */
+  padding: 8px 8px;
+  background: linear-gradient(45deg,#6fd1f7,#178fd4);
+  color: #001a26; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 182, 72, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: block; /* 所有人都可見 */
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  width: 90px; /* 與 linksButton 一致 */
+}
+#aiButton:hover {
+  background: linear-gradient(45deg, #ffc947, #ffb700);
+  box-shadow: 0 8px 20px rgba(255, 182, 72, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#aiButton:active {
+  background: linear-gradient(45deg, #cb4cf5, #eac3f7);
+}
+#aiButton::before {
+  content: "🤖";
+  margin-right: 8px;
+  font-size: 0.8em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#aiButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
 
-     /* 福委會按鈕樣式 */
-     #welfareButton {
-       padding: 3px 3px;
-       background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-       color: #333; 
-       border: none; 
-       border-radius: 20px;
-       cursor: pointer;
-       box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4), 0 3px 8px rgba(0,0,0,0.15);
-       transition: all 0.3s ease;
-       font-size: 1.3em; 
-       font-weight: bold;
-       display: flex; 
-       align-items: center; 
-       justify-content: center;
-       min-height: 35px;
-       min-width: 80px;
-       width: 90px;
-       position: static; /* 移除絕對定位 */
-     }
+/* 福委會按鈕樣式 */
+#welfareButton {
+  position: absolute;
+  top: 290px; /* 將按鈕放在使用統計按鈕下方 */
+  left: 10px;
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  color: #333; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  min-width: 80px;
+  width: 90px;
+}
 
-     #welfareButton:hover {
-       background: linear-gradient(45deg, #fad0c4, #ff9a9e);
-       box-shadow: 0 8px 20px rgba(255, 154, 158, 0.5), 0 5px 12px rgba(0,0,0,0.2);
-       transform: translateY(-2px);
-     }
+#welfareButton:hover {
+  background: linear-gradient(45deg, #fad0c4, #ff9a9e);
+  box-shadow: 0 8px 20px rgba(255, 154, 158, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
 
-     #welfareButton::before {
-       content: "🎁";
-       margin-right: 8px;
-       font-size: 0.7em;
-       display: inline-block;
-       transition: all 0.3s ease;
-       position: relative;
-       top: -1px;
-     }
+#welfareButton::before {
+  content: "🎁";
+  margin-right: 8px;
+  font-size: 0.7em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
 
-     #welfareButton:hover::before {
-       transform: rotate(360deg);
-       font-size: 1em;
-     }
+#welfareButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
 
-     /* 昶青文化按鈕樣式 */
-     #cultureButton {
-       padding: 3px 3px;
-       background: linear-gradient(45deg, #f2fa07, #f7fa9d);
-       color: black; 
-       border: none; 
-       border-radius: 20px;
-       cursor: pointer;
-       box-shadow: 0 6px 15px rgba(142, 68, 173, 0.4), 0 3px 8px rgba(0,0,0,0.15);
-       transition: all 0.3s ease;
-       font-size: 1.3em; 
-       font-weight: bold;
-       font-color: #141400;
-       display: flex; 
-       align-items: center; 
-       justify-content: center;
-       min-height: 35px;
-       min-width: 80px;
-       width: 90px;
-       position: static; /* 移除絕對定位 */
-     }
+/* 昶青文化按鈕樣式 */
+#cultureButton {
+  position: absolute;
+  top: 290px; /* 將按鈕放在福委會按鈕旁邊 */
+  left: 110px;
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #f2fa07, #f7fa9d);
+  color: black; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(142, 68, 173, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  font-color: #141400;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  min-width: 80px;
+  width: 90px;
+}
 
-     #cultureButton:hover {
-       background: linear-gradient(45deg, #9b59b6, #8e44ad);
-       box-shadow: 0 8px 20px rgba(142, 68, 173, 0.5), 0 5px 12px rgba(0,0,0,0.2);
-       transform: translateY(-2px);
-     }
+#cultureButton:hover {
+  background: linear-gradient(45deg, #9b59b6, #8e44ad);
+  box-shadow: 0 8px 20px rgba(142, 68, 173, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
 
-     #cultureButton::before {
-       content: "🏛️";
-       margin-right: 8px;
-       font-size: 0.7em;
-       display: inline-block;
-       transition: all 0.3s ease;
-       position: relative;
-       top: -1px;
-     }
+#cultureButton::before {
+  content: "🏛️";
+  margin-right: 8px;
+  font-size: 0.7em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
 
-     #cultureButton:hover::before {
-       transform: rotate(360deg);
-       font-size: 1em;
-     }
+#cultureButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
 
-      /* Logout Button */
-      #logoutButton {
-        position: absolute;
-        top: 10px; right: 10px;
-        padding: 8px 15px;
-        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-        color: white; border: none; border-radius: 50px;
-        cursor: pointer;
-        box-shadow: 0 6px 15px rgba(255, 107, 107, 0.), 0 3px 8px rgba(0,0,0,0.15);
-        transition: all 0.3s ease;
-        font-size: 0.8em; font-weight: bold;
-        display: flex; align-items: center; justify-content: center;
-        min-height: 30px;
-      }
-      #logoutButton:hover {
-        background: linear-gradient(45deg, #ff8e8e, #ff6b6b);
-        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5), 0 5px 12px rgba(0,0,0,0.2);
-        transform: translateY(-2px);
-      }
-      #logoutButton:active {
-        background: linear-gradient(45deg, #b50404, #ff6b6b);
-      }
-      #logoutButton::before {
-        content: "🚪";
-        margin-right: 8px;
-        font-size: 0.8em;
-        display: inline-block;
-        transition: all 0.3s ease;
-      }
+/* Logout Button */
+#logoutButton {
+  position: absolute;
+  top: 10px; right: 10px;
+  padding: 8px 15px;
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white; border: none; border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 0.8em; font-weight: bold;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 30px;
+}
+#logoutButton:hover {
+  background: linear-gradient(45deg, #ff8e8e, #ff6b6b);
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#logoutButton:active {
+  background: linear-gradient(45deg, #b50404, #ff6b6b);
+}
+#logoutButton::before {
+  content: "🚪";
+  margin-right: 8px;
+  font-size: 0.8em;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
 
-      /* 按鈕點擊效果 */
-      .button-clicked {
-        animation: buttonClick 0.5s;
-      }
-      @keyframes buttonClick {
-        0% { transform: scale(1); }
-        50% { transform: scale(0.95); }
-        100% { transform: scale(1); }
-      }
+/* 按鈕點擊效果 */
+.button-clicked {
+  animation: buttonClick 0.5s;
+}
+@keyframes buttonClick {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
 
-      /* User Info */
-      #userInfo {
-        position: absolute;
-        top: 60px; right: 10px;
-        padding: 5px;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(5px);
-        border-radius: 10px;
-        font-size: 0.6em;
-        color: #054496;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        text-align: right;
-        min-width: 77px;  
-        width: auto;
-      }
-      #userName {
-        font-weight: bold;
-        font-size: 1em;
-      }
+/* User Info */
+#userInfo {
+  position: absolute;
+  top: 60px; right: 10px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  font-size: 0.6em;
+  color: #054496;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: right;
+  min-width: 77px;  
+  width: auto;
+}
+#userName {
+  font-weight: bold;
+  font-size: 1em;
+}
 
-      /* Result (iframe) */
-      #result {
-        margin-top: 10px;
-        text-align: center;
-        position: relative;
-      }
-      iframe {
-        width: 100%; height: 1000px;
-        border: none; border-radius: 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        background-color: white;
-      }
-      iframe:hover {
-        box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.15);
-      }
-      a.download-link {
-        display: inline-block;
-        margin-top: 20px; padding: 15px 30px;
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
-        color: white; text-decoration: none; border-radius: 50px;
-        transition: all 0.3s ease;
-        font-size: 3em; font-weight: bold;
-        box-shadow: 0 8px 15px rgba(33, 147, 176, 0.3), 0 4px 6px rgba(0,0,0,0.1);
-        position: relative; overflow: hidden; min-height: 60px;
-        transform: translateZ(0);
-      }
-      a.download-link:hover {
-        background: linear-gradient(45deg, #6dd5ed, #2193b0);
-        transform: translateY(-3px);
-        box-shadow: 0 12px 25px rgba(33, 147, 176, 0.4), 0 6px 12px rgba(0,0,0,0.15);
-      }
-      a.download-link:active {
-        transform: translateY(-1px);
-        box-shadow: 0 5px 10px rgba(33, 147, 176, 0.3);
-      }
-      a.download-link::before {
-        content: "⬇️";
-        margin-right: 12px;
-      }
+/* Result (iframe) */
+#result {
+  margin-top: 10px;
+  text-align: center;
+  position: relative;
+}
+iframe {
+  width: 100%; height: 1000px;
+  border: none; border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  background-color: white;
+}
+iframe:hover {
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.15);
+}
+a.download-link {
+  display: inline-block;
+  margin-top: 20px; padding: 15px 30px;
+  background: linear-gradient(45deg, #2193b0, #6dd5ed);
+  color: white; text-decoration: none; border-radius: 50px;
+  transition: all 0.3s ease;
+  font-size: 3em; font-weight: bold;
+  box-shadow: 0 8px 15px rgba(33, 147, 176, 0.3), 0 4px 6px rgba(0,0,0,0.1);
+  position: relative; overflow: hidden; min-height: 60px;
+  transform: translateZ(0);
+}
+a.download-link:hover {
+  background: linear-gradient(45deg, #6dd5ed, #2193b0);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(33, 147, 176, 0.4), 0 6px 12px rgba(0,0,0,0.15);
+}
+a.download-link:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(33, 147, 176, 0.3);
+}
+a.download-link::before {
+  content: "⬇️";
+  margin-right: 12px;
+}
 
-      /* Login Screen */
-      #loginScreen {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: linear-gradient(135deg, #a5f571 30%, #07e9f5 50%, #054175 100%);
-        background-size: 250% 250%;
-        animation: gradientBG 15s ease infinite;
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px 0; /* 添加上下內邊距 */
-      }
+/* Login Screen */
+#loginScreen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #a5f571 30%, #07e9f5 50%, #054175 100%);
+  background-size: 250% 250%;
+  animation: gradientBG 15s ease infinite;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0; /* 添加上下內邊距 */
+}
 
-      #loginBox {
-        background: rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(10px);
-        padding: 30px;
-        margin: 20px 0; /* 添加上下外邊距 */
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1);
-        width: 90%;
-        max-width: 400px;
-        text-align: center;
-      }
-      #loginBox h3 {
-        color: #054496;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        font-size: 1.8em;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      }
-      #loginError {
-        color: #ff6b6b;
-        margin: 10px 0;
-        font-weight: bold;
-        display: none;
-      }
+#loginBox {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  margin: 20px 0; /* 添加上下外邊距 */
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+#loginBox h3 {
+  color: #054496;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+#loginError {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+  display: none;
+}
 
-      /* Modal (使用統計) */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0; top: 0;
-        width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.7);
-        overflow: auto;
-      }
-      .modal-content {
-        position: relative;
-        background: white;
-        margin: 10% auto;
-        padding: 20px;
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        width:90%;
-        max-width: 1000px;
-        animation: modalOpen 0.4s;
-      }
-      @keyframes modalOpen {
-        from { opacity: 0; transform: translateY(-50px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-            .close {
-        position: absolute;
-        top: 10px; right: 20px;
-        font-size: 28px;
-        font-weight: bold;
-        color: #aaa;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      .close:hover {
-        color: #2193b0;
-        transform: rotate(90deg);
-      }
-      .modal-header {
-        padding: 10px 0;
-        border-bottom: 2px solid #f0f0f0;
-        margin-bottom: 20px;
-      }
-      .modal-header h3 {
-        color: #054496;
-        font-size: 1.8em;
-        text-align: center;
-      }
-      .chart-container {
-        height: 400px;
-        margin: 20px 0;
-      }
-      .chart-container-half {
-        height: 400px;
-        width: 48%;
-        display: inline-block;
-        margin: 10px 1%;
-      }
-      @media (max-width: 768px) {
-        .chart-container-half {
-          width: 100%;
-          margin: 10px 0;
-        }
-      }
+/* Modal (使用統計) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+.modal-content {
+  position: relative;
+  background: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width:90%;
+  max-width: 1000px;
+  animation: modalOpen 0.4s;
+}
+@keyframes modalOpen {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.close {
+  position: absolute;
+  top: 15px; right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.close:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+.chart-container {
+  width: 100%;
+  height:400px;
+  margin: 10px 0;
+}
 
-      /* 超級連結模態視窗 */
-      #linksModal .modal-content {
-        max-width: 800px;
-      }
-      .links-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-      }
-      .link-card {
-        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-      }
-      .link-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        background: linear-gradient(135deg, #c3cfe2, #f5f7fa);
-      }
-      .link-card a {
-        color: #054496;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.2em;
-        display: flex;
-        align-items: center;
-      }
-      .link-card a::before {
-        content: "🔗";
-        margin-right: 10px;
-        font-size: 1.2em;
-      }
+繼續提供完整代碼的其餘部分：
 
-      /* Password Change Modal */
-      #passwordChangeModal .modal-content {
-        max-width: 500px;
-      }
-      .password-input-group {
-        margin-bottom: 15px;
-      }
-      .password-input-group label {
-        display: block;
-        margin-bottom: 5px;
-        color: #054496;
-        font-weight: bold;
-      }
-      .password-input-group input {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid rgba(33, 147, 176, 0.3);
-        border-radius: 10px;
-        font-size: 1em;
-      }
-      #passwordChangeError, #passwordChangeSuccess {
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 10px;
-        font-weight: bold;
-        display: none;
-      }
-      #passwordChangeError {
-        background-color: rgba(255, 107, 107, 0.2);
-        color: #ff6b6b;
-      }
-      #passwordChangeSuccess {
-        background-color: rgba(46, 213, 115, 0.2);
-        color: #2ed573;
-      }
-      #changePasswordButton {
-        width: 100%;
-        padding: 12px;
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 1.1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      #changePasswordButton:hover {
-        background: linear-gradient(45deg, #6dd5ed, #2193b0);
-        transform: translateY(-2px);
-      }
+```html
+/* NEW: Important Links Modal */
+#linksModal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+#linksModal .modal-content {
+  position: relative;
+  background: white;
+  margin: 10% auto; /* 確保水平置中 */
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 800px;
+  animation: modalOpen 0.4s;
+  left: 0; /* 移除任何可能的左側偏移 */
+  right: 0; /* 移除任何可能的右側偏移 */
+}
+/* 確保模態視窗覆蓋整個畫面 */
+#linksModal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+#linksTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+#linksTable th, #linksTable td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: left;
+}
+#linksTable th {
+  background-color: #f2f2f2;
+}
 
-      /* AI 助理模態視窗樣式 */
-      #aiModal .modal-content {
-        max-width: 800px;
-        height: 80vh;
-        display: flex;
-        flex-direction: column;
-      }
-      .ai-chat-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 15px;
-        overflow: hidden;
-      }
-      .ai-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 15px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        margin-bottom: 15px;
-      }
-      .ai-message {
-        margin-bottom: 15px;
-        padding: 10px 15px;
-        border-radius: 18px;
-        max-width: 80%;
-        word-wrap: break-word;
-      }
-      .ai-message-user {
-        background-color: #dcf8c6;
-        align-self: flex-end;
-        margin-left: auto;
-      }
-      .ai-message-bot {
-        background-color: #ffffff;
-        align-self: flex-start;
-        margin-right: auto;
-        box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-      }
-      .ai-input-container {
-        display: flex;
-        gap: 10px;
-      }
-      #aiInput {
-        flex: 1;
-        padding: 12px 15px;
-        border: 2px solid rgba(33, 147, 176, 0.3);
-        border-radius: 20px;
-        font-size: 1em;
-        outline: none;
-      }
-      #aiSendButton {
-        padding: 10px 20px;
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
-        color: white;
-        border: none;
-        border-radius: 20px;
-        font-size: 1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      #aiSendButton:hover {
-        background: linear-gradient(45deg, #6dd5ed, #2193b0);
-        transform: translateY(-2px);
-      }
-      .ai-suggestions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 10px;
-      }
-      .ai-suggestion {
-        background-color: #e3f2fd;
-        padding: 8px 15px;
-        border-radius: 15px;
-        font-size: 0.9em;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .ai-suggestion:hover {
-        background-color: #bbdefb;
-        transform: translateY(-2px);
-      }
-      .ai-typing {
-        padding: 10px 15px;
-        color: #777;
-        font-style: italic;
-      }
+/* 第一欄 */
+#linksTable td:nth-child(1) {
+  font-size: 11px;
+  width: 50%;  /* 佔表格寬度的 30% */
+}
 
-      /* Loading Spinner */
-      .spinner {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.5);
-        z-index: 9999;
-        justify-content: center;
-        align-items: center;
-      }
-      .spinner-inner {
-        width: 64px; height: 64px;
-        border: 8px solid rgba(255,255,255,0.3);
-        border-radius: 50%;
-        border-top-color: #2193b0;
-        animation: spin 1s ease-in-out infinite;
-      }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
+/* 第二欄 */
+#linksTable td:nth-child(2) {
+  font-size: 6px;
+  width: 50%;  /* 佔表格寬度的 70% */
+}
 
-      /* 響應式設計 */
-      @media (max-width: 768px) {
-        .container {
-          padding: 15px;
-        }
-        h2 {
-          font-size: 1.8em;
-        }
-        label {
-          font-size: 1.2em;
-        }
-        select, button, input[type="text"] {
-          padding: 12px;
-          font-size: 1em;
-        }
-        .logo-img {
-          max-width: 150px;
-        }
-      }
-      @media (max-width: 480px) {
-        .container {
-          padding: 10px;
-        }
-        h2 {
-          font-size: 1.5em;
-        }
-        label {
-          font-size: 1em;
-        }
-        select, button, input[type="text"] {
-          padding: 10px;
-          font-size: 0.9em;
-        }
-        .logo-img {
-          max-width: 120px;
-        }
-        #statsButton, #linksButton, #aiButton, #welfareButton, #cultureButton {
-          font-size: 0.9em;
-          min-width: 70px;
-          width: 70px;
-        }
-      }
+/* 
+  ----- Media Queries -----
+  這裡有三段: 
+  1) @media (max-width: 820px)
+  2) @media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2)
+  3) 再一個 @media (max-width: 820px) 
+  全都保留 
+*/
 
-      /* 版本資訊 */
-      .version-info {
-        position: absolute;
-        bottom: 5px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 0.7em;
-        color: rgba(5, 68, 150, 0.6);
-        text-align: center;
-      }
+@media (max-width: 820px) {
+  .container { padding: 30px; }
+  h2 { font-size: 2.2em; }
+  label { font-size: 1.3em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; }
+  iframe { height: 500px; }
+  a.download-link { font-size: 1em; padding: 12px 25px; }
+}
+
+@media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2) {
+  h2 { font-size: 2em; }
+  label { font-size: 1em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; padding: 12px 12px; }
+  #statsButton, #logoutButton { font-size: 0.8em; }
+  a.download-link { font-size: 1em; }
+}
+
+@media (max-width: 820px) {
+  .container { padding: 15px; }
+  #statsButton { 
+    font-size: 1em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 240px; 
+  }
+  #userInfo { top: 50px; right: 10px; font-size: 0.8em; }
+  #linksButton {
+    font-size: 1em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 240px;
+  }
+  #aiButton {
+    font-size: 1em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 125px;
+  }
+}
+
+/* 媒體查詢調整 */
+@media (max-width: 820px) {
+  #welfareButton { 
+    font-size: 1em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 290px; 
+  }
+  
+  #cultureButton { 
+    font-size: 1em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 290px; 
+    left: 125px;
+  }
+  
+  .first-form-group {
+    margin-top: 120px; /* 在小螢幕上調整邊距 */
+  }
+}
+
+@media (max-width: 600px) {
+  #linksTable td:nth-child(1) {
+    font-size: 16px;
+    width: 70%;  /* 名稱欄位佔表格寬度的 35% */  
+  }
+  
+  #linksTable td:nth-child(2) {
+    font-size: 10px;
+    width: 30%;  /* 名稱欄位佔表格寬度的 35% */  
+  }
+  
+  #linksTable td {
+    padding: 10px 8px; /* 在手機上增加垂直間距 */
+  }
+  
+  #linksTable a {
+    word-break: break-all; /* 確保超連結在手機上會換行 */
+  }
+}
+
+/* ★ NEW: AI Modal (寬度90%) */
+#aiModal {
+  display: none;
+  position: fixed;
+  z-index: 1002; /* 比 linksModal、statsModal 更前 */
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+#aiModal .modal-content {
+  position: relative;
+  background: white;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 1200px;
+  animation: modalOpen 0.4s;
+}
+#aiModal .close {
+  position: absolute;
+  top: 15px; right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#aiModal .close:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* 增強AI對話框樣式 */
+#aiChatContainer {
+  margin-bottom: 15px;
+  min-height: 300px; 
+  max-height: 500px; 
+  overflow-y: auto; 
+  border: 1px solid #ccc; 
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.chat-assistant {
+  background: linear-gradient(to right, #e8f4f8, #f2f9ff);
+  padding: 12px;
+  margin: 8px 5px;
+  border-radius: 12px;
+  border-top-left-radius: 4px;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 85%;
+  margin-right: auto;
+  position: relative;
+}
+
+.chat-user {
+  background: linear-gradient(to right, #dcf8c6, #e5f7d3);
+  padding: 12px;
+  margin: 8px 5px;
+  border-radius: 12px;
+  border-top-right-radius: 4px;
+  text-align: right;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 85%;
+  margin-left: auto;
+  position: relative;
+}
+
+.ai-input-container {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+#aiUserInput {
+  flex: 1;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+#sendAiBtn {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: linear-gradient(45deg, #00bfff, #007fff);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.ai-suggestions {
+  margin-top: 10px;
+}
+
+.ai-suggestions p {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestion-chip {
+  background: #f0f0f0;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #ddd;
+}
+
+.suggestion-chip:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.loading-dots {
+  display: flex;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  margin: 0 3px;
+  background: #888;
+  border-radius: 50%;
+  animation: dot-pulse 1.5s infinite ease-in-out;
+}
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* 更改密碼模態視窗樣式 */
+#changePasswordModal .modal-content {
+  max-width: 500px;
+}
+#changePasswordModal .form-group {
+  margin-bottom: 15px;
+}
+#passwordError {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+  display: none;
+}
     </style>
+
   </head>
+
   <body>
-    <div class="letter letter-t">T</div>
-    <div class="letter letter-c1">C</div>
-    <div class="letter letter-c2">C</div>
-    
+    <!-- 登入畫面 -->
+    <div id="loginScreen">
+      <div id="loginBox">
+        <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
+        <h3>昶青數位資料中心登入</h3>
+        <div class="form-group">
+          <label for="username">使用者帳號</label>
+          <input type="text" id="username" placeholder="請輸入帳號">
+        </div>
+        <div class="form-group">
+          <label for="password">使用者密碼</label>
+          <input type="password" id="password" placeholder="請輸入密碼">
+        </div>
+        <div id="loginError"></div>
+       <button onclick="loginUser()" style="margin-top: 15px;">登入系統</button>
+        <h6 style="text-align: center; color: #8f8d8d;margin-top: 20px;">Designed by T.C.C.管理本部</h6>
+      </div>
+    </div>
+
+    <!-- 主應用程式 -->
     <div class="container">
-      <img src="https://i.imgur.com/xxxxxxxx.png" alt="TCC Logo" class="logo-img">
+      <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
       <h2>昶青數位資料中心</h2>
       
-      <!-- 登出按鈕 -->
-      <button id="logoutButton">登出</button>
-      
-      <!-- 用戶資訊 -->
+      <button id="logoutButton" onclick="logoutUser()">登出</button>
       <div id="userInfo">
-        歡迎, <span id="userName">使用者</span>
-        <div id="userRole">職稱</div>
+        歡迎, <span id="userName"></span>
+        <div id="userRole"></div>
       </div>
+      <button id="statsButton" onclick="showStats()">使用統計</button>
+      <!-- 只有s3看到的按鈕 -->
+      <button id="linksButton" onclick="showLinks()">超級連結</button>
+
+      <!-- ★ NEW: AI助手按鈕 (所有人可見) -->
+      <button id="aiButton" onclick="showAiModal()">AI助理</button>
+      <!-- 在 #aiButton 後添加福委會按鈕 -->
+      <button id="welfareButton" onclick="showWelfarePage()">福委會</button>
+      <!-- 新增：昶青文化按鈕 -->
+      <button id="cultureButton" onclick="showCulturePage()">昶青文化</button>
       
-      <!-- 功能按鈕群 - 修改為使用按鈕容器來置中 -->
-      <div class="button-container">
-        <button id="statsButton">使用統計</button>
-        <button id="aiButton">AI助理</button>
-        <button id="linksButton">超級連結</button>
-        <button id="welfareButton">福委會</button>
-        <button id="cultureButton">昶青文化</button>
+      <div class="form-group first-form-group">
+        <label for="folderSelect">請選擇部門</label>
+        <select id="folderSelect" onchange="loadFiles()">
+          <option value="">請選擇...</option>
+        </select>
       </div>
 
-      <!-- 表單群組 -->
-      <div class="form-group first-form-group">
-        <label for="departmentSelect">請選擇部門</label>
-        <select id="departmentSelect">
-          <option value="" selected disabled>請選擇...</option>
-        </select>
-      </div>
-      
       <div class="form-group">
-        <label for="fileTypeSelect">請選擇文件類別</label>
-        <select id="fileTypeSelect">
+        <label for="typeSelect">請選擇文件類別</label>
+        <select id="typeSelect" onchange="loadFiles()">
           <option value="all" selected>全部文件</option>
-          <option value="method">辦法計畫</option>
-          <option value="other">其他文件</option>
+          <option value="辦法">辦法計畫</option>
+          <option value="其他文件">其他文件</option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label for="searchInput">檔案搜尋</label>
-        <input type="text" id="searchInput" placeholder="請輸入關鍵字...">
+        <input type="text" id="searchInput" placeholder="請輸入關鍵字..." oninput="loadFiles()">
       </div>
       
       <div class="form-group">
         <label for="fileSelect">請選擇檔案</label>
-        <select id="fileSelect">
-          <option value="" selected disabled>請選擇...</option>
+        <select id="fileSelect" onchange="showFile()">
+          <option value="">請選擇...</option>
         </select>
       </div>
-      
+       <h6 style="text-align: center; color: #808080;">Designed by T.C.C.管理本部</h6>
       <div id="result"></div>
-      
-      <div class="version-info">
-        Designed by T.C.C.管理本部 | Version 2.0.0
-      </div>
     </div>
     
-    <!-- 登入畫面 -->
-    <div id="loginScreen">
-      <div id="loginBox">
-        <img src="https://i.imgur.com/xxxxxxxx.png" alt="TCC Logo" class="logo-img">
-        <h3>昶青數位資料中心</h3>
-        <div class="form-group">
-          <input type="text" id="usernameInput" placeholder="使用者名稱" autocomplete="username">
-        </div>
-        <div class="form-group">
-          <input type="password" id="passwordInput" placeholder="密碼" autocomplete="current-password">
-        </div>
-        <div id="loginError">使用者名稱或密碼錯誤</div>
-        <button id="loginButton">登入</button>
-      </div>
-    </div>
-    
-    <!-- 使用統計模態視窗 -->
+    <!-- 使用統計 Modal -->
     <div id="statsModal" class="modal">
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-header">
-          <h3>使用統計</h3>
-        </div>
-        <div class="chart-container" id="departmentChart"></div>
-        <div class="chart-container-half" id="fileTypeChart"></div>
-        <div class="chart-container-half" id="userChart"></div>
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>使用統計</h2>
+        <div id="vendorsChart" class="chart-container"></div>
+        <div id="filesChart" class="chart-container"></div>
       </div>
     </div>
-    
-    <!-- 超級連結模態視窗 -->
-    <div id="linksModal" class="modal">
+
+    <!-- 超級連結 Modal (只給s3用) -->
+    <div id="linksModal">
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-header">
-          <h3>重要連結</h3>
-        </div>
-        <div class="links-grid" id="linksGrid">
-          <!-- 連結會動態生成 -->
-        </div>
+        <span class="close" onclick="closeLinksModal()">&times;</span>
+        <h2>重要連結</h2>
+        <div id="linksContainer"></div>
       </div>
     </div>
-    
-    <!-- 密碼變更模態視窗 -->
-    <div id="passwordChangeModal" class="modal">
+
+    <!-- 更新AI對話 Modal -->
+    <div id="aiModal">
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-header">
-          <h3>變更密碼</h3>
+        <span class="close" onclick="closeAiModal()">&times;</span>
+        <h2>AI搜查助理</h2>
+        <div id="aiChatContainer"></div>
+        <div class="ai-input-container">
+          <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題" onkeypress="if(event.keyCode === 13) sendMessageToAi()">
+          <button id="sendAiBtn" onclick="sendMessageToAi()">送出</button>
         </div>
-        <div class="password-input-group">
-          <label for="currentPassword">目前密碼</label>
-          <input type="password" id="currentPassword" placeholder="請輸入目前密碼">
-        </div>
-        <div class="password-input-group">
-          <label for="newPassword">新密碼</label>
-          <input type="password" id="newPassword" placeholder="請輸入新密碼">
-        </div>
-        <div class="password-input-group">
-          <label for="confirmPassword">確認新密碼</label>
-          <input type="password" id="confirmPassword" placeholder="請再次輸入新密碼">
-        </div>
-        <div id="passwordChangeError"></div>
-        <div id="passwordChangeSuccess">密碼變更成功！</div>
-        <button id="changePasswordButton">變更密碼</button>
-      </div>
-    </div>
-    
-    <!-- AI 助理模態視窗 -->
-    <div id="aiModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-header">
-          <h3>AI 助理</h3>
-        </div>
-        <div class="ai-chat-container">
-          <div class="ai-messages" id="aiMessages">
-            <div class="ai-message ai-message-bot">
-              您好，我是昶青數位資料中心的 AI 助理。有什麼我可以幫您的嗎？
-            </div>
-          </div>
-          <div class="ai-suggestions">
-            <div class="ai-suggestion">如何查詢文件？</div>
-            <div class="ai-suggestion">最近更新的文件有哪些？</div>
-            <div class="ai-suggestion">管理部門的文件在哪裡？</div>
-          </div>
-          <div class="ai-input-container">
-            <input type="text" id="aiInput" placeholder="請輸入您的問題...">
-            <button id="aiSendButton">發送</button>
+        <div class="ai-suggestions">
+          <p>延伸問題：</p>
+          <div class="suggestion-chips">
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">特休獎勵金</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">環境品質</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">員工餐飲</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">員工服裝</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">出差</span>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- 載入動畫 -->
-    <div class="spinner">
-      <div class="spinner-inner"></div>
+
+    <!-- 更改密碼模態視窗 -->
+    <div id="changePasswordModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+        <h2>更改密碼</h2>
+        <div class="form-group">
+          <label for="currentPassword">目前密碼:</label>
+          <input type="password" id="currentPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">新密碼:</label>
+          <input type="password" id="newPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">確認新密碼:</label>
+          <input type="password" id="confirmPassword" required>
+        </div>
+        <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
+        <button onclick="changePassword()">確認更改</button>
+      </div>
     </div>
 
     <script>
