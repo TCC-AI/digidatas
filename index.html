@@ -77,29 +77,6 @@
         color: #f09707;
         animation: letterExplosion 1s 0.4s forwards, moveRandom-C2 102s infinite alternate ease-in-out, sizeChange-C2 30s infinite alternate ease-in-out, colorChange-3 90s infinite;
       }
-
-      /* 添加在 CSS 樣式表中，可以放在 #cultureButton 樣式之後 */
-.button-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  position: absolute;
-  top: 250px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 80%;
-  max-width: 500px;
-}
-
-/* 修改所有按鈕，移除絕對定位 */
-#statsButton, #linksButton, #aiButton, #welfareButton, #cultureButton {
-  position: relative;
-  top: auto;
-  left: auto;
-}
-
       
       @keyframes letterExplosion {
         0% {
@@ -777,6 +754,29 @@ a.download-link::before {
   background-color: #f2f2f2;
 }
 
+/* 添加在 CSS 樣式表中，可以放在 #cultureButton 樣式之後 */
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  position: absolute;
+  top: 250px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 80%;
+  max-width: 500px;
+}
+
+/* 修改所有按鈕，移除絕對定位 */
+#statsButton, #linksButton, #aiButton, #welfareButton, #cultureButton {
+  position: relative;
+  top: auto;
+  left: auto;
+}
+
+
 /* 第一欄 */
 #linksTable td:nth-child(1) {
   font-size: 11px;
@@ -1041,6 +1041,18 @@ a.download-link::before {
   50% { transform: scale(1.2); opacity: 1; }
 }
 
+/* 調整第一個表單組的上邊距 */
+.first-form-group {
+  margin-top: 140px; /* 增加邊距，確保在按鈕群下方 */
+}
+
+@media (max-width: 820px) {
+  .first-form-group {
+    margin-top: 160px; /* 在小螢幕上增加更多邊距 */
+  }
+}
+
+
 /* 更改密碼模態視窗樣式 */
 #changePasswordModal .modal-content {
   max-width: 500px;
@@ -1054,18 +1066,6 @@ a.download-link::before {
   font-weight: bold;
   display: none;
 }
-
-/* 調整第一個表單組的上邊距 */
-.first-form-group {
-  margin-top: 100px; /* 增加邊距，確保在按鈕群下方 */
-}
-
-@media (max-width: 820px) {
-  .first-form-group {
-    margin-top: 110px; /* 在小螢幕上增加更多邊距 */
-  }
-}
-
     </style>
 
   </head>
@@ -1091,17 +1091,16 @@ a.download-link::before {
     </div>
 
     <!-- 主應用程式 -->
-   <div class="container">
-  <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
-  <h2>昶青數位資料中心</h2>
-  
-  <button id="logoutButton" onclick="logoutUser()">登出</button>
-  <div id="userInfo">
-    歡迎, <span id="userName"></span>
-    <div id="userRole"></div>
-  </div>
-  
-  <!-- 添加按鈕容器，將所有按鈕包裝在內 -->
+    <div class="container">
+      <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
+      <h2>昶青數位資料中心</h2>
+      
+      <button id="logoutButton" onclick="logoutUser()">登出</button>
+      <div id="userInfo">
+        歡迎, <span id="userName"></span>
+        <div id="userRole"></div>
+      </div>
+      <!-- 添加按鈕容器，將所有按鈕包裝在內 -->
   <div class="button-container">
     <button id="statsButton" onclick="showStats()">使用統計</button>
     <button id="linksButton" onclick="showLinks()">超級連結</button>
