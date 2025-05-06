@@ -1146,8 +1146,850 @@
     </div>
 
     <script>
-      // JavaScript 代碼保持不變
-      // 此處省略 JavaScript 代碼，因為您只需要修改 CSS 樣式
+      /*************************************************
+       * 1) Web App URL
+       *************************************************/
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyojYN84LvgO1AdfUaMu6BuHGFA46pFIgKgjmivG3EMXN1oZC52IodQo9qoSClJCMZr/exec";
+      let currentUser = null;
+      
+      /*************************************************
+       * 2) 檢查是否已登入 + 字母特效
+       *************************************************/
+      window.onload = function() {
+        const token = localStorage.getItem('authToken');
+        const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token 檢查
+        if (token && csrfToken) {
+          callGAS('getSubfolders')
+            .then(data => {
+              if (data.success) {
+                document.getElementById('loginScreen').style.display = 'none';
+                currentUser = {
+                  username: localStorage.getItem('username'),
+                  name: localStorage.getItem('name'),
+                  role: localStorage.getItem('role'),
+                  permission: localStorage.getItem('permissionLevel') || ''
+                };
+                updateUserInfo();
+                populateFolderDropdown(data.result);
+              } else {
+                clearAuthData();
+                document.getElementById('loginScreen').style.display = 'flex';
+              }
+            })
+            .catch(err => {
+              console.error("Fetch error:", err);
+              clearAuthData();
+              document.getElementById('loginScreen').style.display = 'flex';
+            });
+        }
+        
+        createTCCLetters(); // 建立 T, C, C 字母特效
+      };
+
+      // 清除所有身份驗證數據
+      function clearAuthData() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('csrfToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('name');
+        localStorage.removeItem('role');
+        localStorage.removeItem('loginRowIndex');
+        localStorage.removeItem('permissionLevel');
+      }
+
+      /*************************************************
+       * 3) 登入函數
+       *************************************************/
+      function loginUser() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const loginError = document.getElementById('loginError');
+        
+        if (!username || !password) {
+          loginError.textContent = '請輸入帳號和密碼';
+          loginError.style.display = 'block';
+          return;
+        }
+        
+        callGAS('login', { username, password }, false)
+          .then(data => {
+            if (data.success) {
+              localStorage.setItem('authToken', data.result.token);
+              localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
+              localStorage.setItem('username', data.result.username);
+              localStorage.setItem('name', data.result.name);
+              localStorage.setItem('role', data.result.role);
+              if (data.result.permissionLevel) {
+                localStorage.setItem('permissionLevel', data.result.permissionLevel);
+              }
+              if (data.result.loginRowIndex) {
+                localStorage.setItem('loginRowIndex', data.result.loginRowIndex);
+              }
+              
+              currentUser = {
+                username: data.result.username,
+                name: data.result.name,
+                role: data.result.role,
+                permission: data.result.permissionLevel || ''
+              };
+              
+              document.getElementById('loginScreen').style.display = 'none';
+              updateUserInfo();
+              
+              callGAS('getSubfolders')
+                .then(data => {
+                  if (data.success) {
+                    populateFolderDropdown(data.result);
+                  } else {
+                    console.error("Error:", data.error);
+                  }
+                })
+                .catch(err => console.error("Fetch error:", err));
+            } else {
+              loginError.textContent = data.error || '登入失敗';
+              loginError.style.display = 'block';
+            }
+          })
+          .catch(err => {
+            console.error('登入錯誤:', err);
+            loginError.textContent = '登入發生錯誤，請稍後再試';
+            loginError.style.display = 'block';
+          });
+      }
+
+     /*************************************************
+     * 4) 登出函數
+     *************************************************/
+    function logoutUser() {
+      // 檢查是否已經存在下拉選單
+      const existingDropdown = document.querySelector('.logout-dropdown');
+      if (existingDropdown) {
+        document.body.removeChild(existingDropdown);
+        return;
+      }
+
+      // 添加下拉菜單
+      var dropdown = document.createElement('div');
+      dropdown.className = 'logout-dropdown';
+      dropdown.style.position = 'absolute';
+      dropdown.style.top = '45px';
+      dropdown.style.right = '10px';
+      dropdown.style.backgroundColor = 'white';
+      dropdown.style.borderRadius = '10px';
+      dropdown.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+      dropdown.style.zIndex = '1000';
+      dropdown.style.overflow = 'hidden';
+      dropdown.style.minWidth = '120px';
+      
+      // 添加更改密碼選項
+      var changePasswordOption = document.createElement('div');
+      changePasswordOption.className = 'dropdown-option';
+      changePasswordOption.textContent = '更改密碼';
+      changePasswordOption.style.padding = '12px 15px';
+      changePasswordOption.style.cursor = 'pointer';
+      changePasswordOption.style.borderBottom = '1px solid #eee';
+      changePasswordOption.style.transition = 'background-color 0.3s';
+      changePasswordOption.style.color = '#333';
+      changePasswordOption.style.fontWeight = 'bold';
+      changePasswordOption.onmouseover = function() {
+        this.style.backgroundColor = '#f5f5f5';
+      };
+      changePasswordOption.onmouseout = function() {
+        this.style.backgroundColor = 'white';
+      };
+      changePasswordOption.onclick = function(e) {
+        e.stopPropagation(); // 防止事件冒泡
+        showChangePasswordModal();
+        document.body.removeChild(dropdown);
+      };
+      
+      // 添加登出選項
+      var logoutOption = document.createElement('div');
+      logoutOption.className = 'dropdown-option';
+      logoutOption.textContent = '登出系統';
+      logoutOption.style.padding = '12px 15px';
+      logoutOption.style.cursor = 'pointer';
+      logoutOption.style.color = '#ff3333';
+      logoutOption.style.fontWeight = 'bold';
+      logoutOption.style.transition = 'background-color 0.3s';
+      logoutOption.onmouseover = function() {
+        this.style.backgroundColor = '#fff0f0';
+      };
+      logoutOption.onmouseout = function() {
+        this.style.backgroundColor = 'white';
+      };
+      logoutOption.onclick = function(e) {
+        e.stopPropagation(); // 防止事件冒泡
+        performLogout();
+      };
+      
+      dropdown.appendChild(changePasswordOption);
+      dropdown.appendChild(logoutOption);
+      document.body.appendChild(dropdown);
+      
+      // 點擊其他地方關閉下拉菜單
+      setTimeout(function() {
+        document.addEventListener('click', function closeDropdown(e) {
+          if (!dropdown.contains(e.target) && e.target.id !== 'logoutButton') {
+            if (document.body.contains(dropdown)) {
+              document.body.removeChild(dropdown);
+            }
+            document.removeEventListener('click', closeDropdown);
+          }
+        });
+      }, 0);
+    }
+
+    function performLogout() {
+      // 添加按鈕點擊效果
+      const logoutBtn = document.getElementById('logoutButton');
+      logoutBtn.classList.add('button-clicked');
+      
+      // 更改按鈕顏色
+      logoutBtn.style.background = 'linear-gradient(45deg, #ff3333, #ff6b6b)';
+      
+      // 延遲執行登出操作
+      setTimeout(() => {
+        const loginRowIndex = localStorage.getItem('loginRowIndex');
+        if (loginRowIndex) {
+          callGAS('logLogout', { rowIndex: loginRowIndex })
+            .then(data => {
+              doLogout();
+            })
+            .catch(err => {
+              doLogout();
+            });
+        } else {
+          doLogout();
+        }
+      }, 300);
+    }
+
+    // 執行登出的實際操作
+    function doLogout() {
+      // 清除本地存儲
+      clearAuthData();
+
+      // 重置當前用戶
+      currentUser = null;
+      
+      // 顯示登入畫面
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('loginError').style.display = 'none';
+      
+      // 重置登出按鈕顏色
+      const logoutBtn = document.getElementById('logoutButton');
+      logoutBtn.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e8e)';
+      logoutBtn.classList.remove('button-clicked');
+    }
+
+
+    // 顯示更改密碼模態視窗
+    function showChangePasswordModal() {
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      document.getElementById('passwordError').style.display = 'none';
+      document.getElementById('changePasswordModal').style.display = 'block';
+    }
+
+    // 關閉更改密碼模態視窗
+    function closeChangePasswordModal() {
+      document.getElementById('changePasswordModal').style.display = 'none';
+    }
+
+    // 更改密碼
+    function changePassword() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const passwordError = document.getElementById('passwordError');
+      
+      // 驗證輸入
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        passwordError.textContent = '請填寫所有欄位';
+        passwordError.style.display = 'block';
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        passwordError.textContent = '新密碼與確認密碼不符';
+        passwordError.style.display = 'block';
+        return;
+      }
+      
+      // 呼叫後端API更改密碼
+      callGAS('changePassword', { 
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        username: localStorage.getItem('username')
+      })
+      .then(data => {
+        if (data.success) {
+          alert('密碼更改成功！請重新登入。');
+          closeChangePasswordModal();
+          performLogout();
+        } else {
+          passwordError.textContent = data.error || '密碼更改失敗';
+          passwordError.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        console.error('更改密碼錯誤:', err);
+        passwordError.textContent = '更改密碼時發生錯誤，請稍後再試';
+        passwordError.style.display = 'block';
+      });
+    }
+
+      /*************************************************
+       * 5) 更新用戶信息顯示 + s3按鈕顯示
+       *************************************************/
+      function updateUserInfo() {
+        if (currentUser) {
+          document.getElementById('userName').textContent = currentUser.name || currentUser.username;
+          document.getElementById('userRole').textContent = currentUser.role || '';
+          
+          const linksButton = document.getElementById('linksButton');
+          if (currentUser.permission === 's3') {
+            linksButton.style.display = 'block';
+          } else {
+            linksButton.style.display = 'none';
+          }
+        }
+      }
+
+            /*************************************************
+       * 6) 調用 Apps Script
+       *************************************************/
+      function callGAS(action, params = {}, useToken = true) {
+        if (useToken && action !== 'login') {
+          const token = localStorage.getItem('authToken');
+          const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token
+          if (token) {
+            params.token = token;
+            params.csrf = csrfToken; // 每次請求都帶上 CSRF token
+          }
+        }
+        const query = new URLSearchParams({ action, ...params });
+        const url = GAS_WEBAPP_URL + "?" + query.toString();
+
+        return fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("HTTP error, status=" + response.status);
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.needLogin) {
+              clearAuthData();
+              document.getElementById('loginScreen').style.display = 'flex';
+              throw new Error('需要重新登入');
+            }
+            return data;
+          });
+      }
+
+      /*************************************************
+       * 7) 填充部門下拉
+       *************************************************/
+      function populateFolderDropdown(folders) {
+        const select = document.getElementById('folderSelect');
+        select.innerHTML = '<option value="">請選擇...</option>';
+        
+        folders.forEach(folder => {
+          const option = document.createElement('option');
+          option.value = folder.id;
+          option.textContent = folder.name;
+          select.appendChild(option);
+        });
+      }
+
+      /*************************************************
+       * 8) 載入檔案 (含類別篩選 + 分級篩選)
+       *************************************************/
+      function loadFiles() {
+        const folderId = document.getElementById('folderSelect').value;
+        if (!folderId) return;
+
+        const keyword = document.getElementById('searchInput').value.trim();
+        const category = document.getElementById('typeSelect').value;
+
+        callGAS('getFiles', { folderId, keyword })
+          .then(data => {
+            if (data.success) {
+              let files = data.result;
+              files = filterByPermission(files);
+
+              if (category === '辦法') {
+                const keywords = ['辦法', '計畫', '細則'];
+                                files = files.filter(file => {
+                  const nameLower = file.name.toLowerCase();
+                  return keywords.some(kw => nameLower.includes(kw));
+                });
+              } else if (category === '其他文件') {
+                const keywords = ['辦法', '計畫', '細則'];
+                files = files.filter(file => {
+                  const nameLower = file.name.toLowerCase();
+                  return !keywords.some(kw => nameLower.includes(kw));
+                });
+              }
+
+              populateFileDropdown(files);
+            } else {
+              console.error("Error:", data.error);
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+      /*************************************************
+       * 分級篩選邏輯
+       *************************************************/
+      function filterByPermission(files) {
+        const p = currentUser ? currentUser.permission : "";
+        if (p === 's3') {
+          return files;
+        } else if (p === 's2') {
+          return files.filter(file => !file.name.toLowerCase().includes('s3'));
+        } else if (p === 's1') {
+          return files.filter(file => file.name.toLowerCase().includes('s1'));
+        }
+        return files;
+      }
+
+      /*************************************************
+       * 9) 填充檔案下拉
+       *************************************************/
+      function populateFileDropdown(files) {
+        const select = document.getElementById('fileSelect');
+        select.innerHTML = '<option value="">請選擇...</option>';
+        files.forEach(file => {
+          const option = document.createElement('option');
+          option.value = file.id;
+          option.textContent = file.name;
+          select.appendChild(option);
+        });
+      }
+
+      /*************************************************
+       * 10) 顯示檔案
+       *************************************************/
+      function showFile() {
+        const fileSelect = document.getElementById('fileSelect');
+        const fileId = fileSelect.value;
+        if (!fileId) {
+          document.getElementById('result').innerHTML = '';
+          return;
+        }
+
+        const fileName = fileSelect.options[fileSelect.selectedIndex].text;
+        const folderSelect = document.getElementById('folderSelect');
+        const folderName = folderSelect.options[folderSelect.selectedIndex].text;
+
+        callGAS('getFilePreviewUrl', { fileId })
+          .then(data => {
+            if (data.success) {
+              displayFile(data.result);
+              callGAS('logRetrieval', { 
+                vendorName: folderName, 
+                fileName: fileName,
+                username: currentUser ? currentUser.name || currentUser.username : ''
+              });
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+      function displayFile(fileInfo) {
+        const resultDiv = document.getElementById('result');
+        if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps')) {
+          resultDiv.innerHTML = `<iframe src="${fileInfo.url}" allowfullscreen></iframe>`;
+        } else {
+          resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank">下載 ${fileInfo.name}</a>`;
+        }
+      }
+
+      /*************************************************
+       * 12) 使用統計
+       *************************************************/
+      function showStats() {
+        callGAS('getStatisticsDataOnly')
+          .then(data => {
+            if (data.success) {
+              document.getElementById('statsModal').style.display = 'block';
+              drawCharts(data.result);
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+      function closeModal() {
+        document.getElementById('statsModal').style.display = 'none';
+      }
+
+      function drawCharts(statData) {
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(() => {
+          if (statData.vendors.length > 0) {
+            const vendorsData = new google.visualization.DataTable();
+            vendorsData.addColumn('string', '部門');
+            vendorsData.addColumn('number', '查詢次數');
+            vendorsData.addRows(statData.vendors);
+            const vendorsOptions = {
+              title: '【部門熱度】查詢統計',
+              pieHole: 0.4,
+              legend: { position: 'bottom' }
+            };
+            const vendorsChart = new google.visualization.PieChart(document.getElementById('vendorsChart'));
+            vendorsChart.draw(vendorsData, vendorsOptions);
+          } else {
+            document.getElementById('vendorsChart').innerHTML = '<p>暫無部門查詢數據</p>';
+          }
+
+          if (statData.files.length > 0) {
+            const filesData = new google.visualization.DataTable();
+            filesData.addColumn('string', '檔案');
+            filesData.addColumn('number', '查詢次數');
+            filesData.addRows(statData.files);
+            const filesOptions = {
+              title: '【檔案熱度】查詢統計',
+              legend: { position: 'bottom' }
+            };
+            const filesChart = new google.visualization.BarChart(document.getElementById('filesChart'));
+            filesChart.draw(filesData, filesOptions);
+          } else {
+            document.getElementById('filesChart').innerHTML = '<p>暫無檔案查詢數據</p>';
+          }
+        });
+      }
+
+      /*************************************************
+       * 13) 點擊 modal 外關閉
+       *************************************************/
+      window.onclick = function(event) {
+        const statsModal = document.getElementById('statsModal');
+        const linksModal = document.getElementById('linksModal');
+        const aiModal    = document.getElementById('aiModal'); 
+        const changePasswordModal = document.getElementById('changePasswordModal');
+
+        if (event.target === statsModal) {
+          statsModal.style.display = "none";
+        } else if (event.target === linksModal) {
+          linksModal.style.display = "none";
+        } else if (event.target === aiModal) {
+          aiModal.style.display = "none";
+        } else if (event.target === changePasswordModal) {
+          changePasswordModal.style.display = "none";
+        }
+      };
+
+      /*************************************************
+       * 14) TCC 字母特效
+       *************************************************/
+      function createTCCLetters() {
+        const lettersData = [
+          { text: 'T', className: 'letter-t' },
+          { text: 'C', className: 'letter-c1' },
+          { text: 'C', className: 'letter-c2' }
+        ];
+        
+        lettersData.forEach(ld => {
+          const el = document.createElement('div');
+          el.classList.add('letter', ld.className);
+          el.innerText = ld.text;
+          el.style.left = '50%';
+          el.style.top = '50%';
+          document.body.appendChild(el);
+        });
+      }
+
+      /*************************************************
+       * ★ NEW: 顯示「重要連結」(只有 s3)
+       *************************************************/
+function showLinks() {
+  // 添加按鈕點擊效果
+  const linksBtn = document.getElementById('linksButton');
+  linksBtn.classList.add('button-clicked');
+  
+  // 更改按鈕顏色
+  linksBtn.style.background = 'linear-gradient(45deg, #ff8c00, #ffb700)';
+  
+  setTimeout(() => {
+    callGAS('getImportantLinks')
+      .then(data => {
+        if (data.success) {
+          const links = data.result; 
+          renderLinksTable(links);
+          
+          // 確保模態視窗正確顯示
+          const modal = document.getElementById('linksModal');
+          modal.style.display = 'block';
+          
+          // 確保模態內容置中
+          const modalContent = modal.querySelector('.modal-content');
+          if (modalContent) {
+            modalContent.style.margin = '10% auto';
+            modalContent.style.left = '0';
+            modalContent.style.right = '0';
+          }
+          
+          setTimeout(() => {
+            linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+            linksBtn.classList.remove('button-clicked');
+          }, 300);
+        }
+      });
+  }, 300);
+}
+
+      
+      function closeLinksModal() {
+        document.getElementById('linksModal').style.display = 'none';
+        const linksBtn = document.getElementById('linksButton');
+        linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+        linksBtn.classList.remove('button-clicked');
+      }
+      
+      function renderLinksTable(links) {
+        const container = document.getElementById('linksContainer');
+        if (!links || links.length === 0) {
+          container.innerHTML = '<p>暫無重要連結資料</p>';
+          return;
+        }
+        let html = '<table id="linksTable">';
+        html += '<tr><th>名稱</th><th>超連結</th></tr>';
+        links.forEach(item => {
+          html += `<tr>
+                     <td>${item.name}</td>
+                     <td><a href="${item.url}" target="_blank">${item.url}</a></td>
+                   </tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+      }
+
+      /*************************************************
+       * ★ NEW: AI助手按鈕 & Modal
+       *************************************************/
+      // 更新AI對話相關JS函數
+      let chatHistory = [];
+
+      function showAiModal() {
+        document.getElementById('aiModal').style.display = 'block';
+        // 初次開啟時，先放兩句話(問候 + 問問題)
+        const chatContainer = document.getElementById('aiChatContainer');
+        if (chatContainer.innerHTML === '') {
+          chatContainer.innerHTML = `
+            <div class="chat-assistant">哈囉～願你有個美好的一天～</div>
+            <div class="chat-assistant">你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～</div>
+          `;
+          
+          // 儲存對話歷史
+          chatHistory = [
+            {
+              role: "assistant",
+              content: "哈囉～願你擁有美好的一天～"
+            },
+            {
+              role: "assistant",
+              content: "你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～"
+            }
+          ];
+        }
+      }
+
+      function closeAiModal() {
+        document.getElementById('aiModal').style.display = 'none';
+      }
+
+      function sendMessageToAi() {
+        const userInput = document.getElementById('aiUserInput').value.trim();
+        if (!userInput) return;
+        
+        // 先把使用者的話顯示在畫面
+        const chatContainer = document.getElementById('aiChatContainer');
+        const userMsgHtml = `<div class="chat-user">${escapeHtml(userInput)}</div>`;
+        chatContainer.innerHTML += userMsgHtml;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // 顯示載入中動畫
+        const loadingId = showLoadingMessage();
+        
+        // 儲存用戶訊息到歷史
+        chatHistory.push({
+          role: "user",
+          content: userInput
+        });
+        
+        // 呼叫後端
+        callGAS('aiAssistant', { 
+          userMessage: userInput,
+          chatHistory: JSON.stringify(chatHistory)
+        })
+          .then(data => {
+            // 移除載入中訊息
+            removeLoadingMessage(loadingId);
+            
+            if (data.success) {
+              const aiReply = data.result.reply;
+              // 直接插入 HTML 字串
+              const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`;
+              chatContainer.innerHTML += assistantMsgHtml;
+              
+              // 儲存AI回覆到歷史
+              chatHistory.push({
+                role: "assistant",
+                content: aiReply.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '') // 移除HTML標籤，保留換行
+              });
+              
+              // 限制歷史長度，避免過長
+              if (chatHistory.length > 10) {
+                chatHistory = chatHistory.slice(-10);
+              }
+              
+              // 更新建議問題
+              updateSuggestions(aiReply);
+            } else {
+              chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
+            }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          })
+          .catch(err => {
+            console.error("sendMessageToAi error:", err);
+            removeLoadingMessage(loadingId);
+            chatContainer.innerHTML += `<div class="chat-assistant">抱歉，目前無法取得回應。</div>`;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          })
+          .finally(() => {
+            document.getElementById('aiUserInput').value = "";
+          });
+      }
+
+      // 顯示載入中動畫
+      function showLoadingMessage() {
+        const chatContainer = document.getElementById('aiChatContainer');
+        const loadingId = 'loading-' + Date.now();
+        chatContainer.innerHTML += `
+          <div id="${loadingId}" class="chat-assistant" style="display:flex; align-items:center;">
+            <div class="loading-dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <span style="margin-left:10px">正在思考中...</span>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        return loadingId;
+      }
+
+      // 移除載入中訊息
+      function removeLoadingMessage(loadingId) {
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) {
+          loadingElement.remove();
+        }
+      }
+      
+      // 更新建議問題
+      function updateSuggestions(aiReply) {
+        // 從AI回覆中提取建議問題
+        const suggestionsMatch = aiReply.match(/您可能還想了解：<br>(.*?)(?:<br>|$)/s);
+        
+        if (suggestionsMatch && suggestionsMatch[1]) {
+          const suggestionsText = suggestionsMatch[1];
+          const suggestions = suggestionsText.split('<br>').map(s => s.trim().replace(/^[•\-]\s*/, '').replace(/「|」/g, ''));
+          
+          const validSuggestions = suggestions.filter(s => s && s.length > 0 && s.length < 50);
+          
+          if (validSuggestions.length > 0) {
+            const suggestionsContainer = document.querySelector('.suggestion-chips');
+            suggestionsContainer.innerHTML = '';
+            
+            validSuggestions.forEach(suggestion => {
+              const chip = document.createElement('span');
+              chip.className = 'suggestion-chip';
+              chip.textContent = suggestion;
+              chip.onclick = function() { useAiSuggestion(this); };
+              suggestionsContainer.appendChild(chip);
+            });
+          }
+        }
+      }
+
+      // 使用建議問題
+      function useAiSuggestion(element) {
+        const suggestion = element.textContent;
+        document.getElementById('aiUserInput').value = suggestion;
+        sendMessageToAi();
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/[<>&"]/g, function(c){
+          switch(c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '"': return '&quot;';
+          }
+          return c;
+        });
+      }
+
+      // 添加到原有 JavaScript 中
+      function showWelfarePage() {
+        // 添加按鈕點擊效果
+        const welfareBtn = document.getElementById('welfareButton');
+        welfareBtn.classList.add('button-clicked');
+        
+        // 更改按鈕顏色
+        welfareBtn.style.background = 'linear-gradient(45deg, #ff7e5f, #feb47b)';
+        
+        // 延遲執行跳轉操作
+        setTimeout(() => {
+          // 儲存當前用戶資訊到 sessionStorage，以便在福委會頁面使用
+          if (currentUser) {
+            sessionStorage.setItem('username', currentUser.username);
+            sessionStorage.setItem('name', currentUser.name);
+            sessionStorage.setItem('role', currentUser.role);
+            sessionStorage.setItem('permissionLevel', currentUser.permission);
+            sessionStorage.setItem('authToken', localStorage.getItem('authToken'));
+            sessionStorage.setItem('csrfToken', localStorage.getItem('csrfToken'));
+          }
+          
+          // 跳轉到福委會頁面
+          window.location.href = 'welfare.html';
+        }, 300);
+      }
+
+      // 添加昶青文化頁面跳轉函數
+      function showCulturePage() {
+        // 添加按鈕點擊效果
+        const cultureBtn = document.getElementById('cultureButton');
+        cultureBtn.classList.add('button-clicked');
+        
+        // 更改按鈕顏色
+        cultureBtn.style.background = 'linear-gradient(45deg, #9b59b6, #a569bd)';
+        
+        // 延遲執行跳轉操作
+        setTimeout(() => {
+          // 儲存當前用戶資訊到 sessionStorage，以便在文化頁面使用
+          if (currentUser) {
+            sessionStorage.setItem('username', currentUser.username);
+            sessionStorage.setItem('name', currentUser.name);
+            sessionStorage.setItem('role', currentUser.role);
+            sessionStorage.setItem('permissionLevel', currentUser.permission);
+            sessionStorage.setItem('authToken', localStorage.getItem('authToken'));
+            sessionStorage.setItem('csrfToken', localStorage.getItem('csrfToken'));
+          }
+          
+          // 跳轉到昶青文化頁面
+          window.location.href = 'culture.html';
+        }, 300);
+      }
     </script>
   </body>
 </html>
