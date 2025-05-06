@@ -719,13 +719,25 @@ a.download-link::before {
 #linksModal .modal-content {
   position: relative;
   background: white;
-  margin: 10% auto;
+  margin: 10% auto; /* 確保水平置中 */
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-  width:90%;
+  width: 90%;
   max-width: 800px;
   animation: modalOpen 0.4s;
+  left: 0; /* 移除任何可能的左側偏移 */
+  right: 0; /* 移除任何可能的右側偏移 */
+}
+/* 確保模態視窗覆蓋整個畫面 */
+#linksModal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
 }
 #linksTable {
   width: 100%;
@@ -1722,39 +1734,42 @@ a.download-link::before {
       /*************************************************
        * ★ NEW: 顯示「重要連結」(只有 s3)
        *************************************************/
-      function showLinks() {
-        // 添加按鈕點擊效果
-        const linksBtn = document.getElementById('linksButton');
-        linksBtn.classList.add('button-clicked');
-        
-        // 更改按鈕顏色
-        linksBtn.style.background = 'linear-gradient(45deg, #ff8c00, #ffb700)';
-        
-        setTimeout(() => {
-          callGAS('getImportantLinks')
-            .then(data => {
-              if (data.success) {
-                const links = data.result; 
-                renderLinksTable(links);
-                document.getElementById('linksModal').style.display = 'block';
-                
-                setTimeout(() => {
-                  linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
-                  linksBtn.classList.remove('button-clicked');
-                }, 300);
-              } else {
-                console.error("Error:", data.error);
-                linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
-                linksBtn.classList.remove('button-clicked');
-              }
-            })
-            .catch(err => {
-              console.error("Fetch error:", err);
-              linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
-              linksBtn.classList.remove('button-clicked');
-            });
-        }, 300);
-      }
+function showLinks() {
+  // 添加按鈕點擊效果
+  const linksBtn = document.getElementById('linksButton');
+  linksBtn.classList.add('button-clicked');
+  
+  // 更改按鈕顏色
+  linksBtn.style.background = 'linear-gradient(45deg, #ff8c00, #ffb700)';
+  
+  setTimeout(() => {
+    callGAS('getImportantLinks')
+      .then(data => {
+        if (data.success) {
+          const links = data.result; 
+          renderLinksTable(links);
+          
+          // 確保模態視窗正確顯示
+          const modal = document.getElementById('linksModal');
+          modal.style.display = 'block';
+          
+          // 確保模態內容置中
+          const modalContent = modal.querySelector('.modal-content');
+          if (modalContent) {
+            modalContent.style.margin = '10% auto';
+            modalContent.style.left = '0';
+            modalContent.style.right = '0';
+          }
+          
+          setTimeout(() => {
+            linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+            linksBtn.classList.remove('button-clicked');
+          }, 300);
+        }
+      });
+  }, 300);
+}
+
       
       function closeLinksModal() {
         document.getElementById('linksModal').style.display = 'none';
