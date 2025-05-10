@@ -1176,7 +1176,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyojYN84LvgO1AdfUaMu6BuHGFA46pFIgKgjmivG3EMXN1oZC52IodQo9qoSClJCMZr/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzc2iin5SbdKovIAYgzz9MfBliTVMb5mIsaXrE0kEYWqWEYHJy26l5P7oHkB0g1u-HcqA/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1630,87 +1630,27 @@ a.download-link::before {
           .catch(err => console.error("Fetch error:", err));
       }
 
-   function displayFile(fileInfo) {
+     function displayFile(fileInfo) {
   const resultDiv = document.getElementById('result');
-  const fileExtension = fileInfo.name.split('.').pop().toLowerCase();
   
-  // 檢查檔案是否為 Word 文件
-  const isWordDocument = fileExtension === 'doc' || fileExtension === 'docx';
+  // 檢查是否為 Word 文件 (.doc 或 .docx)
+  const isWordDocument = fileInfo.mimeType === 'application/msword' || 
+                         fileInfo.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+                         fileInfo.name.toLowerCase().endsWith('.doc') || 
+                         fileInfo.name.toLowerCase().endsWith('.docx');
   
-  if (isWordDocument) {
-    // 對於 Word 文件，直接提供下載連結
-    resultDiv.innerHTML = `
-      <div class="file-download-container">
-        <div class="file-info">
-          <div class="file-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-          </div>
-          <div class="file-details">
-            <h3>${fileInfo.name}</h3>
-            <p>Word 文件</p>
-          </div>
-        </div>
-        <a href="${fileInfo.url}" class="download-link" target="_blank" download>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          下載檔案
-        </a>
-      </div>
-      <style>
-        .file-download-container {
-          border: 1px solid #e0e0e0;
-          border-radius: 8px;
-          padding: 20px;
-          margin: 20px 0;
-          background-color: #f9f9f9;
-        }
-        .file-info {
-          display: flex;
-          align-items: center;
-          margin-bottom: 15px;
-        }
-        .file-icon {
-          margin-right: 15px;
-        }
-        .file-details h3 {
-          margin: 0 0 5px 0;
-          color: #333;
-        }
-        .file-details p {
-          margin: 0;
-          color: #666;
-        }
-        .download-link {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #2196F3;
-          color: white;
-          padding: 10px 15px;
-          border-radius: 4px;
-          text-decoration: none;
-          font-weight: bold;
-          transition: background-color 0.3s;
-        }
-        .download-link:hover {
-          background-color: #0b7dda;
-        }
-        .download-link svg {
-          margin-right: 8px;
-        }
-      </style>
-    `;
-  } else if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps')) {
-    // 保持原有的 PDF 和 Google 文件處理方式不變
+  if (fileInfo.mimeType === 'application/pdf' || 
+      fileInfo.mimeType.includes('google-apps') || 
+      isWordDocument) {
+    
+    // 對於 Word 文件，我們需要使用 Google Docs Viewer 來預覽
+    let previewUrl = fileInfo.url;
+    
+    // 如果是 Word 文件，使用 Google Docs Viewer
+    if (isWordDocument) {
+      previewUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileInfo.url)}&embedded=true`;
+    }
+    
     resultDiv.innerHTML = `
       <div style="position: relative;">
         <a href="${fileInfo.url}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
@@ -1720,11 +1660,10 @@ a.download-link::before {
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
         </a>
-        <iframe src="${fileInfo.url}" allowfullscreen></iframe>
+        <iframe src="${previewUrl}" allowfullscreen></iframe>
       </div>
     `;
   } else {
-    // 保持原有的其他檔案類型處理方式不變
     resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank">下載 ${fileInfo.name}</a>`;
   }
 }
