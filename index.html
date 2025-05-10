@@ -1637,16 +1637,19 @@ a.download-link::before {
   // 檢查檔案是否為 Word 文件
   const isWordDocument = fileExtension === 'doc' || fileExtension === 'docx';
   
-  // 為 Word 文件準備 Google Docs 連結
-  let openUrl = fileInfo.url;
-  if (isWordDocument) {
-    // 使用 Google Docs 開啟 URL 格式
-    openUrl = `https://docs.google.com/document/d/e/2PACX-${encodeURIComponent(fileInfo.id)}/edit`;
-    // 如果沒有 fileInfo.id，可以使用以下替代方案
-    // openUrl = `https://docs.google.com/gview?url=${encodeURIComponent(fileInfo.url)}&embedded=true`;
-  }
-  
   if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps') || isWordDocument) {
+    // 對於 Word 文件，使用 Office 線上預覽或 Google Docs Viewer
+    let previewUrl = fileInfo.url;
+    let openUrl = fileInfo.url;
+    
+    if (isWordDocument) {
+      // 使用 Microsoft Office 線上預覽服務
+      previewUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileInfo.url)}`;
+      
+      // 使用原始 URL 開啟，讓瀏覽器決定使用哪個應用程式開啟
+      openUrl = fileInfo.url;
+    }
+    
     resultDiv.innerHTML = `
       <div style="position: relative;">
         <a href="${openUrl}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
@@ -1656,13 +1659,14 @@ a.download-link::before {
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
         </a>
-        <iframe src="${isWordDocument ? `https://docs.google.com/gview?url=${encodeURIComponent(fileInfo.url)}&embedded=true` : fileInfo.url}" allowfullscreen></iframe>
+        <iframe src="${previewUrl}" style="width: 100%; height: 600px; border: none;"></iframe>
       </div>
     `;
   } else {
     resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank">下載 ${fileInfo.name}</a>`;
   }
 }
+
 
 
       /*************************************************
