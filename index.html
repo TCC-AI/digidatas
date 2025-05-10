@@ -1754,27 +1754,17 @@ a.download-link::before {
           .catch(err => console.error("Fetch error:", err));
       }
 
-     function displayFile(fileInfo) {
+function displayFile(fileInfo) {
   const resultDiv = document.getElementById('result');
   
-  // 檢查是否為 Word 文件 (.doc 或 .docx)
-  const isWordDocument = fileInfo.mimeType === 'application/msword' || 
-                         fileInfo.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-                         fileInfo.name.toLowerCase().endsWith('.doc') || 
-                         fileInfo.name.toLowerCase().endsWith('.docx');
+  // 取得副檔名
+  const fileExtension = fileInfo.name.split('.').pop().toLowerCase();
   
-  if (fileInfo.mimeType === 'application/pdf' || 
-      fileInfo.mimeType.includes('google-apps') || 
-      isWordDocument) {
-    
-    // 對於 Word 文件，我們需要使用 Google Docs Viewer 來預覽
-    let previewUrl = fileInfo.url;
-    
-    // 如果是 Word 文件，使用 Google Docs Viewer
-    if (isWordDocument) {
-      previewUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileInfo.url)}&embedded=true`;
-    }
-    
+  // Google Docs Viewer支援的文件類型
+  const docFormats = ['doc', 'docx'];
+
+  if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps')) {
+    // PDF和Google原生文件直接預覽
     resultDiv.innerHTML = `
       <div style="position: relative;">
         <a href="${fileInfo.url}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
@@ -1784,13 +1774,30 @@ a.download-link::before {
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
         </a>
-        <iframe src="${previewUrl}" allowfullscreen></iframe>
+        <iframe src="${fileInfo.url}" allowfullscreen></iframe>
+      </div>
+    `;
+  } else if (docFormats.includes(fileExtension)) {
+    // 使用Google Docs Viewer預覽.doc及.docx
+    const googleDocsViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(fileInfo.url)}&embedded=true`;
+    resultDiv.innerHTML = `
+      <div style="position: relative;">
+        <a href="${fileInfo.url}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+        <iframe src="${googleDocsViewerUrl}" allowfullscreen></iframe>
       </div>
     `;
   } else {
+    // 其他格式僅提供下載連結
     resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank">下載 ${fileInfo.name}</a>`;
   }
 }
+
 
 
 
