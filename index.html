@@ -1630,20 +1630,33 @@ a.download-link::before {
           .catch(err => console.error("Fetch error:", err));
       }
 
-     function displayFile(fileInfo) {
+    function displayFile(fileInfo) {
   const resultDiv = document.getElementById('result');
-  if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps')) {
-    // 修改這裡：添加一個包含打開檔案圖示的容器
+  const fileExtension = fileInfo.name.split('.').pop().toLowerCase();
+  
+  // 檢查檔案是否為 Word 文件
+  const isWordDocument = fileExtension === 'doc' || fileExtension === 'docx';
+  
+  // 為 Word 文件準備 Google Docs 連結
+  let openUrl = fileInfo.url;
+  if (isWordDocument) {
+    // 使用 Google Docs 開啟 URL 格式
+    openUrl = `https://docs.google.com/document/d/e/2PACX-${encodeURIComponent(fileInfo.id)}/edit`;
+    // 如果沒有 fileInfo.id，可以使用以下替代方案
+    // openUrl = `https://docs.google.com/gview?url=${encodeURIComponent(fileInfo.url)}&embedded=true`;
+  }
+  
+  if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps') || isWordDocument) {
     resultDiv.innerHTML = `
       <div style="position: relative;">
-        <a href="${fileInfo.url}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+        <a href="${openUrl}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
             <polyline points="15 3 21 3 21 9"></polyline>
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
         </a>
-        <iframe src="${fileInfo.url}" allowfullscreen></iframe>
+        <iframe src="${isWordDocument ? `https://docs.google.com/gview?url=${encodeURIComponent(fileInfo.url)}&embedded=true` : fileInfo.url}" allowfullscreen></iframe>
       </div>
     `;
   } else {
