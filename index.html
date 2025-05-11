@@ -1176,7 +1176,7 @@ a.download-link::before {
       /*************************************************
        * 1) Web App URL
        *************************************************/
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyuCr90ROE7uX8EbA77RxIBbU7-Mwi8YkpqjVMt3VWs6dGGQKAMxWOZBW-ftGlz7dwd/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzxACDBUIUII3tmqYTyn8_2DRYECTar34eNUoK3krNX5qx7ruIIycmq0lH2j3JtjVk/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1632,6 +1632,28 @@ a.download-link::before {
 
 function displayFile(fileInfo) {
   const resultDiv = document.getElementById('result');
+    // 添加下載按鈕
+  const downloadButton = `
+    <div style="text-align: center; margin-bottom: 10px;">
+      <a href="${fileInfo.downloadUrl || fileInfo.url}" target="_blank" download class="download-button" style="
+        display: inline-block;
+        padding: 10px 20px;
+        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(33, 147, 176, 0.3);
+      ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        下載 ${fileInfo.name}
+      </a>
+    </div>
+  `;
   
   // 取得副檔名
   const fileExtension = fileInfo.name.split('.').pop().toLowerCase();
@@ -1643,11 +1665,11 @@ function displayFile(fileInfo) {
     // PDF和Google原生文件直接預覽
     resultDiv.innerHTML = `
       <div style="position: relative;">
-        <a href="${fileInfo.url}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+        <a href="${fileInfo.url.replace('/preview', '/export?format=docx')}" target="_blank" download style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
         </a>
         <iframe src="${fileInfo.url}" allowfullscreen></iframe>
@@ -1658,11 +1680,11 @@ function displayFile(fileInfo) {
     const googleDocsViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(fileInfo.url)}&embedded=true`;
     resultDiv.innerHTML = `
       <div style="position: relative;">
-        <a href="${fileInfo.url}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+        <a href="${fileInfo.url}" target="_blank" download style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
         </a>
         <iframe src="${googleDocsViewerUrl}" allowfullscreen></iframe>
@@ -1670,9 +1692,10 @@ function displayFile(fileInfo) {
     `;
   } else {
     // 其他格式僅提供下載連結
-    resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank">下載 ${fileInfo.name}</a>`;
+    resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank" download>下載 ${fileInfo.name}</a>`;
   }
 }
+
 
 
 
