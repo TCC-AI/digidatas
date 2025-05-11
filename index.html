@@ -1632,69 +1632,211 @@ a.download-link::before {
 
 function displayFile(fileInfo) {
   const resultDiv = document.getElementById('result');
-    // 添加下載按鈕
-  const downloadButton = `
-    <div style="text-align: center; margin-bottom: 10px;">
-      <a href="${fileInfo.downloadUrl || fileInfo.url}" target="_blank" download class="download-button" style="
-        display: inline-block;
-        padding: 10px 20px;
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
-        color: white;
-        text-decoration: none;
-        border-radius: 50px;
-        font-weight: bold;
-        box-shadow: 0 4px 10px rgba(33, 147, 176, 0.3);
-      ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        下載 ${fileInfo.name}
-      </a>
-    </div>
-  `;
   
-  // 取得副檔名
-  const fileExtension = fileInfo.name.split('.').pop().toLowerCase();
+  // 檢測文件類型
+  const isGoogleNativeDoc = fileInfo.mimeType.includes('google-apps');
+  const fileName = fileInfo.name;
   
-  // Google Docs Viewer支援的文件類型
-  const docFormats = ['doc', 'docx'];
-
-  if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps')) {
-    // PDF和Google原生文件直接預覽
-    resultDiv.innerHTML = `
-      <div style="position: relative;">
-        <a href="${fileInfo.url.replace('/preview', '/export?format=docx')}" target="_blank" download style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-        </a>
-        <iframe src="${fileInfo.url}" allowfullscreen></iframe>
-      </div>
-    `;
-  } else if (docFormats.includes(fileExtension)) {
-    // 使用Google Docs Viewer預覽.doc及.docx
-    const googleDocsViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(fileInfo.url)}&embedded=true`;
-    resultDiv.innerHTML = `
-      <div style="position: relative;">
-        <a href="${fileInfo.url}" target="_blank" download style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-        </a>
-        <iframe src="${googleDocsViewerUrl}" allowfullscreen></iframe>
+  // 創建下載按鈕區域
+  let downloadOptions = '';
+  
+  if (isGoogleNativeDoc) {
+    // Google 原生文件提供多種下載格式選項
+    downloadOptions = `
+      <div class="download-options" style="text-align: center; margin: 10px 0;">
+        <p style="margin-bottom: 8px; font-weight: bold;">下載選項：</p>
+        <button onclick="downloadFile('${fileInfo.exportUrl || fileInfo.downloadUrl}', '${fileName}.pdf', 'pdf')" class="download-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          PDF 格式
+        </button>
+        <button onclick="downloadFile('${fileInfo.exportUrl?.replace('pdf', 'docx') || fileInfo.downloadUrl}', '${fileName}.docx', 'docx')" class="download-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Word 格式
+        </button>
       </div>
     `;
   } else {
-    // 其他格式僅提供下載連結
-    resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank" download>下載 ${fileInfo.name}</a>`;
+    // 非 Google 原生文件提供直接下載
+    downloadOptions = `
+      <div class="download-options" style="text-align: center; margin: 10px 0;">
+        <button onclick="downloadFile('${fileInfo.temporaryUrl || fileInfo.downloadUrl}', '${fileName}')" class="download-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          下載檔案
+        </button>
+      </div>
+    `;
+    // 添加右上角下載按鈕
+  const downloadButton = `
+    <a href="#" onclick="downloadFile('${fileInfo.temporaryUrl || fileInfo.downloadUrl}', '${fileInfo.name}'); return false;" 
+       style="position: absolute; top: 10px; right: 10px; z-index: 1000; 
+              background: #2196F3; color: white; padding: 8px 15px; 
+              border-radius: 50px; text-decoration: none; font-weight: bold;
+              display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      下載
+    </a>
+  `;
+  
+  // 將下載按鈕添加到預覽容器
+  const previewContainer = document.querySelector('.preview-container');
+  if (previewContainer) {
+    previewContainer.insertAdjacentHTML('afterbegin', downloadButton);
   }
 }
+  }
+  
+  // 顯示預覽和下載選項
+  resultDiv.innerHTML = `
+    ${downloadOptions}
+    <div class="preview-container" style="position: relative; height: 80vh;">
+      <iframe src="${fileInfo.url}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+    </div>
+  `;
+  
+  // 添加下載按鈕樣式
+  const style = document.createElement('style');
+  style.textContent = `
+    .download-btn {
+      display: inline-block;
+      margin: 0 5px;
+      padding: 8px 15px;
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// 添加下載檔案的函數
+function downloadFile(url, fileName, format) {
+  // 顯示下載中提示
+  const downloadStatus = document.createElement('div');
+  downloadStatus.className = 'download-status';
+  downloadStatus.innerHTML = `
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+      <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+        <div class="spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
+        <p>正在準備下載 ${fileName}...</p>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(downloadStatus);
+  
+  // 添加旋轉動畫
+  const spinnerStyle = document.createElement('style');
+  spinnerStyle.textContent = `
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  `;
+  document.head.appendChild(spinnerStyle);
+  
+  // 使用 fetch API 下載檔案
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + getAccessToken() // 如果需要授權
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('下載失敗');
+    }
+    return response.blob();
+  })
+  .then(blob => {
+    // 創建下載連結
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = fileName;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    // 移除下載狀態提示
+    document.body.removeChild(downloadStatus);
+    document.head.removeChild(spinnerStyle);
+    
+    // 顯示成功訊息
+    showMessage('下載成功！', 'success');
+  })
+  .catch(error => {
+    console.error('下載錯誤:', error);
+    
+    // 移除下載狀態提示
+    document.body.removeChild(downloadStatus);
+    document.head.removeChild(spinnerStyle);
+    
+    // 顯示錯誤訊息
+    showMessage('下載失敗，請稍後再試。', 'error');
+    
+    // 嘗試備用方案 - 直接開啟下載連結
+    window.open(url, '_blank');
+  });
+}
+
+// 顯示訊息提示
+function showMessage(message, type) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message ${type}`;
+  messageDiv.innerHTML = `
+    <div style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; 
+                background: ${type === 'success' ? '#4CAF50' : '#F44336'}; 
+                color: white; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                z-index: 9999; animation: fadeIn 0.3s, fadeOut 0.3s 2.7s forwards;">
+      ${message}
+    </div>
+  `;
+  
+  // 添加動畫樣式
+  const messageStyle = document.createElement('style');
+  messageStyle.textContent = `
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(20px); }
+    }
+  `;
+  document.head.appendChild(messageStyle);
+  
+  document.body.appendChild(messageDiv);
+  
+  // 3秒後移除訊息
+  setTimeout(() => {
+    document.body.removeChild(messageDiv);
+    document.head.removeChild(messageStyle);
+  }, 3000);
+}
+
+// 獲取訪問令牌（如果您的應用使用OAuth）
+function getAccessToken() {
+  // 如果您的應用使用OAuth，在這裡返回訪問令牌
+  // 否則返回null或空字串
+  return localStorage.getItem('accessToken') || '';
+}
+
 
 
 
