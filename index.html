@@ -1173,6 +1173,32 @@ a.download-link::before {
     </div>
 
     <script>
+          // 在 <script> 開頭添加
+    let idleTimer = null;
+    const IDLE_TIMEOUT = 10 * 60 * 1000; // 10分鐘
+    
+    // 在 window.onload 和 loginUser() 成功後調用
+    function startIdleTimer() {
+      if (idleTimer) clearTimeout(idleTimer);
+      
+      idleTimer = setTimeout(() => {
+        alert('閒置超過10分鐘，系統將自動登出');
+        clearAuthData();
+        currentUser = null;
+        document.getElementById('loginScreen').style.display = 'flex';
+      }, IDLE_TIMEOUT);
+    }
+    
+    // 重置計時器 (用戶有活動時)
+    function resetIdleTimer() {
+      startIdleTimer();
+    }
+    
+    // 監聽用戶活動
+    document.addEventListener('mousemove', resetIdleTimer);
+    document.addEventListener('keypress', resetIdleTimer);
+    document.addEventListener('click', resetIdleTimer);
+
       /*************************************************
        * 1) Web App URL
        *************************************************/
